@@ -1,1 +1,10 @@
-{}
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "prettier.enable": true,
+  "search.exclude": {
+    "dist": true
+  }
+}
