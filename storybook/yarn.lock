@@ -9647,6 +9647,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     storybook: ^7.0.0-beta.12
+    too-many-hooks: "link:./../too-many-hooks"
     typescript: ^4.9.3
     vite: ^4.0.0
   languageName: unknown
@@ -9907,6 +9908,12 @@ __metadata:
   checksum: 952c29e2a85d7123239b5cfdd889a0dde47ab0497f0913d70588f19c53f7e0b5327c95f4651e413c74b785147f9637b17410ac8c846d5d4a20a5a33eb6dc3a45
   languageName: node
   linkType: hard
+
+"too-many-hooks@link:./../too-many-hooks::locator=storybook%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "too-many-hooks@link:./../too-many-hooks::locator=storybook%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "tr46@npm:~0.0.3":
   version: 0.0.3
