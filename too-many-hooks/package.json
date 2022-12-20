@@ -6,9 +6,10 @@
   ],
   "main": "./dist/too-many-hooks.umd.cjs",
   "module": "./dist/too-many-hooks.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/too-many-hooks.js",
       "require": "./dist/too-many-hooks.umd.cjs"
     }
