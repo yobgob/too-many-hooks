@@ -1,3 +1,4 @@
 import useCount from './useCount'
+import useFlag from './useFlag'
 
-export { useCount }
+export { useCount, useFlag }
