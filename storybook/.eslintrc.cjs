@@ -1,11 +1,37 @@
 module.exports = {
-  extends: ['react-app', 'plugin:storybook/recommended'],
+  root: true,
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.eslint.json',
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.eslint.json'],
+    extraFileExtensions: ['.mdx'],
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
-  rules: {
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/no-unnecessary-condition': 'warn',
-    '@typescript-eslint/prefer-optional-chain': 'warn',
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'mdx', 'jsx-a11y'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:jsx-a11y/recommended',
+  ],
+  ignorePatterns: ['*.cjs'],
+  overrides: [
+    {
+      files: ['.tsx', '.ts'],
+      extends: 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    },
+    {
+      files: ['*.mdx'],
+      extends: 'plugin:mdx/recommended',
+    },
+  ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
+  rules: {},
 }
