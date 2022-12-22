@@ -5,10 +5,14 @@ import dedent from 'ts-dedent'
 import { UseCount } from './UseCount'
 
 const DESCRIPTION = dedent`
-A demo of the \`useCount\` hook. The \`onClick\` control determines whether to call \`increment\` or \`decrement\` on click.
-<br/><br/>\`count: number\` is the current count, displayed on the button
-<br/>\`increment: () => void\` adds one to the current count
-<br/>\`decrement: () => void\` subtracts one from the current count
+Easily manages state for a value that is incremented or decremented
+<br/><br/>args:
+<br/>\`initial: number = 0\` initial value for \`count\`
+<br/>\`step: number = 1\` amount to increment and decrement by
+<br/><br/>returns:
+<br/>\`count: number\` is the current count, displayed on the button
+<br/>\`increment: (stepOverride?: number) => void\` Adds the \`stepOverride\` or, if \`undefined\`, \`step\` to \`count\`
+<br/>\`decrement: (stepOverride?: number) => void\` Subracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\`
 <br/><br/>Example hook usage:
 
 \`\`\`tsx
