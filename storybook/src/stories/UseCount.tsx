@@ -1,20 +1,41 @@
 import React from 'react'
 import { useCount } from 'too-many-hooks'
-import { Button } from './Button'
+
+import './useCount.css'
 
 export interface UseCountStoryProps {
-  onClick: 'increment' | 'decrement'
+  step?: number
+  incrementStep?: number
+  decrementStep?: number
 }
 
-export const UseCount: React.FC<UseCountStoryProps> = ({ onClick }) => {
-  const { count, increment, decrement } = useCount()
+export const UseCount: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrementStep }) => {
+  const { count, increment, decrement } = useCount({ step })
 
   return (
-    <Button
-      primary
-      size="small"
-      label={`Clicked ${count} time${count === 1 ? '' : 's'}`}
-      onClick={onClick === 'increment' ? increment : decrement}
-    />
+    <div className="post-wrapper">
+      <hr />
+      <div className="header">
+        <img src="https://picsum.photos/30" alt="Random pfp" />
+        <div>Dawson Booth</div>
+        <div>@DawsonBooth420</div>
+      </div>
+      <div className="body">
+        <p>
+          This new library too-many-hooks has huge potential. I hope they add a hook I can use to
+          easily count likes/dislikes on a post. Maybe a "useCount"?
+        </p>
+      </div>
+      <div className="like-dislike">
+        <button onClick={() => decrement(decrementStep)} name="like">
+          &#128078;
+        </button>
+        <span>{count}</span>
+        <button onClick={() => increment(incrementStep)} name="dislike">
+          &#128077;
+        </button>
+      </div>
+      <hr />
+    </div>
   )
 }

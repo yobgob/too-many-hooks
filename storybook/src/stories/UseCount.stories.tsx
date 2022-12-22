@@ -35,28 +35,16 @@ const meta = {
     },
   },
   tags: ['docsPage'],
-  argTypes: {
-    onClick: {
-      control: {
-        type: 'radio',
-      },
-      options: ['increment', 'decrement'],
-      defaultValue: 'increment',
-    },
-  },
 } satisfies Meta<typeof UseCount>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const UseCountStory: Story = {
+export const LikesAndDislikes: Story = {
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const countingButton = canvas.getByRole('button')
     userEvent.click(countingButton)
-  },
-  args: {
-    onClick: 'increment',
   },
 }
