@@ -1,4 +1,4 @@
-import useCount, { UseCountArgs } from './useCount'
+import useIncrement, { UseIncrement, UseIncrementArgs, UseIncrementReturn } from './useIncrement'
 
-export type { UseCountArgs }
-export { useCount }
+export type { UseIncrementArgs, UseIncrementReturn, UseIncrement }
+export { useIncrement }
