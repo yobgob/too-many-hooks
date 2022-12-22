@@ -79,10 +79,15 @@ export type UseCount = (args: UseCountArgs) => UseCountReturn
  * Returns a numeric `count` and functions to set, increment, decrement, or reset it
  *
  * @example
- * // To count up by 2s
+ * To count up by 2s
+ * ```ts
  * const [count, { increment }] = useCount({step: 2})
- * // To count down by 1s
+ * ```
+ * @example
+ * To count down by 1s
+ * ```ts
  * const [count, { decrement }] = useCount()
+ * ```
  * @implements {UseCount}
  * @param {UseCountArgs} { initial = 0, step = 1 }
  * @returns {UseCountReturn}
