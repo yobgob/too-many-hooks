@@ -32,19 +32,21 @@ return (
     <button onClick={open}>Open modal</button>
     {isOpen
       ? ReactDOM.createPortal(
-          <>
-            <div className="overlay" onClick={close} aria-hidden />
-            <div className="modal-wrapper" aria-modal tabIndex={-1} role="dialog">
-              <div className="modal">
-                <button className="close-button" title="Close" onClick={close}>
-                  &#10005;
-                </button>
-                This modal was opened with a simple "onClick=&#123;open&#125;". Clicking
-                "&#10005;" or outside of the modal will close it with a simple
-                "onClick=&#123;close&#125;". No setters needed.
-              </div>
+        <div className="overlay" onClick={close} aria-hidden />
+        <div className="modal-wrapper" aria-modal tabIndex={-1} role="dialog">
+          <div className="modal">
+            <button className="close-button" title="Close" onClick={close}>
+              &#10005;
+            </button>
+            <div>
+              This modal was opened with a simple<code>onClick=&#123;open&#125;</code>.
+              Clicking<code>&#10005;</code> or outside of the modal will close it with a
+              simple
+              <code>onClick=&#123;close&#125;</code>. No setters needed.
             </div>
-          </>,
+          </div>
+        </div>
+      </>,
           document.body,
         )
       : null}

@@ -19,9 +19,12 @@ export const UseFlag: React.FC = () => {
                   <button className="close-button" title="Close" onClick={close}>
                     &#10005;
                   </button>
-                  This modal was opened with a simple "onClick=&#123;open&#125;". Clicking
-                  "&#10005;" or outside of the modal will close it with a simple
-                  "onClick=&#123;close&#125;". No setters needed.
+                  <div>
+                    This modal was opened with a simple<code>onClick=&#123;open&#125;</code>.
+                    Clicking<code>&#10005;</code> or outside of the modal will close it with a
+                    simple
+                    <code>onClick=&#123;close&#125;</code>. No setters needed.
+                  </div>
                 </div>
               </div>
             </>,

@@ -38,9 +38,18 @@
   gap: 3rem;
 
   background-color: white;
-  color: black;
   border-radius: 0.5rem;
+  color: black;
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 1.5rem;
+}
+
+.modal code {
+  margin-left: 0.4em;
+  padding: 0.2rem 0.5rem;
+
+  background-color: #eee;
+  color: #c7254e;
 }
 
 .close-button {
