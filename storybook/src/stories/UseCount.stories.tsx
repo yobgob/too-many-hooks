@@ -1,40 +1,43 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
 import dedent from 'ts-dedent'
-
-import { UseIncrement } from './UseIncrement'
+import { UseCount } from './UseCount'
 
 const DESCRIPTION = dedent`
 
 Types: 
 
 \`\`\`ts
-export interface UseIncrementArgs {
+declare interface UseCountArgs {
   /** Initial \`count\`, defaults to \`0\` */
-  initial?: number;
+  initial?: number
   /** Amount to increment or decrement by, defaults to \`1\` */
-  step?: number;
+  step?: number
 }
-export declare type UseIncrementReturn = [
+declare type UseCountReturn = [
   number,
   {
-      /** Adds the \`stepOverride\` or, if \`undefined\`, \`step\` to \`count\` */
-      readonly increment: (stepOverride?: number) => void;
-      /** Subtracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\` */
-      readonly decrement: (stepOverride?: number) => void;
-  }
-];
+    /** Sets \`count\` to the provided value */
+    readonly set: React.Dispatch<React.SetStateAction<number>>
+    /** Adds the \`stepOverride\` or, if \`undefined\`, \`step\` to \`count\` */
+    readonly increment: (stepOverride?: number) => void
+    /** Subtracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\` */
+    readonly decrement: (stepOverride?: number) => void
+    /** Resets \`count\` to its initial value */
+    readonly reset: () => void
+  },
+]
 /** Returns a numeric \`count\` and functions to increment or decrement it */
-export declare type UseIncrement = (args: UseIncrementArgs) => UseIncrementReturn;
-declare const useIncrement: UseIncrement;
+declare type UseCount = (args: UseCountArgs) => UseCountReturn;
+declare const useCount: UseCount;
 \`\`\`
 
 Example hook usage:
 
 \`\`\`tsx
-import { useIncrement } from 'too-many-hooks'
+import { useCount } from 'too-many-hooks'
 
-const [count, { increment, decrement }] = useIncrement()
+const [count, { set, increment, decrement, reset }] = useCount()
 
 <button onClick={onClick === 'increment' ? increment : decrement}>
   Clicked {count} time{count === 1 ? '' : 's'}
@@ -42,20 +45,20 @@ const [count, { increment, decrement }] = useIncrement()
 \`\`\``
 
 const meta = {
-  title: 'Example/UseIncrement',
-  component: UseIncrement,
+  title: 'Example/UseCount',
+  component: UseCount,
   parameters: {
     layout: 'centered',
     controls: { expanded: true },
     docs: {
-      title: 'useIncrement',
+      title: 'useCount',
       description: {
         component: DESCRIPTION,
       },
     },
   },
   tags: ['docsPage'],
-} satisfies Meta<typeof UseIncrement>
+} satisfies Meta<typeof UseCount>
 
 export default meta
 
