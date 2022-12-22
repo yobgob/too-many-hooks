@@ -3,9 +3,15 @@
   "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "format": "prettier --write 'src/**/*.{ts,tsx}'",
+    "lint:code": "eslint 'src/**/*.{ts,tsx}' --max-warnings=0",
+    "lint:formatting": "prettier --check src",
+    "lint:types": "tsc --noEmit",
+    "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types"
   },
   "dependencies": {
+    "eslint-config-react-app": "^7.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "too-many-hooks": "link:./../too-many-hooks",

@@ -1,6 +1,5 @@
 import React from 'react'
 import { useCount } from 'too-many-hooks'
-
 import './useCount.css'
 
 export interface UseCountStoryProps {

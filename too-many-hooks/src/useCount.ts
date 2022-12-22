@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-interface Args {
+export interface UseCountArgs {
   /** Initial `count`, defaults to `0` */
   initial?: number
   /** Amount to increment or decrement by, defaults to `1` */
@@ -8,7 +8,7 @@ interface Args {
 }
 
 /** Returns a numeric `count` and functions to increment or decrement it */
-const useCount = ({ initial = 0, step = 1 }: Args) => {
+const useCount = ({ initial = 0, step = 1 }: UseCountArgs) => {
   const [count, setCount] = useState<number>(initial)
 
   const increment = useCallback(
