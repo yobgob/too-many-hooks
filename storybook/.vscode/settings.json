@@ -4,6 +4,17 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "prettier.enable": true,
+  "eslint.options": {
+    "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
+  },
+  "eslint.validate": [
+    "markdown",
+    "mdx",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "search.exclude": {
     "dist": true
   }
