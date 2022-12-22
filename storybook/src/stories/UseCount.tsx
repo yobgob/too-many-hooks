@@ -1,7 +1,6 @@
 import React from 'react'
 import { useCount } from 'too-many-hooks'
-
-import './useCount.css'
+import { Button } from '../components'
 
 export interface UseCountStoryProps {
   step?: number
@@ -10,32 +9,32 @@ export interface UseCountStoryProps {
 }
 
 export const UseCount: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrementStep }) => {
-  const { count, increment, decrement } = useCount({ step })
+  const [value, { increment, decrement }] = useCount({ step })
 
   return (
-    <div className="post-wrapper">
-      <hr />
-      <div className="header">
-        <img src="https://picsum.photos/30" alt="Random pfp" />
+    <div className="max-w-sm py-2 px-4 flex flex-col items-start gap-2 bg-white rounded-md text-black">
+      <hr className="w-full" />
+      <div className="flex items-center gap-2">
+        <img src="https://picsum.photos/30" alt="Random pfp" className="rounded-full" />
         <div>Dawson Booth</div>
-        <div>@DawsonBooth420</div>
+        <div className="text-slate-400">@DawsonBooth420</div>
       </div>
-      <div className="body">
-        <p>
+      <div className="ml-3.5 pl-3.5 border-l border-slate-400">
+        <p className="m-1">
           This new library too-many-hooks has huge potential. I hope they add a hook I can use to
           easily count likes/dislikes on a post. Maybe a "useCount"?
         </p>
       </div>
-      <div className="like-dislike">
-        <button onClick={() => decrement(decrementStep)} name="like">
+      <div className="pl-3.5 flex items-baseline gap-2">
+        <Button onClick={() => decrement(decrementStep)} variant="text" title="dislike">
           &#128078;
-        </button>
-        <span>{count}</span>
-        <button onClick={() => increment(incrementStep)} name="dislike">
+        </Button>
+        <span>{value}</span>
+        <Button onClick={() => increment(incrementStep)} variant="text" title="like">
           &#128077;
-        </button>
+        </Button>
       </div>
-      <hr />
+      <hr className="w-full bg-slate-800" />
     </div>
   )
 }

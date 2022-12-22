@@ -16,7 +16,12 @@
   },
   "version": "0.0.0",
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "format": "prettier --write 'src/**/*.{ts,tsx}'",
+    "lint:code": "eslint 'src/**/*.{ts,tsx}' --max-warnings=0",
+    "lint:formatting": "prettier --check src",
+    "lint:types": "tsc --noEmit",
+    "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types"
   },
   "dependencies": {
     "react": "^18.2.0"
