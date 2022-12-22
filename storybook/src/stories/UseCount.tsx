@@ -27,11 +27,11 @@ export const UseCount: React.FC<UseCountStoryProps> = ({ step, incrementStep, de
         </p>
       </div>
       <div className="like-dislike">
-        <button onClick={() => decrement(decrementStep)} name="like">
+        <button onClick={() => decrement(decrementStep)} title="like">
           &#128078;
         </button>
         <span>{count}</span>
-        <button onClick={() => increment(incrementStep)} name="dislike">
+        <button onClick={() => increment(incrementStep)} title="dislike">
           &#128077;
         </button>
       </div>

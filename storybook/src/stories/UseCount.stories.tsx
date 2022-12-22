@@ -48,7 +48,7 @@ type Story = StoryObj<typeof meta>
 export const LikesAndDislikes: Story = {
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const countingButton = canvas.getByRole('button')
+    const countingButton = canvas.getByTitle('like')
     userEvent.click(countingButton)
   },
 }
