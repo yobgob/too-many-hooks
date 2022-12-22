@@ -1,8 +1,4 @@
-import { useState } from 'react'
+import useCount, { UseCount, UseCountArgs, UseCountReturn } from './useCount'
 
-const useCount = (initial: number = 0) => {
-  const [count, setCount] = useState<number>(initial)
-  return { count, increment: () => setCount(c => c + 1), decrement: () => setCount(c => c - 1) }
-}
-
+export type { UseCountArgs, UseCountReturn, UseCount }
 export { useCount }
