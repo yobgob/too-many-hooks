@@ -1,13 +1,26 @@
 module.exports = {
-  extends: ['react-app', 'plugin:jsx-a11y/recommended'],
+  root: true,
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.eslint.json',
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.eslint.json'],
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
-  plugins: ['jsx-a11y'],
-  rules: {
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/no-unnecessary-condition': 'warn',
-    '@typescript-eslint/prefer-optional-chain': 'warn',
-    'react-hooks/exhaustive-deps': 'warn',
+  plugins: ['@typescript-eslint', 'react', 'react-hooks'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+  ],
+  ignorePatterns: ['*.cjs'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
+  rules: {},
 }
