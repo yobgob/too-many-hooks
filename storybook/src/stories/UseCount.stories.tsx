@@ -5,15 +5,27 @@ import dedent from 'ts-dedent'
 import { UseCount } from './UseCount'
 
 const DESCRIPTION = dedent`
-Easily manages state for a value that is incremented or decremented
-<br/><br/>args:
-<br/>\`initial: number = 0\` Initial value for \`count\`
-<br/>\`step: number = 1\` Amount to increment and decrement by
-<br/><br/>returns:
-<br/>\`count: number\`
-<br/>\`increment: (stepOverride?: number) => void\` Adds the \`stepOverride\` or, if \`undefined\`, \`step\` to \`count\`
-<br/>\`decrement: (stepOverride?: number) => void\` Subtracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\`
-<br/><br/>Example hook usage:
+
+Types: 
+
+\`\`\`ts
+interface Args {
+  /** Initial \`count\`, defaults to \`0\` */
+  initial?: number;
+  /** Amount to increment or decrement by, defaults to \`1\` */
+  step?: number;
+}
+/** Returns a numeric \`count\` and functions to increment or decrement it */
+declare const useCount: ({ initial, step }: Args) => {
+  readonly count: number;
+  /** Adds the \`stepOverride\` or, if \`undefined\`, \`step\` to \`count\` */
+  readonly increment: (stepOverride?: number) => void;
+  /** Subtracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\` */
+  readonly decrement: (stepOverride?: number) => void;
+};
+\`\`\`
+
+Example hook usage:
 
 \`\`\`tsx
 import { useCount } from 'too-many-hooks'
