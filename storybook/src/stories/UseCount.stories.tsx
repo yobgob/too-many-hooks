@@ -7,12 +7,12 @@ import { UseCount } from './UseCount'
 const DESCRIPTION = dedent`
 Easily manages state for a value that is incremented or decremented
 <br/><br/>args:
-<br/>\`initial: number = 0\` initial value for \`count\`
-<br/>\`step: number = 1\` amount to increment and decrement by
+<br/>\`initial: number = 0\` Initial value for \`count\`
+<br/>\`step: number = 1\` Amount to increment and decrement by
 <br/><br/>returns:
-<br/>\`count: number\` is the current count, displayed on the button
+<br/>\`count: number\`
 <br/>\`increment: (stepOverride?: number) => void\` Adds the \`stepOverride\` or, if \`undefined\`, \`step\` to \`count\`
-<br/>\`decrement: (stepOverride?: number) => void\` Subracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\`
+<br/>\`decrement: (stepOverride?: number) => void\` Subtracts the \`stepOverride\` or, if \`undefined\`, \`step\` from \`count\`
 <br/><br/>Example hook usage:
 
 \`\`\`tsx
