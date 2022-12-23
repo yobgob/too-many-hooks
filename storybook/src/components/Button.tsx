@@ -9,7 +9,7 @@ const Button: React.FC<Props> = ({ variant = 'fill', className, ...props }) => {
     <button
       className={`px-1.5 py-1 border rounded-md bg-transparent border-transparent  ${
         variant === 'fill'
-          ? 'bg-blue-400 hover:underline'
+          ? 'bg-blue-500 hover:underline text-white'
           : variant === 'outline'
           ? 'bg-transparent border-slate-800 hover:underline'
           : 'hover:bg-slate-100'

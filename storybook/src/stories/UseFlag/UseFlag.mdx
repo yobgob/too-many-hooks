@@ -1,0 +1,87 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Example/UseFlag" />
+
+# useFlag
+
+Simply manage boolean state
+
+### Types:
+
+```ts
+/**
+ * Return values of the `useFlag` hook
+ *
+ * @export
+ * @typedef {UseFlagReturn}
+ */
+export declare type UseFlagReturn = [
+    boolean,
+    {
+        /**
+         * Sets the flag to a specific boolean value
+         *
+         * @readonly
+         * @type {React.Dispatch<React.SetStateAction<boolean>>}
+         */
+        readonly set: React.Dispatch<React.SetStateAction<boolean>>;
+        /**
+         * Sets the flag to true
+         *
+         * @readonly
+         * @type {() => void}
+         */
+        readonly flag: () => void;
+        /**
+         * Sets the flag to false
+         *
+         * @readonly
+         * @type {() => void}
+         */
+        readonly unflag: () => void;
+        /**
+         * Inverts the flag
+         *
+         * @readonly
+         * @type {() => void}
+         */
+        readonly toggle: () => void;
+    }
+];
+/**
+ * `useFlag` hook type
+ *
+ * @export
+ * @typedef {UseFlag}
+ * @param {boolean} initial
+ * @returns {UseFlagReturn}
+ */
+export declare type UseFlag = (initial: boolean) => UseFlagReturn;
+/**
+ * Simplifies boolean state management
+ *
+ * @implements {UseFlag}
+ * @param {boolean} initial
+ * @returns {UseFlagReturn}
+ */
+declare const useFlag: UseFlag;
+```
+
+### Example hook usage:
+
+```tsx
+import { useFlag } from 'too-many-hooks'
+
+const [isOpen, { flag: open, unflag: close }] = useFlag(false)
+
+return (
+  <div className="bg-white h-screen w-screen flex flex-col items-center justify-center">
+    <button onClick={open}>Open modal</button>
+    <Modal isOpen={isOpen} onClose={close}>
+      This modal was opened with a simple<code>onClick=&#123;open&#125;</code>. Clicking
+      <code>&#10005;</code> or outside of the modal will close it with a simple
+      <code>onClick=&#123;close&#125;</code>. No setters needed.
+    </Modal>
+  </div>
+)
+```
