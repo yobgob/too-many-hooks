@@ -10,7 +10,7 @@ const Modal: React.FC = () => {
     <div className="bg-white h-screen w-screen flex flex-col items-center justify-center">
       <Button onClick={open}>Open modal</Button>
       <Modal_ isOpen={isOpen} onClose={close}>
-        <div>
+        <div className="leading-8">
           This modal was opened with a simple<code>onClick=&#123;open&#125;</code>. Clicking
           <code>&#10005;</code> or outside of the modal will close it with a simple
           <code>onClick=&#123;close&#125;</code>. No setters needed.
