@@ -8,7 +8,7 @@ export interface UseCountStoryProps {
   decrementStep?: number
 }
 
-export const UseCount: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrementStep }) => {
+const SocialMedia: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrementStep }) => {
   const [value, { increment, decrement }] = useCount({ step })
 
   return (
@@ -38,3 +38,5 @@ export const UseCount: React.FC<UseCountStoryProps> = ({ step, incrementStep, de
     </div>
   )
 }
+
+export default SocialMedia

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import UseFlagForm from './UseFlagForm'
-import useFlagFormCode from './UseFlagForm.tsx?raw'
-import UseFlagModal from './UseFlagModal'
-import useFlagModalCode from './UseFlagModal.tsx?raw'
+import Form_ from './Form'
+import FORM_CODE from './Form.tsx?raw'
+import Modal_ from './Modal'
+import MODAL_CODE from './Modal.tsx?raw'
 
 const meta = {
   title: 'Example/UseFlag',
@@ -11,26 +11,24 @@ const meta = {
 
 export default meta
 
-type Story = StoryObj<typeof meta>
-
-export const Modal: Story = {
+export const Modal: StoryObj<Meta<typeof Modal_>> = {
   parameters: {
-    component: UseFlagModal,
+    component: Modal_,
     layout: 'fullscreen',
     docs: {
-      source: { code: useFlagModalCode, language: 'tsx' },
+      source: { code: MODAL_CODE, language: 'tsx' },
     },
   },
-  render: () => <UseFlagModal />,
+  render: () => <Modal_ />,
 }
 
-export const Form: Story = {
+export const Form: StoryObj<Meta<typeof Form_>> = {
   parameters: {
-    component: UseFlagForm,
+    component: Form_,
     layout: 'centered',
     docs: {
-      source: { code: useFlagFormCode, language: 'tsx' },
+      source: { code: FORM_CODE, language: 'tsx' },
     },
   },
-  render: () => <UseFlagForm />,
+  render: () => <Form_ />,
 }

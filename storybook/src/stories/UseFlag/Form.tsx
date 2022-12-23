@@ -2,7 +2,7 @@ import React from 'react'
 import { useFlag } from 'too-many-hooks'
 import { Button } from '../../components'
 
-const UseFlagForm: React.FC = () => {
+const Form: React.FC = () => {
   const [hasUnsavedChanges, { flag: setUnsaved, unflag: setSaved }] = useFlag(false)
   const [hasBegun, { flag: setHasBegun }] = useFlag(false)
 
@@ -50,4 +50,4 @@ const UseFlagForm: React.FC = () => {
   )
 }
 
-export default UseFlagForm
+export default Form
