@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import Form_ from './Form'
+import Form from './Form'
 import FORM_CODE from './Form.tsx?raw'
-import Modal_ from './Modal'
+import Modal from './Modal'
 import MODAL_CODE from './Modal.tsx?raw'
 
 const meta = {
@@ -11,24 +11,26 @@ const meta = {
 
 export default meta
 
-export const Modal: StoryObj<Meta<typeof Modal_>> = {
+export const ModalStory: StoryObj<Meta<typeof Modal>> = {
+  name: 'Modal',
   parameters: {
-    component: Modal_,
+    component: Modal,
     layout: 'fullscreen',
     docs: {
       source: { code: MODAL_CODE, language: 'tsx' },
     },
   },
-  render: () => <Modal_ />,
+  render: () => <Modal />,
 }
 
-export const Form: StoryObj<Meta<typeof Form_>> = {
+export const FormStory: StoryObj<Meta<typeof Form>> = {
+  name: 'Form',
   parameters: {
-    component: Form_,
+    component: Form,
     layout: 'centered',
     docs: {
       source: { code: FORM_CODE, language: 'tsx' },
     },
   },
-  render: () => <Form_ />,
+  render: () => <Form />,
 }
