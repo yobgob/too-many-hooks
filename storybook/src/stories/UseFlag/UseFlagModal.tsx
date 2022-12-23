@@ -3,7 +3,7 @@ import { useFlag } from 'too-many-hooks'
 import { Button, Modal } from '../../components'
 import '../../index.css'
 
-export const UseFlag: React.FC = () => {
+const UseFlagModal: React.FC = () => {
   const [isOpen, { flag: open, unflag: close }] = useFlag(false)
 
   return (
@@ -19,3 +19,5 @@ export const UseFlag: React.FC = () => {
     </div>
   )
 }
+
+export default UseFlagModal

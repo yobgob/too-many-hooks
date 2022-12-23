@@ -2004,7 +2004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:7.0.0-beta.13":
+"@storybook/addon-docs@npm:7.0.0-beta.13, @storybook/addon-docs@npm:^7.0.0-beta.12":
   version: 7.0.0-beta.13
   resolution: "@storybook/addon-docs@npm:7.0.0-beta.13"
   dependencies:
@@ -10927,6 +10927,7 @@ __metadata:
   resolution: "storybook@workspace:."
   dependencies:
     "@babel/core": ^7.20.5
+    "@storybook/addon-docs": ^7.0.0-beta.12
     "@storybook/addon-essentials": ^7.0.0-beta.12
     "@storybook/addon-interactions": ^7.0.0-beta.12
     "@storybook/addon-links": ^7.0.0-beta.12
