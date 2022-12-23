@@ -6,3 +6,12 @@ html {
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 12px;
 }
+
+code {
+  margin-left: 0.4em;
+  padding: 0.2rem 0.5rem;
+
+  background-color: #eee;
+  color: #c7254e;
+  white-space: nowrap;
+}
