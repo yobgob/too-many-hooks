@@ -80,6 +80,13 @@ export type UseArrayReturn<T> = [
       newElement: React.SetStateAction<T>,
     ) => void
     /**
+     * The same functionality as JS Array.sort, but applied to state
+     *
+     * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
+     * @param {((a: T, b: T) => number) | undefined} compareFn
+     */
+    sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
+    /**
      * Empties the array
      *
      * @type {() => void}
@@ -123,10 +130,7 @@ const isUpdateFunction = <T>(element: React.SetStateAction<T>): element is (prev
  * @param {T[]} initial
  * @returns {UseArrayReturn}
  */
-const useArray = <T>(
-  /** Initial flag state, required */
-  initial: T[],
-): UseArrayReturn<T> => {
+const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
   const [array, setArray] = useState<T[]>(initial)
 
   const push = useCallback((...elements: T[]) => setArray(array => [...array, ...elements]), [])
@@ -169,6 +173,12 @@ const useArray = <T>(
     [setElement],
   )
 
+  const sort = useCallback(
+    (compareFn?: ((a: T, b: T) => number) | undefined) =>
+      setArray(array => [...array.sort(compareFn)]),
+    [],
+  )
+
   const clear = useCallback(() => setArray([]), [])
   const reset = useCallback(() => setArray(initial), [initial])
 
@@ -181,6 +191,7 @@ const useArray = <T>(
       removeAt,
       updateAt,
       updateWhere,
+      sort,
       clear,
       reset,
     },
