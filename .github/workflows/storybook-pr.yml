@@ -46,7 +46,7 @@ jobs:
       run: yarn build-storybook
       working-directory: storybook
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy to PR Preview
       uses: rossjrw/pr-preview-action@v1
       with:
         source-dir: storybook/storybook-static
