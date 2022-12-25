@@ -1,3 +1,5 @@
+name: Preview storybook in PR
+concurrency: preview-${{ github.ref }}
 on:
   pull_request:
     types:
