@@ -48,4 +48,4 @@ jobs:
         folder: storybook/storybook-static
         branch: gh-pages
         clean-exclude: pr-preview
-
+        force: false
