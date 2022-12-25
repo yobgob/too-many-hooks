@@ -1,3 +1,4 @@
+name: Lint and build package
 on:
   pull_request:
     branches:
