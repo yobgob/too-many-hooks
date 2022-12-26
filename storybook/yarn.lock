@@ -10957,7 +10957,7 @@ __metadata:
     react-dom: ^18.2.0
     storybook: ^7.0.0-beta.12
     tailwindcss: ^3.2.4
-    too-many-hooks: "link:./../too-many-hooks"
+    too-many-hooks: "file:../too-many-hooks"
     ts-dedent: ^2.2.0
     typescript: ^4.9.3
     vite: ^4.0.0
@@ -11297,11 +11297,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"too-many-hooks@link:./../too-many-hooks::locator=storybook%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "too-many-hooks@link:./../too-many-hooks::locator=storybook%40workspace%3A."
+"too-many-hooks@file:../too-many-hooks::locator=storybook%40workspace%3A.":
+  version: 0.0.0
+  resolution: "too-many-hooks@file:../too-many-hooks#../too-many-hooks::hash=36ec3d&locator=storybook%40workspace%3A."
+  dependencies:
+    react: ^18.2.0
+  checksum: 86ffc1e8576623e2a929fab7b02ed8eb14b33ed19c16f98ac67397325c2d5e681730b5c4773b34b2e5d8de37d11ca92d319d70aa669972de2f144b097dae261c
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "tr46@npm:~0.0.3":
   version: 0.0.3
