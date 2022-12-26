@@ -1,4 +1,4 @@
-import { Canvas, Meta, Story } from '@storybook/blocks';
+import { Canvas, Meta, Story } from '@storybook/blocks'
 import { userEvent, within } from '@storybook/testing-library'
 import SocialMedia from './SocialMedia'
 import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
@@ -11,7 +11,7 @@ Increment and decrement numeric state
 
 ## Types
 
-```ts
+````ts
 /**
  * Arguments to the `useCount` hook
  *
@@ -26,7 +26,7 @@ export interface UseCountArgs {
    * @type {?number}
    * @default 0
    */
-  initial?: number;
+  initial?: number
   /** Amount to increment or decrement by */
   /**
    * Description placeholder
@@ -34,7 +34,7 @@ export interface UseCountArgs {
    * @type {?number}
    * @default 1
    */
-  step?: number;
+  step?: number
 }
 /**
  * Return values of the `useCount` hook
@@ -51,30 +51,30 @@ export declare type UseCountReturn = [
      * @readonly
      * @type {React.Dispatch<React.SetStateAction<number>>}
      */
-    readonly set: React.Dispatch<React.SetStateAction<number>>;
+    readonly set: React.Dispatch<React.SetStateAction<number>>
     /**
      * Adds the `stepOverride` or, if `undefined`, `step` to `count`
      *
      * @readonly
      * @type {(stepOverride?: number) => void}
      */
-    readonly increment: (stepOverride?: number) => void;
+    readonly increment: (stepOverride?: number) => void
     /**
      * Subtracts the `stepOverride` or, if `undefined`, `step` from `count`
      *
      * @readonly
      * @type {(stepOverride?: number) => void}
      */
-    readonly decrement: (stepOverride?: number) => void;
+    readonly decrement: (stepOverride?: number) => void
     /**
      * Resets `count` to its initial value
      *
      * @readonly
      * @type {() => void}
      */
-    readonly reset: () => void;
-  }
-];
+    readonly reset: () => void
+  },
+]
 /**
  * `useCount` hook type
  *
@@ -83,7 +83,7 @@ export declare type UseCountReturn = [
  * @param {UseCountArgs}
  * @returns {UseCountReturn}
  */
-export declare type UseCount = (args: UseCountArgs) => UseCountReturn;
+export declare type UseCount = (args: UseCountArgs) => UseCountReturn
 /**
  * Returns a numeric `count` and functions to set, increment, decrement, or reset it
  *
@@ -101,33 +101,33 @@ export declare type UseCount = (args: UseCountArgs) => UseCountReturn;
  * @param {UseCountArgs} { initial = 0, step = 1 }
  * @returns {UseCountReturn}
  */
-export declare const useCount: UseCount;
-```
+export declare const useCount: UseCount
+````
 
 ## Examples
 
 ### Social Media
 
 <Canvas withSource="open">
-  <Story 
-    name= 'Social Media'
+  <Story
+    name="Social Media"
     play={({ canvasElement }) => {
       const canvas = within(canvasElement)
       const countingButton = canvas.getByTitle('like')
       userEvent.click(countingButton)
     }}
-    parameters= {{
+    parameters={{
       layout: 'centered',
       controls: { expanded: true },
       docs: {
         source: { code: SOCIAL_MEDIA_CODE, language: 'tsx' },
       },
     }}
-    argTypes={ {
+    argTypes={{
       step: { type: 'number', defaultValue: 1 },
       incrementStep: { type: 'number' },
       decrementStep: { type: 'number' },
     }}
-    render={args => <SocialMedia {...args}/>}
+    render={args => <SocialMedia {...args} />}
   />
 </Canvas>

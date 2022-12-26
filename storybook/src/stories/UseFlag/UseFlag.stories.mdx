@@ -1,4 +1,4 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
 import Modal from './Modal'
 import MODAL_CODE from './Modal.tsx?raw'
 import Form from './Form'
@@ -28,30 +28,30 @@ export declare type UseFlagReturn = [
      * @readonly
      * @type {React.Dispatch<React.SetStateAction<boolean>>}
      */
-    readonly set: React.Dispatch<React.SetStateAction<boolean>>;
+    readonly set: React.Dispatch<React.SetStateAction<boolean>>
     /**
      * Sets the flag to true
      *
      * @readonly
      * @type {() => void}
      */
-    readonly flag: () => void;
+    readonly flag: () => void
     /**
      * Sets the flag to false
      *
      * @readonly
      * @type {() => void}
      */
-    readonly unflag: () => void;
+    readonly unflag: () => void
     /**
      * Inverts the flag
      *
      * @readonly
      * @type {() => void}
      */
-    readonly toggle: () => void;
-  }
-];
+    readonly toggle: () => void
+  },
+]
 /**
  * `useFlag` hook type
  *
@@ -60,7 +60,7 @@ export declare type UseFlagReturn = [
  * @param {boolean} initial
  * @returns {UseFlagReturn}
  */
-export declare type UseFlag = (initial: boolean) => UseFlagReturn;
+export declare type UseFlag = (initial: boolean) => UseFlagReturn
 /**
  * Simplifies boolean state management
  *
@@ -68,7 +68,7 @@ export declare type UseFlag = (initial: boolean) => UseFlagReturn;
  * @param {boolean} initial
  * @returns {UseFlagReturn}
  */
-declare const useFlag: UseFlag;
+declare const useFlag: UseFlag
 ```
 
 ## Examples
@@ -76,12 +76,15 @@ declare const useFlag: UseFlag;
 ### Modal
 
 <Canvas withSource="open">
-  <Story name="Modal" parameters={{
-    layout: 'centered',
-    docs: {
-      source: { code: MODAL_CODE, language: 'tsx' },
-    },
-  }} >
+  <Story
+    name="Modal"
+    parameters={{
+      layout: 'centered',
+      docs: {
+        source: { code: MODAL_CODE, language: 'tsx' },
+      },
+    }}
+  >
     <Modal />
   </Story>
 </Canvas>
@@ -89,12 +92,15 @@ declare const useFlag: UseFlag;
 ### Form State
 
 <Canvas withSource="open">
-  <Story name="Form" parameters={{
-    layout: 'centered',
-    docs: {
-      source: { code: FORM_CODE, language: 'tsx' },
-    },
-  }} >
+  <Story
+    name="Form"
+    parameters={{
+      layout: 'centered',
+      docs: {
+        source: { code: FORM_CODE, language: 'tsx' },
+      },
+    }}
+  >
     <Form />
   </Story>
 </Canvas>
