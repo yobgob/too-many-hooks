@@ -1,7 +1,7 @@
 module.exports = {
   arrowParens: 'avoid',
   jsxSingleQuote: false,
-  plugins: ['prettier-plugin-organize-imports'],
+  plugins: ['prettier-plugin-organize-imports', 'prettier-plugin-tailwindcss'],
   printWidth: 100,
   quoteProps: 'as-needed',
   semi: false,
