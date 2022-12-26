@@ -1,4 +1,8 @@
 import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import Modal from './Modal'
+import MODAL_CODE from './Modal.tsx?raw'
+import Form from './Form'
+import FORM_CODE from './Form.tsx?raw'
 
 <Meta title="Example/UseFlag" />
 
@@ -16,37 +20,37 @@ Simply manage boolean state
  * @typedef {UseFlagReturn}
  */
 export declare type UseFlagReturn = [
-    boolean,
-    {
-        /**
-         * Sets the flag to a specific boolean value
-         *
-         * @readonly
-         * @type {React.Dispatch<React.SetStateAction<boolean>>}
-         */
-        readonly set: React.Dispatch<React.SetStateAction<boolean>>;
-        /**
-         * Sets the flag to true
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly flag: () => void;
-        /**
-         * Sets the flag to false
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly unflag: () => void;
-        /**
-         * Inverts the flag
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly toggle: () => void;
-    }
+  boolean,
+  {
+    /**
+     * Sets the flag to a specific boolean value
+     *
+     * @readonly
+     * @type {React.Dispatch<React.SetStateAction<boolean>>}
+     */
+    readonly set: React.Dispatch<React.SetStateAction<boolean>>;
+    /**
+     * Sets the flag to true
+     *
+     * @readonly
+     * @type {() => void}
+     */
+    readonly flag: () => void;
+    /**
+     * Sets the flag to false
+     *
+     * @readonly
+     * @type {() => void}
+     */
+    readonly unflag: () => void;
+    /**
+     * Inverts the flag
+     *
+     * @readonly
+     * @type {() => void}
+     */
+    readonly toggle: () => void;
+  }
 ];
 /**
  * `useFlag` hook type
@@ -67,17 +71,30 @@ export declare type UseFlag = (initial: boolean) => UseFlagReturn;
 declare const useFlag: UseFlag;
 ```
 
-
 ## Examples
 
 ### Modal
 
 <Canvas withSource="open">
-  <Story id="example-useflag--modal-story" />
+  <Story name="Modal" parameters={{
+    layout: 'centered',
+    docs: {
+      source: { code: MODAL_CODE, language: 'tsx' },
+    },
+  }} >
+    <Modal />
+  </Story>
 </Canvas>
 
 ### Form State
 
 <Canvas withSource="open">
-  <Story id="example-useflag--form-story" />
+  <Story name="Form" parameters={{
+    layout: 'centered',
+    docs: {
+      source: { code: FORM_CODE, language: 'tsx' },
+    },
+  }} >
+    <Form />
+  </Story>
 </Canvas>
