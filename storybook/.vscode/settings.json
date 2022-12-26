@@ -17,5 +17,6 @@
   ],
   "search.exclude": {
     "dist": true
-  }
+  },
+  "test": true
 }
