@@ -12,8 +12,7 @@ const SocialMedia: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrem
   const [value, { increment, decrement }] = useCount({ step })
 
   return (
-    <div className="max-w-sm py-2 px-4 flex flex-col items-start gap-2 bg-white rounded-md text-black">
-      <hr className="w-full" />
+    <div className="max-w-2xl w-full py-2 px-4 flex flex-col items-start gap-2 bg-white rounded-md text-black border">
       <div className="flex items-center gap-2">
         <img src="https://picsum.photos/30" alt="Random pfp" className="rounded-full" />
         <div>Dawson Booth</div>
@@ -26,15 +25,14 @@ const SocialMedia: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrem
         </p>
       </div>
       <div className="pl-3.5 flex items-baseline gap-2">
-        <Button onClick={() => decrement(decrementStep)} variant="text" title="dislike">
-          &#128078;
-        </Button>
-        <span>{value}</span>
         <Button onClick={() => increment(incrementStep)} variant="text" title="like">
           &#128077;
         </Button>
+        <span>{value}</span>
+        <Button onClick={() => decrement(decrementStep)} variant="text" title="dislike">
+          &#128078;
+        </Button>
       </div>
-      <hr className="w-full bg-slate-800" />
     </div>
   )
 }

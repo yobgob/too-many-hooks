@@ -13,12 +13,12 @@ const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
     ? ReactDOM.createPortal(
         <>
           <div
-            className="fixed top-0 left-0 w-screen h-screen bg-black opacity-25"
+            className="fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-50"
             onClick={onClose}
             aria-hidden
           />
           <div
-            className="fixed top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4"
+            className="fixed top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-50"
             aria-modal
             tabIndex={-1}
             role="dialog"
