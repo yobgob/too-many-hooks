@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build && touch storybook-static/.nojekyll",
+    "build-storybook": "storybook build",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "lint:code": "eslint 'src/**/*.{ts,tsx}' --max-warnings=0",
     "lint:formatting": "prettier --check src",

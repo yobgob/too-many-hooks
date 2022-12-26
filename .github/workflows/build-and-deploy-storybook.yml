@@ -41,7 +41,7 @@ jobs:
       working-directory: storybook
 
     - name: Build storybook
-      run: yarn build-storybook
+      run: yarn build-storybook && touch storybook-static/.nojekyll
       working-directory: storybook
 
     - name: Deploy to GitHub Pages
