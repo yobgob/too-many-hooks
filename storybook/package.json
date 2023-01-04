@@ -4,8 +4,8 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "format": "prettier --write 'src/**/*.{ts,tsx}'",
-    "lint:code": "eslint 'src/**/*.{ts,tsx}' --max-warnings=0",
+    "format": "prettier --write src",
+    "lint:code": "eslint src --max-warnings=0",
     "lint:formatting": "prettier --check src",
     "lint:types": "tsc --noEmit",
     "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types"
