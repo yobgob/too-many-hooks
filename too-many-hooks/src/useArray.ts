@@ -80,6 +80,17 @@ export type UseArrayReturn<T> = [
       newElement: React.SetStateAction<T>,
     ) => void
     /**
+     * The same functionality as JS Array.filter applied to state
+     *
+     * @readonly
+     * @type {(predicate: (element: T) => boolean) => void}
+     * @param {predicate: (element: T) => boolean} predicate
+     */
+    readonly filter: (
+      predicate: (element: T) => boolean,
+      newElement: React.SetStateAction<T>,
+    ) => void
+    /**
      * The same functionality as JS Array.sort, but applied to state
      *
      * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
@@ -173,6 +184,12 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
     [setElement],
   )
 
+  const filter = useCallback(
+    (predicate: (element: T) => boolean) =>
+      setArray(array => array.filter(element => predicate(element))),
+    [],
+  )
+
   const sort = useCallback(
     (compareFn?: ((a: T, b: T) => number) | undefined) =>
       setArray(array => [...array.sort(compareFn)]),
@@ -191,6 +208,7 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
       removeAt,
       updateAt,
       updateWhere,
+      filter,
       sort,
       clear,
       reset,
