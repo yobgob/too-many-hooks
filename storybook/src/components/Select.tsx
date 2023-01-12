@@ -4,7 +4,8 @@ type OptionValue = React.OptionHTMLAttributes<HTMLOptionElement>['value']
 
 interface Props<T extends OptionValue> extends Omit<ComponentProps<'select'>, 'onChange'> {
   label?: React.ReactNode
-  onChange: (value: T) => void
+  labelDirection?: 'row' | 'column'
+  onChange?: React.ChangeEventHandler<HTMLSelectElement & { value: T }>
   options: { value: T; label: string }[]
   variant?: 'fill' | 'outline' | 'text'
   color?: string
@@ -12,6 +13,7 @@ interface Props<T extends OptionValue> extends Omit<ComponentProps<'select'>, 'o
 
 const Select = <T extends OptionValue>({
   label,
+  labelDirection = 'row',
   onChange,
   options,
   className,
@@ -20,10 +22,14 @@ const Select = <T extends OptionValue>({
   ...props
 }: Props<T>) => {
   return (
-    <label className="flex items-baseline gap-1">
+    <label
+      className={`flex ${
+        labelDirection === 'row' ? 'items-baseline' : 'flex-col items-start'
+      } gap-1`}
+    >
       {label}
       <select
-        className={`pl-1.5 pr-8 py-1 border rounded-md bg-transparent border-transparent disabled:hover:no-underline  ${
+        className={`w-full pl-1.5 pr-8 py-1 border rounded-md bg-transparent border-transparent disabled:hover:no-underline  ${
           variant === 'fill'
             ? `bg-blue-500 hover:underline text-white disabled:bg-slate-500`
             : variant === 'outline'
@@ -37,7 +43,11 @@ const Select = <T extends OptionValue>({
             ? { borderColor: color }
             : { color }
         }
-        onChange={e => onChange(e.target.value as T)}
+        onChange={
+          onChange
+            ? e => onChange(e as React.ChangeEvent<HTMLSelectElement & { value: T }>)
+            : undefined
+        }
         {...props}
       >
         {options.map(({ value, label }) => (

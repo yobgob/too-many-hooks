@@ -94,6 +94,12 @@ export type UseArrayReturn<T> = [
      * @param {((a: T, b: T) => number) | undefined} compareFn
      */
     sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
+    /** /**
+     * The same functionality as JS Array.reverse, but applied to state
+     *
+     * @type {() => void)}
+     */
+    reverse: () => void
     /**
      * Empties the array
      *
@@ -162,6 +168,7 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
       isUpdateFunction(updaterOrValue) ? updaterOrValue(previousState) : updaterOrValue,
     [],
   )
+
   const updateAt = useCallback(
     (index: number, ...elements: React.SetStateAction<T>[]) =>
       setArray(array => [
@@ -192,6 +199,7 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
       setArray(array => [...array.sort(compareFn)]),
     [],
   )
+  const reverse = useCallback(() => setArray(array => [...array.reverse()]), [])
 
   const clear = useCallback(() => setArray([]), [])
   const reset = useCallback(() => setArray(initial), [initial])
@@ -207,6 +215,7 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
       updateWhere,
       filter,
       sort,
+      reverse,
       clear,
       reset,
     },
