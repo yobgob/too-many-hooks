@@ -84,23 +84,8 @@ const Burger: React.FC = () => {
   return (
     <div className="mx-auto p-4 max-w-4xl h-screen flex flex-col gap-8">
       <h1>Create a burger</h1>
-      <div className="h-full flex gap-8 justify-center">
+      <div className="h-full flex gap-8 justify-start">
         <div className="h-fit flex flex-col flex-wrap gap-4">
-          <Select<number | 'top' | 'bottom'>
-            label="Add ingredients at"
-            labelDirection="column"
-            options={[
-              { label: 'Top (0)', value: 'top' },
-              ...ingredients.slice(1).map((_, i) => ({
-                label: (i + 1).toString(),
-                value: i + 1,
-              })),
-              { label: `Bottom (${ingredients.length})`, value: 'bottom' },
-            ]}
-            onChange={e => setInsertLocation(e.target.value)}
-            value={insertLocation}
-          />
-
           <div className="h-fit flex flex-col gap-2">
             {Object.entries(INGREDIENTS).map(([key, { label, color }]) => {
               const typedKey = key as Ingredient
@@ -121,6 +106,20 @@ const Burger: React.FC = () => {
               )
             })}
           </div>
+          <Select<number | 'top' | 'bottom'>
+            label="Add ingredients at"
+            labelDirection="column"
+            options={[
+              { label: 'Top (0)', value: 'top' },
+              ...ingredients.slice(1).map((_, i) => ({
+                label: (i + 1).toString(),
+                value: i + 1,
+              })),
+              { label: `Bottom (${ingredients.length})`, value: 'bottom' },
+            ]}
+            onChange={e => setInsertLocation(e.target.value)}
+            value={insertLocation}
+          />
         </div>
 
         <div className="h-fit flex flex-col flex-wrap gap-8">
@@ -208,7 +207,7 @@ const Burger: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-full pb-4 flex flex-col items-center justify-center">
+        <div className="h-full mx-auto pb-4 flex flex-col items-center justify-center">
           {ingredients.map((ingredient, i) => (
             <div key={`${ingredient}-${i}`} className="relative flex items-center gap-2">
               {INGREDIENTS[ingredient].svg}
