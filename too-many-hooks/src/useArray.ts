@@ -86,10 +86,7 @@ export type UseArrayReturn<T> = [
      * @type {(predicate: (element: T) => boolean) => void}
      * @param {predicate: (element: T) => boolean} predicate
      */
-    readonly filter: (
-      predicate: (element: T) => boolean,
-      newElement: React.SetStateAction<T>,
-    ) => void
+    readonly filter: (predicate: (element: T) => boolean) => void
     /**
      * The same functionality as JS Array.sort, but applied to state
      *
