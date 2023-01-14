@@ -1,7 +1,5 @@
 import { Canvas, Meta, Story } from '@storybook/blocks'
-import { userEvent, within } from '@storybook/testing-library'
-import SocialMedia from './SocialMedia'
-import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
+import * as stories from './stories'
 
 <Meta title="Example/UseCount" />
 
@@ -109,25 +107,5 @@ export declare const useCount: UseCount
 ### Social Media
 
 <Canvas withSource="open">
-  <Story
-    name="Social Media"
-    play={({ canvasElement }) => {
-      const canvas = within(canvasElement)
-      const countingButton = canvas.getByTitle('like')
-      userEvent.click(countingButton)
-    }}
-    parameters={{
-      layout: 'centered',
-      controls: { expanded: true },
-      docs: {
-        source: { code: SOCIAL_MEDIA_CODE, language: 'tsx' },
-      },
-    }}
-    argTypes={{
-      step: { type: 'number', defaultValue: 1 },
-      incrementStep: { type: 'number' },
-      decrementStep: { type: 'number' },
-    }}
-    render={args => <SocialMedia {...args} />}
-  />
+  <Story name="Social Media" story={stories.socialMedia} />
 </Canvas>
