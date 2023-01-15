@@ -1,4 +1,5 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import * as stories from './stories'
 
 <Meta title="Example/UseFlag" />
 
@@ -16,38 +17,38 @@ Simply manage boolean state
  * @typedef {UseFlagReturn}
  */
 export declare type UseFlagReturn = [
-    boolean,
-    {
-        /**
-         * Sets the flag to a specific boolean value
-         *
-         * @readonly
-         * @type {React.Dispatch<React.SetStateAction<boolean>>}
-         */
-        readonly set: React.Dispatch<React.SetStateAction<boolean>>;
-        /**
-         * Sets the flag to true
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly flag: () => void;
-        /**
-         * Sets the flag to false
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly unflag: () => void;
-        /**
-         * Inverts the flag
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly toggle: () => void;
-    }
-];
+  boolean,
+  {
+    /**
+     * Sets the flag to a specific boolean value
+     *
+     * @readonly
+     * @type {React.Dispatch<React.SetStateAction<boolean>>}
+     */
+    readonly set: React.Dispatch<React.SetStateAction<boolean>>
+    /**
+     * Sets the flag to true
+     *
+     * @readonly
+     * @type {() => void}
+     */
+    readonly flag: () => void
+    /**
+     * Sets the flag to false
+     *
+     * @readonly
+     * @type {() => void}
+     */
+    readonly unflag: () => void
+    /**
+     * Inverts the flag
+     *
+     * @readonly
+     * @type {() => void}
+     */
+    readonly toggle: () => void
+  },
+]
 /**
  * `useFlag` hook type
  *
@@ -56,7 +57,7 @@ export declare type UseFlagReturn = [
  * @param {boolean} initial
  * @returns {UseFlagReturn}
  */
-export declare type UseFlag = (initial: boolean) => UseFlagReturn;
+export declare type UseFlag = (initial: boolean) => UseFlagReturn
 /**
  * Simplifies boolean state management
  *
@@ -64,20 +65,19 @@ export declare type UseFlag = (initial: boolean) => UseFlagReturn;
  * @param {boolean} initial
  * @returns {UseFlagReturn}
  */
-declare const useFlag: UseFlag;
+declare const useFlag: UseFlag
 ```
-
 
 ## Examples
 
 ### Modal
 
 <Canvas withSource="open">
-  <Story id="example-useflag--modal-story" />
+  <Story name="Modal" story={stories.modal} />
 </Canvas>
 
 ### Form State
 
 <Canvas withSource="open">
-  <Story id="example-useflag--form-story" />
+  <Story name="Form" story={stories.form} />
 </Canvas>

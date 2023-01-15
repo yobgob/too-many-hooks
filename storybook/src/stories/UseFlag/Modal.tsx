@@ -7,7 +7,7 @@ const Modal: React.FC = () => {
   const [isOpen, { flag: open, unflag: close }] = useFlag(false)
 
   return (
-    <div className="bg-white h-screen w-screen flex flex-col items-center justify-center">
+    <>
       <Button onClick={open}>Open modal</Button>
       <Modal_ isOpen={isOpen} onClose={close}>
         <div className="leading-8">
@@ -16,7 +16,7 @@ const Modal: React.FC = () => {
           <code>onClick=&#123;close&#125;</code>. No setters needed.
         </div>
       </Modal_>
-    </div>
+    </>
   )
 }
 
