@@ -1,83 +1,150 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import * as stories from './stories'
 
 <Meta title="Example/UseArray" />
 
-# useFlag
+# useArray
 
-Simply manage boolean state
+Wrap array state with useful helper functions for easier, cleaner updates
 
 ## Types
 
-```ts
+````ts
 /**
- * Return values of the `useFlag` hook
+ * Return values of the `useArray` hook
  *
  * @export
- * @typedef {UseFlagReturn}
+ * @typedef {UseArrayReturn}
+ * @template T
  */
-export declare type UseFlagReturn = [
-    boolean,
-    {
-        /**
-         * Sets the flag to a specific boolean value
-         *
-         * @readonly
-         * @type {React.Dispatch<React.SetStateAction<boolean>>}
-         */
-        readonly set: React.Dispatch<React.SetStateAction<boolean>>;
-        /**
-         * Sets the flag to true
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly flag: () => void;
-        /**
-         * Sets the flag to false
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly unflag: () => void;
-        /**
-         * Inverts the flag
-         *
-         * @readonly
-         * @type {() => void}
-         */
-        readonly toggle: () => void;
-    }
-];
+export declare type UseArrayReturn<T> = [
+  T[],
+  {
+    /**
+     * The default React state setter for the entire array
+     *
+     * @readonly
+     * @type {React.Dispatch<React.SetStateAction<T[]>>}
+     */
+    readonly set: React.Dispatch<React.SetStateAction<T[]>>
+    /**
+     * Adds element(s) to the end of the array
+     *
+     * @readonly
+     * @type {(...elements: T[]) => void}
+     * @param {T[]} ...elements
+     */
+    readonly push: (...elements: T[]) => void
+    /**
+     * Inserts element(s) at an index, shifting the remaining elements right.
+     * If the index is out of range the elements are pushed to the end.
+     *
+     * @readonly
+     * @type {(index: number, ...elements: T[]) => void}
+     * @param {number} index
+     * @param {T[]} elements
+     */
+    readonly insertAt: (index: number, ...elements: T[]) => void
+    /**
+     * Removes an element at an index, shifting the remaining elements left.
+     * If the index is out of range, no change occurs.
+     *
+     * @readonly
+     * @type {(index: number) => void}
+     * @param {number} index
+     *
+     */
+    readonly removeAt: (index: number) => void
+    /**
+     * Updates element(s) at an index. For each additional element, subsequent elements are updated.
+     *
+     * @example
+     * Updating `['a', 'b', 'c']` to `['a', 'd', 'e']
+     * ```ts
+     * updateAt(1, 'd', 'e')
+     * ```
+     *
+     * @readonly
+     * @type {(index: number, ...elements: React.SetStateAction<T>[]) => void}
+     * @param {number} index
+     * @param {React.SetStateAction<T>[]} elements
+     */
+    readonly updateAt: (index: number, ...elements: React.SetStateAction<T>[]) => void
+    /**
+     * Updates element(s) that match a predicate
+     *
+     * @example
+     * Updating records with `lastUpdated` before Dec 23 2022 to have `isCurrent`=`false`
+     * ```ts
+     * const oldestCurrentDate = new Date('12-23-2022')
+     * updateWhere((record) => record.lastUpdated < oldestCurrentDate, )
+     * ```
+     *
+     * @readonly
+     * @type {(predicate: (element: T) => boolean, newElement: React.SetStateAction<T>) => void}
+     * @param {predicate: (element: T) => boolean} predicate
+     * @param {React.SetStateAction<T>} newElement
+     */
+    readonly updateWhere: (
+      predicate: (element: T) => boolean,
+      newElement: React.SetStateAction<T>,
+    ) => void
+    /**
+     * The same functionality as JS Array.filter applied to state
+     *
+     * @readonly
+     * @type {(predicate: (element: T) => boolean) => void}
+     * @param {predicate: (element: T) => boolean} predicate
+     */
+    readonly filter: (predicate: (element: T) => boolean) => void
+    /**
+     * The same functionality as JS Array.sort, but applied to state
+     *
+     * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
+     * @param {((a: T, b: T) => number) | undefined} compareFn
+     */
+    sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
+    /**
+     * Empties the array
+     *
+     * @type {() => void}
+     */
+    clear: () => void
+    /**
+     * Resets the array to its initial value
+     *
+     * @type {() => void}
+     */
+    reset: () => void
+  },
+]
 /**
- * `useFlag` hook type
+ * `useArray` hook type
  *
  * @export
- * @typedef {UseFlag}
- * @param {boolean} initial
- * @returns {UseFlagReturn}
+ * @typedef {UseArray}
+ * @template T
+ * @param {T[]} initial
+ * @returns {UseArrayReturn}
  */
-export declare type UseFlag = (initial: boolean) => UseFlagReturn;
+export declare type UseArray<T> = (initial: T[]) => UseArrayReturn<T>
 /**
  * Simplifies boolean state management
  *
- * @implements {UseFlag}
- * @param {boolean} initial
- * @returns {UseFlagReturn}
+ * @implements {UseArray}
+ * @template T
+ * @param {T[]} initial
+ * @returns {UseArrayReturn}
  */
-declare const useFlag: UseFlag;
-```
-
+declare const useArray: <T>(initial: T[]) => UseArrayReturn<T>
+export default useArray
+````
 
 ## Examples
 
-### Modal
+### Burger
 
 <Canvas withSource="open">
-  <Story id="example-useflag--modal-story" />
+  <Story name="Burger" story={stories.burger} />
 </Canvas>
-
-### Form State
-
-<Canvas withSource="open">
-  <Story id="example-useflag--form-story" />
-</Canvas>
+```
