@@ -1,0 +1,59 @@
+name: Preview storybook in PR
+concurrency: preview-${{ github.ref }}
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+    paths:
+      - 'too-many-hooks/**'
+      - 'storybook/**'
+
+jobs:
+  storybook:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Restore package cache
+      uses: c-hive/gha-yarn-cache@v2
+      with:
+        directory: too-many-hooks
+
+    - name: Install package dependencies
+      run: yarn install
+      working-directory: too-many-hooks
+
+    - name: Build package
+      run: yarn build
+      working-directory: too-many-hooks
+
+    - name: Restore storybook cache
+      uses: c-hive/gha-yarn-cache@v2
+      with:
+        directory: storybook
+
+    - name: Install storybook dependencies
+      run: yarn install
+      working-directory: storybook
+
+    - name: Build storybook
+      run: yarn build-storybook
+      working-directory: storybook
+
+    - name: Deploy to PR Preview
+      uses: rossjrw/pr-preview-action@v1
+      with:
+        source-dir: storybook/storybook-static
+        preview-branch: gh-pages
+        umbrella-dir: pr-preview
+        action: auto

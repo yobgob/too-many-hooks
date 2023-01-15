@@ -1,0 +1,40 @@
+name: Lint and build package
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - 'too-many-hooks/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Restore cache
+      uses: c-hive/gha-yarn-cache@v2
+      with:
+        directory: too-many-hooks
+
+    - name: Install dependencies
+      run: yarn install
+      working-directory: too-many-hooks
+
+    - name: Lint
+      run: yarn lint
+      working-directory: too-many-hooks
+
+    - name: Build
+      run: yarn build
+      working-directory: too-many-hooks
+

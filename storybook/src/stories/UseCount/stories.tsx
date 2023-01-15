@@ -3,22 +3,13 @@ import { userEvent, within } from '@storybook/testing-library'
 import SocialMedia from './SocialMedia'
 import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
 
-const meta = {
-  title: 'Example/UseCount',
-  tags: ['docsPage'],
-} satisfies Meta
-
-export default meta
-
-export const SocialMediaStory: StoryObj<Meta<typeof SocialMedia>> = {
-  name: 'Social Media',
+export const socialMedia: StoryObj<Meta<typeof SocialMedia>> = {
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const countingButton = canvas.getByTitle('like')
     userEvent.click(countingButton)
   },
   parameters: {
-    component: SocialMedia,
     layout: 'centered',
     controls: { expanded: true },
     docs: {
@@ -26,7 +17,7 @@ export const SocialMediaStory: StoryObj<Meta<typeof SocialMedia>> = {
     },
   },
   argTypes: {
-    step: { type: 'number' },
+    step: { type: 'number', defaultValue: 1 },
     incrementStep: { type: 'number' },
     decrementStep: { type: 'number' },
   },
