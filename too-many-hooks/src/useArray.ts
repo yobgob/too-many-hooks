@@ -17,6 +17,20 @@ export type UseArrayReturn<T> = [
      * @type {React.Dispatch<React.SetStateAction<T[]>>}
      */
     readonly set: React.Dispatch<React.SetStateAction<T[]>>
+
+    /**
+     * Empties the array
+     *
+     * @type {() => void}
+     */
+    readonly clear: () => void
+    /**
+     * Resets the array to its initial value
+     *
+     * @type {() => void}
+     */
+    readonly reset: () => void
+
     /**
      * Adds element(s) to the end of the array
      *
@@ -45,6 +59,7 @@ export type UseArrayReturn<T> = [
      *
      */
     readonly removeAt: (index: number) => void
+
     /**
      * Updates element(s) at an index. For each additional element, subsequent elements are updated.
      *
@@ -87,6 +102,7 @@ export type UseArrayReturn<T> = [
      * @param {React.SetStateAction<T>} newElement
      */
     readonly updateAll: (newElement: React.SetStateAction<T>) => void
+
     /**
      * The same functionality as JS Array.filter with the results applied to the array state
      *
@@ -96,30 +112,27 @@ export type UseArrayReturn<T> = [
      */
     readonly filter: (predicate: (element: T) => boolean) => void
     /**
+     * The same functionality as JS Array.slice with the results applied to the array state
+     *
+     * @readonly
+     * @type {(start?: number, end?: number) => void}
+     * @param {number?} start
+     * @param {number?} end
+     */
+    readonly slice: (start?: number, end?: number) => void
+    /**
      * The same functionality as JS Array.sort with the results applied to the array state
      *
      * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
      * @param {((a: T, b: T) => number) | undefined} compareFn
      */
-    sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
+    readonly sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
     /** /**
      * The same functionality as JS Array.reverse with the results applied to the array state
      *
      * @type {() => void)}
      */
-    reverse: () => void
-    /**
-     * Empties the array
-     *
-     * @type {() => void}
-     */
-    clear: () => void
-    /**
-     * Resets the array to its initial value
-     *
-     * @type {() => void}
-     */
-    reset: () => void
+    readonly reverse: () => void
   },
 ]
 
@@ -155,17 +168,6 @@ const isUpdateFunction = <T>(element: React.SetStateAction<T>): element is (prev
 const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
   const [array, setArray] = useState<T[]>(initial)
 
-  const push = useCallback((...elements: T[]) => setArray(array => [...array, ...elements]), [])
-  const insertAt = useCallback(
-    (index: number, ...elements: T[]) =>
-      setArray(array => [...array.slice(0, index), ...elements, ...array.slice(index)]),
-    [],
-  )
-  const removeAt = useCallback(
-    (index: number) => setArray(array => [...array.slice(0, index), ...array.slice(index + 1)]),
-    [],
-  )
-
   /**
    * Local utility for resolving a setStateAction on an element
    *
@@ -177,6 +179,22 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
     [],
   )
 
+  const clear = useCallback(() => setArray([]), [])
+  const reset = useCallback(() => setArray(initial), [initial])
+
+  // add and remove elements
+  const push = useCallback((...elements: T[]) => setArray(array => [...array, ...elements]), [])
+  const insertAt = useCallback(
+    (index: number, ...elements: T[]) =>
+      setArray(array => [...array.slice(0, index), ...elements, ...array.slice(index)]),
+    [],
+  )
+  const removeAt = useCallback(
+    (index: number) => setArray(array => [...array.slice(0, index), ...array.slice(index + 1)]),
+    [],
+  )
+
+  // update elements
   const updateAt = useCallback(
     (index: number, ...elements: React.SetStateAction<T>[]) =>
       setArray(array => [
@@ -195,19 +213,22 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
       ),
     [setElement],
   )
-
   const updateAll = useCallback(
     (newElement: React.SetStateAction<T>) =>
       setArray(array => array.map(element => setElement(element, newElement))),
     [setElement],
   )
 
+  // standard JS array functions
   const filter = useCallback(
     (predicate: (element: T) => boolean) =>
       setArray(array => array.filter(element => predicate(element))),
     [],
   )
-
+  const slice = useCallback(
+    (start?: number, end?: number) => setArray(array => array.slice(start, end)),
+    [],
+  )
   const sort = useCallback(
     (compareFn?: ((a: T, b: T) => number) | undefined) =>
       setArray(array => [...array.sort(compareFn)]),
@@ -215,24 +236,26 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
   )
   const reverse = useCallback(() => setArray(array => [...array.reverse()]), [])
 
-  const clear = useCallback(() => setArray([]), [])
-  const reset = useCallback(() => setArray(initial), [initial])
-
   return [
     array,
     {
       set: setArray,
+
+      clear,
+      reset,
+
       push,
       insertAt,
       removeAt,
+
       updateAt,
       updateWhere,
       updateAll,
+
       filter,
+      slice,
       sort,
       reverse,
-      clear,
-      reset,
     },
   ]
 }

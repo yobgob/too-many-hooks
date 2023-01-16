@@ -5,7 +5,35 @@ import * as stories from './stories'
 
 # useArray
 
-Wrap array state with useful helper functions for easier, cleaner updates
+Wrap array state with powerful helper functions for simpler updates
+
+## Functions
+
+- `set` - The default React state setter for the entire array.
+
+- `clear` - Empties the array.
+
+- `reset` - Resets the array to its initial value.
+
+- `push` - Adds element(s) to the end of the array.
+
+- `insertAt` - Inserts element(s) at an index, shifting the remaining elements right. If the index is out of range the elements are pushed to the end.
+
+- `removeAt` - Removes an element at an index, shifting the remaining elements left. If the index is out of range, no change occurs.
+
+- `updateAt` - Updates element(s) at an index. For each additional element, subsequent elements are updated.
+
+- `updateWhere` - Updates element(s) that match a predicate.
+
+- `updateAll` - The same functionality as JS Array.map with the results applied to the array state
+
+- `filter` - The same functionality as JS Array.filter with the results applied to the array state
+
+- `slice` - The same functionality as JS Array.slice with the results applied to the array state
+
+- `sort` - The same functionality as JS Array.sort with the results applied to the array state
+
+- `reverse` - The same functionality as JS Array.reverse with the results applied to the array state
 
 ## Types
 
@@ -27,6 +55,18 @@ export declare type UseArrayReturn<T> = [
      * @type {React.Dispatch<React.SetStateAction<T[]>>}
      */
     readonly set: React.Dispatch<React.SetStateAction<T[]>>
+    /**
+     * Empties the array
+     *
+     * @type {() => void}
+     */
+    readonly clear: () => void
+    /**
+     * Resets the array to its initial value
+     *
+     * @type {() => void}
+     */
+    readonly reset: () => void
     /**
      * Adds element(s) to the end of the array
      *
@@ -106,30 +146,27 @@ export declare type UseArrayReturn<T> = [
      */
     readonly filter: (predicate: (element: T) => boolean) => void
     /**
+     * The same functionality as JS Array.slice with the results applied to the array state
+     *
+     * @readonly
+     * @type {(start?: number, end?: number) => void}
+     * @param {number?} start
+     * @param {number?} end
+     */
+    readonly slice: (start?: number, end?: number) => void
+    /**
      * The same functionality as JS Array.sort with the results applied to the array state
      *
      * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
      * @param {((a: T, b: T) => number) | undefined} compareFn
      */
-    sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
+    readonly sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
     /** /**
      * The same functionality as JS Array.reverse with the results applied to the array state
      *
      * @type {() => void)}
      */
-    reverse: () => void
-    /**
-     * Empties the array
-     *
-     * @type {() => void}
-     */
-    clear: () => void
-    /**
-     * Resets the array to its initial value
-     *
-     * @type {() => void}
-     */
-    reset: () => void
+    readonly reverse: () => void
   },
 ]
 /**
