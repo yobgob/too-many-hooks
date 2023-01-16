@@ -12,7 +12,7 @@ const Button: React.FC<Props> = ({ variant = 'fill', color, className, ...props 
         variant === 'fill'
           ? 'bg-blue-500 text-white hover:underline disabled:bg-slate-500 '
           : variant === 'outline'
-          ? 'bg-white border-slate-800 hover:underline disabled:text-slate-600'
+          ? 'border-slate-800 bg-white hover:underline disabled:text-slate-600'
           : 'hover:bg-slate-100'
       } ${className}`}
       style={
