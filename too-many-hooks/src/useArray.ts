@@ -80,7 +80,15 @@ export type UseArrayReturn<T> = [
       newElement: React.SetStateAction<T>,
     ) => void
     /**
-     * The same functionality as JS Array.filter applied to state
+     * The same functionality as JS Array.map with the results applied to the array state
+     *
+     * @readonly
+     * @type {(newElement: React.SetStateAction<T>) => void}
+     * @param {React.SetStateAction<T>} newElement
+     */
+    readonly updateAll: (newElement: React.SetStateAction<T>) => void
+    /**
+     * The same functionality as JS Array.filter with the results applied to the array state
      *
      * @readonly
      * @type {(predicate: (element: T) => boolean) => void}
@@ -88,14 +96,14 @@ export type UseArrayReturn<T> = [
      */
     readonly filter: (predicate: (element: T) => boolean) => void
     /**
-     * The same functionality as JS Array.sort, but applied to state
+     * The same functionality as JS Array.sort with the results applied to the array state
      *
      * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
      * @param {((a: T, b: T) => number) | undefined} compareFn
      */
     sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
     /** /**
-     * The same functionality as JS Array.reverse, but applied to state
+     * The same functionality as JS Array.reverse with the results applied to the array state
      *
      * @type {() => void)}
      */
@@ -188,6 +196,12 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
     [setElement],
   )
 
+  const updateAll = useCallback(
+    (newElement: React.SetStateAction<T>) =>
+      setArray(array => array.map(element => setElement(element, newElement))),
+    [setElement],
+  )
+
   const filter = useCallback(
     (predicate: (element: T) => boolean) =>
       setArray(array => array.filter(element => predicate(element))),
@@ -213,6 +227,7 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
       removeAt,
       updateAt,
       updateWhere,
+      updateAll,
       filter,
       sort,
       reverse,
