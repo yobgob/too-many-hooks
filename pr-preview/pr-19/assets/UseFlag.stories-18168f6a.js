@@ -61,7 +61,7 @@ const Form: React.FC = () => {
 }
 
 export default Form
-`,c=()=>{const[a,{flag:t,unflag:n}]=l(!1);return o(h,{children:[e(p,{onClick:t,children:"Open modal"}),e(F,{isOpen:a,onClose:n,children:o("div",{className:"leading-8",children:["This modal was opened with a simple",e("code",{children:"onClick={open}"}),". Clicking",e("code",{children:"✕"})," or outside of the modal will close it via",e("code",{children:"onClick={close}"}),". No setters needed."]})})]})};try{c.displayName="Modal",c.__docgenInfo={description:"",displayName:"Modal",props:{}}}catch{}const N=`import React from 'react'
+`,c=()=>{const[a,{flag:t,unflag:n}]=l(!1);return o(h,{children:[e(p,{onClick:t,children:"Open modal"}),e(F,{isOpen:a,onClose:n,children:o("div",{className:"prose leading-8",children:["This modal was opened with a simple",e("code",{children:"onClick={open}"}),". Clicking",e("code",{children:"✕"})," or outside of the modal will close it via",e("code",{children:"onClick={close}"}),". No setters needed."]})})]})};try{c.displayName="Modal",c.__docgenInfo={description:"",displayName:"Modal",props:{}}}catch{}const N=`import React from 'react'
 import { useFlag } from 'too-many-hooks'
 import { Button, Modal as Modal_ } from '../../components'
 import '../../index.css'
@@ -73,7 +73,7 @@ const Modal: React.FC = () => {
     <>
       <Button onClick={open}>Open modal</Button>
       <Modal_ isOpen={isOpen} onClose={close}>
-        <div className="leading-8">
+        <div className="prose leading-8">
           This modal was opened with a simple<code>onClick=&#123;open&#125;</code>. Clicking
           <code>&#10005;</code> or outside of the modal will close it via
           <code>onClick=&#123;close&#125;</code>. No setters needed.
@@ -151,4 +151,4 @@ export default useFlag
 `,e(g,{withSource:"open",children:e(m,{name:"Modal",story:f})}),`
 `,e(r.h3,{children:"Form State"}),`
 `,e(g,{withSource:"open",children:e(m,{name:"Form",story:b})})]})}}const S=f;S.storyName="Modal";const M=b;M.storyName="Form";const s={title:"Example/UseFlag",tags:["mdx"],includeStories:["_modal_","_form_"]};s.parameters=s.parameters||{};s.parameters.docs={...s.parameters.docs||{},page:w};const Q=["_modal_","_form_"];export{Q as __namedExportsOrder,M as _form_,S as _modal_,s as default};
-//# sourceMappingURL=UseFlag.stories-29cbeeda.js.map
+//# sourceMappingURL=UseFlag.stories-18168f6a.js.map
