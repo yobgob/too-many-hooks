@@ -1,4 +1,14 @@
-import { BottomBun, Cheese, Ketchup, Lettuce, Mayo, Mustard, Patty, Tomato, TopBun } from './assets'
+import {
+  BottomBun,
+  Cheese,
+  Ketchup,
+  Lettuce,
+  Mayo,
+  Mustard,
+  Patty,
+  Tomato,
+  TopBun,
+} from './components'
 import { Ingredient, IngredientGroup } from './types'
 
 const INGREDIENT_WIDTH = '10rem'
