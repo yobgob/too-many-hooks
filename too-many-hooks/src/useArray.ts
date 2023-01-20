@@ -221,8 +221,7 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
 
   // standard JS array functions
   const filter = useCallback(
-    (predicate: (element: T) => boolean) =>
-      setArray(array => array.filter(element => predicate(element))),
+    (predicate: (element: T) => boolean) => setArray(array => array.filter(predicate)),
     [],
   )
   const slice = useCallback(
