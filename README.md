@@ -69,4 +69,4 @@ Then, run the app locally at [http://localhost:6006/](http://localhost:6006/) by
 
 ### Checks
 
-To ensure code quality, PRs will be automatically linted and checked for adherence to formatting rules before merging. These checks are performed by GitHub workflows at `/.github/workflow/lint-and-build-package.yml` and `/.github/workflow/lint-and-build-storybook.yml`. Each app also has their own scripts for formatting and linting locally.
+To ensure code quality, PRs are automatically linted and checked for adherence to formatting rules before merging. These checks are performed by GitHub workflows at `/.github/workflow/lint-and-build-package.yml` and `/.github/workflow/lint-and-build-storybook.yml`. Each app also has their own scripts for formatting and linting locally.

@@ -31,8 +31,8 @@ The built package will output to `/dist`.
 
 ## Structure
 
-All hooks are contained in the `/src` directory. Each should have its own `useHook.ts` file which declares and exports the hook and all of its types. These should then all be exported from `src/index.ts`.
+All hooks are contained in the `/src` directory. Each has its own `use<Hook>.ts` file which declares and exports the hook and all of its types. These are all subsequently exported from the top-level `src/index.ts`.
 
 ## Documentation
 
-All hooks and types should have block comments that adhere to [JSDoc standards](https://jsdoc.app/) with the goal of adhering to [TSDoc](https://tsdoc.org/) in the future. For functions this should also include usage examples where possible.
+All hooks and types have block comments that adhere to [JSDoc standards](https://jsdoc.app/) with the goal of adhering to [TSDoc](https://tsdoc.org/) in the future. For functions this includes usage examples where possible.

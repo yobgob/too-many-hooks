@@ -31,7 +31,7 @@ Then, run the storybook at [http://localhost:6006/](http://localhost:6006/) with
 
 ## Structure
 
-Each story is defined in a subdirectory of the `/src/stories` directory. Each should have its own `Story.stories.mdx` file containing documentation and story creation. The stories should be defined in a `stories.tsx` file to allow for type checking and intellisense on story definitions, then imported into the MDX file. Each component for these stories should be defined alongside these files.
+Each story is defined in a subdirectory of the `/src/stories` directory. Each has its own `Story.stories.mdx` file containing documentation and story creation. The stories are defined in a `stories.tsx` file to allow for type checking and intellisense on story definitions, then imported into the MDX file. Each story component for these is defined alongside these files. Additional components referenced in story components are placed in a `components` subdirectory.
 
 ## Stories
 
@@ -41,6 +41,6 @@ When creating stories it is important that each provides a useful real-world exa
 
 ### Documentation
 
-Each story should include a documentation page, as defined by its MDX file. This should include at a minimum a `Types` section with the full types for the relevant hook and an `Examples` section containing each story. 
+Each story includes a documentation page, as defined by its MDX file. This includes at a minimum a `Types` section with the full types for the relevant hook and an `Examples` section containing each story.
 
-Each story will also have its source code available to view, since the hook is what we want to show off, not the story UI itself. Since the code is included in the docs, code should be as straightforward and abstracted as possible so it can serve as a valuable example of how to use a hook.
+Each story also has its source code available to view, since the hook is what we want to show off, not the story UI itself. Since the code is included in the docs, story code is written as straightforward and abstracted as possible so it can serve as a valuable example of how to use a hook.
