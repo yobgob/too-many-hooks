@@ -1,6 +1,6 @@
 # storybook
 
-This directory contains the Storybook application for testing and demoing `too-many-hooks`
+This directory contains the storybook application for testing and demoing `too-many-hooks`
 
 ## Running
 
@@ -8,21 +8,21 @@ Install / update dependencies with:
 
 ```yarn install```
 
-Then, run the Storybook at [http://localhost:6006/](http://localhost:6006/) with:
+Then, run the storybook at [http://localhost:6006/](http://localhost:6006/) with:
 
 ```yarn storybook```
 
 ## Tooling
 
-- Build - The application is built using [Vite](https://vitejs.dev/), configured with /`vite.config.ts` and [Storybook](https://storybook.js.org/docs/ember/get-started/introduction)
+- Build - The application is built using [Vite](https://vitejs.dev/), configured with /`vite.config.ts` and [storybook](https://storybook.js.org/docs/ember/get-started/introduction)
 - Formatting - [Prettier](https://prettier.io/docs/en/) configured with `/.prettierrc.cjs`
 - Linting - [ESLint](https://eslint.org/docs/latest/) configured with `/.eslintrc.cjs`
 - Styling - [Tailwind](https://tailwindcss.com/docs/installation) configured with `./tailwind.config.cjs`
 
 ## Scripts
 
-- `storybook` - runs the Storybook at [http://localhost:6006/](http://localhost:6006/)
-- `build-storybook` - builds the Storybook to `/storybook-static`
+- `storybook` - runs the storybook at [http://localhost:6006/](http://localhost:6006/)
+- `build-storybook` - builds the storybook to `/storybook-static`
 - `format` - formats all files with Prettier
 - `lint:code` - lints all code in `/src` with ESLint
 - `lint:formatting` - checks that all code meets Prettier standards

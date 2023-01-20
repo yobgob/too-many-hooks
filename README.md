@@ -4,7 +4,7 @@ An opinionated collection of typed React hooks
 
 ## Storybook
 
-- The Storybook for the current main version can be found at: [https://dawsonbooth.github.io/too-many-hooks](https://dawsonbooth.github.io/too-many-hooks)
+- The storybook for the current main version can be found at: [https://dawsonbooth.github.io/too-many-hooks](https://dawsonbooth.github.io/too-many-hooks)
 - Storybooks will also be build and deployed for each PR at `https://dawsonbooth.github.io/too-many-hooks/pr-preview/pr-[PR number]`
 
 ## Guiding Principles
@@ -43,11 +43,11 @@ Note that all PRs will be squashed, so PR titles must also adhere to the commit 
 
 ### Structure
 
-The monorepo contains both the `too-many-hooks` library at `/too-many-hooks` and the Storybook for testing and demoing hooks at `/storybook`. Contributions will usually include changes to both apps.
+The monorepo contains both the `too-many-hooks` library at `/too-many-hooks` and the storybook for testing and demoing hooks at `/storybook`. Contributions will usually include changes to both apps.
 
 ### Building the library
 
-The Storybook imports the library via a symlink, and thus needs `too-many-hooks` built locally. To build the library, go to `/too-many-hooks` and install dependencies with:
+The storybook imports the library via a symlink, and thus needs `too-many-hooks` built locally. To build the library, go to `/too-many-hooks` and install dependencies with:
 
 ```yarn install```
 
@@ -57,7 +57,7 @@ Then, build the library by running:
 
 The built library will be output to `/too-many-hooks/dist`.
 
-### Running the Storybook
+### Running the storybook
 
 To run the storybook, go to `/storybook` and update dependencies with:
 
