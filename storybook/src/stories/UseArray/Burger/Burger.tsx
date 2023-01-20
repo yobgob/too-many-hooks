@@ -28,7 +28,7 @@ const Burger: React.FC = () => {
   }>({ target: 0, new: 'ketchup' })
 
   return (
-    <div className="mx-auto flex h-screen max-w-4xl flex-col gap-8 p-4">
+    <div className="prose mx-auto flex h-screen max-w-4xl flex-col gap-8 p-4">
       <h1>Create a burger</h1>
       <div className="flex h-full justify-start gap-8">
         <div className="flex h-fit flex-col flex-wrap gap-4">
@@ -222,7 +222,7 @@ const Burger: React.FC = () => {
               </label>
             ))}
           </div>
-          {ingredients.length === 0 && <h1 className="p-4 text-center">No ingredients added</h1>}
+          {ingredients.length === 0 && <h2 className="p-4 text-center">No ingredients added</h2>}
         </div>
       </div>
     </div>

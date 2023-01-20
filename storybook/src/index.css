@@ -15,34 +15,3 @@ code {
   color: #c7254e;
   white-space: nowrap;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 500;
-  margin: 0;
-}
-
-h1 {
-  font-weight: 700;
-  font-size: calc(3rem / 2);
-}
-
-h2 {
-  font-size: calc(5rem / 4);
-}
-
-h3 {
-  font-size: calc(9rem / 8);
-}
-
-h4 {
-  font-size: 1rem;
-}
-
-h5 {
-  font-size: calc(7rem / 8);
-}
