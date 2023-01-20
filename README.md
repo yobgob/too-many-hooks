@@ -37,7 +37,9 @@ Peer dependencies:
 
 ## Contributing
 
-Pick a ticket from the GitHub project's issues and drop a comment to have it assigned to you. Make sure branch names are descriptive and commit messages are valuable. When a change is ready, simply open a PR and make sure to link it to the issue it references.
+Pick a ticket from the GitHub project's issues and drop a comment to have it assigned to you. Make sure branch names are descriptive and commit messages are valuable and in the imperative mood. When a change is ready, simply open a PR and make sure to link it to the issue it references.
+
+Note that all PRs will be squashed, so PR titles must also adhere to the commit message rules. Ensure they are descriptive, concise, and in the imperative mood. For example: "Add useFlag hook" rather than "New hook" or "Added useFlag hook". The title will be the commit message that remains in the `main` history, it is important they are well-written.
 
 ### Structure
 
