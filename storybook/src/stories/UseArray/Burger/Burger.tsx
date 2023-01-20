@@ -16,7 +16,7 @@ const Burger: React.FC = () => {
       type: Ingredient
       isSelected: boolean
     }>([])
-  const [insertLocation, setInsertLocation] = useState<number | 'top' | 'bottom'>('top')
+  const [insertLocation, setInsertLocation] = useState<number | 'top' | 'bottom'>('bottom')
   const [toRemove, setToRemove] = useState<Ingredient | IngredientGroup | 'selected'>('selected')
   const [updateIngredientsWhere, setUpdateIngredientsWhere] = useState<{
     target: Ingredient | IngredientGroup | 'selected'
