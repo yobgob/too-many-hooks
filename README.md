@@ -10,11 +10,8 @@ An opinionated collection of typed React hooks
 ## Guiding Principles
 
 - There should be one obvious way to do each thing
-- Hook functionality can overlap as long as they each have a unique defined purpose
-- Features should be self-contained
 - Explicit is better than implicit
 - Code should be extensible but not unopinionated
-- Code should be self-documenting
 
 ## Getting Started
 
