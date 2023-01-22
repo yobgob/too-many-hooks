@@ -11,7 +11,7 @@ import {
 } from './components'
 import { Ingredient, IngredientGroup } from './types'
 
-const INGREDIENT_WIDTH = '10rem'
+const INGREDIENT_WIDTH = '20rem'
 
 export const INGREDIENTS = {
   top: {

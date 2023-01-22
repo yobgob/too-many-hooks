@@ -218,7 +218,7 @@ const Burger: React.FC = () => {
                   }
                 />
                 {INGREDIENTS[ingredient.type].svg}
-                {i % 2 === 0 && <span className="absolute left-full pl-2">{i}</span>}
+                {<span className="absolute left-full pl-2">{i}</span>}
               </label>
             ))}
           </div>
