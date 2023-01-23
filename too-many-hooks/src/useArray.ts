@@ -59,6 +59,25 @@ export type UseArrayReturn<T> = [
      *
      */
     readonly removeAt: (index: number) => void
+    /**
+     * Removes elements from the array that meet a condition.
+     * Like JS `Array.filter` with the results applied to the array state.
+     *
+     * @readonly
+     * @type {(predicate: (element: T) => boolean) => void}
+     * @param {predicate: (element: T) => boolean} predicate
+     */
+    readonly removeWhere: (predicate: (element: T) => boolean) => void
+    /**
+     * Removes elements from the array outside of a certain range.
+     * Like JS `Array.slice` with the results applied to the array state.
+     *
+     * @readonly
+     * @type {(start?: number, end?: number) => void}
+     * @param {number?} start
+     * @param {number?} end
+     */
+    readonly trimToRange: (start?: number, end?: number) => void
 
     /**
      * Updates element(s) at an index. For each additional element, subsequent elements are updated.
@@ -95,7 +114,8 @@ export type UseArrayReturn<T> = [
       newElement: React.SetStateAction<T>,
     ) => void
     /**
-     * The same functionality as JS Array.map with the results applied to the array state
+     * Transforms all elements to new values.
+     * Like JS `Array.map` with the results applied to the array state.
      *
      * @readonly
      * @type {(newElement: React.SetStateAction<T>) => void}
@@ -104,31 +124,16 @@ export type UseArrayReturn<T> = [
     readonly updateAll: (newElement: React.SetStateAction<T>) => void
 
     /**
-     * The same functionality as JS Array.filter with the results applied to the array state
-     *
-     * @readonly
-     * @type {(predicate: (element: T) => boolean) => void}
-     * @param {predicate: (element: T) => boolean} predicate
-     */
-    readonly filter: (predicate: (element: T) => boolean) => void
-    /**
-     * The same functionality as JS Array.slice with the results applied to the array state
-     *
-     * @readonly
-     * @type {(start?: number, end?: number) => void}
-     * @param {number?} start
-     * @param {number?} end
-     */
-    readonly slice: (start?: number, end?: number) => void
-    /**
-     * The same functionality as JS Array.sort with the results applied to the array state
+     * Sorts the array by comparing each element.
+     * Like JS `Array.sort` with the results applied to the array state.
      *
      * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
      * @param {((a: T, b: T) => number) | undefined} compareFn
      */
     readonly sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
     /** /**
-     * The same functionality as JS Array.reverse with the results applied to the array state
+     * Reverses the order of the elements in the array.
+     * Like JS `Array.reverse` with the results applied to the array state.
      *
      * @type {() => void)}
      */
@@ -182,15 +187,25 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
   const clear = useCallback(() => setArray([]), [])
   const reset = useCallback(() => setArray(initial), [initial])
 
-  // add and remove elements
+  // add elements
   const push = useCallback((...elements: T[]) => setArray(array => [...array, ...elements]), [])
   const insertAt = useCallback(
     (index: number, ...elements: T[]) =>
       setArray(array => [...array.slice(0, index), ...elements, ...array.slice(index)]),
     [],
   )
+
+  // remove elements
   const removeAt = useCallback(
     (index: number) => setArray(array => [...array.slice(0, index), ...array.slice(index + 1)]),
+    [],
+  )
+  const removeWhere = useCallback(
+    (predicate: (element: T) => boolean) => setArray(array => array.filter(predicate)),
+    [],
+  )
+  const trimToRange = useCallback(
+    (start?: number, end?: number) => setArray(array => array.slice(start, end)),
     [],
   )
 
@@ -220,14 +235,6 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
   )
 
   // standard JS array functions
-  const filter = useCallback(
-    (predicate: (element: T) => boolean) => setArray(array => array.filter(predicate)),
-    [],
-  )
-  const slice = useCallback(
-    (start?: number, end?: number) => setArray(array => array.slice(start, end)),
-    [],
-  )
   const sort = useCallback(
     (compareFn?: ((a: T, b: T) => number) | undefined) =>
       setArray(array => [...array.sort(compareFn)]),
@@ -245,14 +252,15 @@ const useArray = <T>(initial: T[]): UseArrayReturn<T> => {
 
       push,
       insertAt,
+
       removeAt,
+      removeWhere,
+      trimToRange,
 
       updateAt,
       updateWhere,
       updateAll,
 
-      filter,
-      slice,
       sort,
       reverse,
     },

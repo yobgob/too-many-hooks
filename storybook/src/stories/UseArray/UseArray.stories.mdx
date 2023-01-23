@@ -21,19 +21,19 @@ Wrap array state with powerful helper functions for simpler updates
 
 - `removeAt` - Removes an element at an index, shifting the remaining elements left. If the index is out of range, no change occurs.
 
+- `removeWhere` - Removes elements from the array that meet a condition. Like JS `Array.filter` with the results applied to the array state.
+
+- `trimToRange` - Removes elements from the array outside of a certain range. Like JS `Array.slice` with the results applied to the array state
+
 - `updateAt` - Updates element(s) at an index. For each additional element, subsequent elements are updated.
 
 - `updateWhere` - Updates element(s) that match a predicate.
 
 - `updateAll` - The same functionality as JS Array.map with the results applied to the array state
 
-- `filter` - The same functionality as JS Array.filter with the results applied to the array state
+- `sort` - Sorts the array by comparing each element. Like JS `Array.sort` with the results applied to the array state.
 
-- `slice` - The same functionality as JS Array.slice with the results applied to the array state
-
-- `sort` - The same functionality as JS Array.sort with the results applied to the array state
-
-- `reverse` - The same functionality as JS Array.reverse with the results applied to the array state
+- `reverse` - Reverses the order of the elements in the array. Like JS `Array.reverse` with the results applied to the array state.
 
 ## Types
 
@@ -96,6 +96,25 @@ export declare type UseArrayReturn<T> = [
      */
     readonly removeAt: (index: number) => void
     /**
+     * Removes elements from the array that meet a condition.
+     * Like JS `Array.filter` with the results applied to the array state.
+     *
+     * @readonly
+     * @type {(predicate: (element: T) => boolean) => void}
+     * @param {predicate: (element: T) => boolean} predicate
+     */
+    readonly removeWhere: (predicate: (element: T) => boolean) => void
+    /**
+     * Removes elements from the array outside of a certain range.
+     * Like JS `Array.slice` with the results applied to the array state.
+     *
+     * @readonly
+     * @type {(start?: number, end?: number) => void}
+     * @param {number?} start
+     * @param {number?} end
+     */
+    readonly trimToRange: (start?: number, end?: number) => void
+    /**
      * Updates element(s) at an index. For each additional element, subsequent elements are updated.
      *
      * @example
@@ -130,7 +149,8 @@ export declare type UseArrayReturn<T> = [
       newElement: React.SetStateAction<T>,
     ) => void
     /**
-     * The same functionality as JS Array.map with the results applied to the array state
+     * Transforms all elements to new values.
+     * Like JS `Array.map` with the results applied to the array state.
      *
      * @readonly
      * @type {(newElement: React.SetStateAction<T>) => void}
@@ -138,31 +158,16 @@ export declare type UseArrayReturn<T> = [
      */
     readonly updateAll: (newElement: React.SetStateAction<T>) => void
     /**
-     * The same functionality as JS Array.filter with the results applied to the array state
-     *
-     * @readonly
-     * @type {(predicate: (element: T) => boolean) => void}
-     * @param {predicate: (element: T) => boolean} predicate
-     */
-    readonly filter: (predicate: (element: T) => boolean) => void
-    /**
-     * The same functionality as JS Array.slice with the results applied to the array state
-     *
-     * @readonly
-     * @type {(start?: number, end?: number) => void}
-     * @param {number?} start
-     * @param {number?} end
-     */
-    readonly slice: (start?: number, end?: number) => void
-    /**
-     * The same functionality as JS Array.sort with the results applied to the array state
+     * Sorts the array by comparing each element.
+     * Like JS `Array.sort` with the results applied to the array state.
      *
      * @type {((compareFn?: ((a: T, b: T) => number) | undefined) => void)}
      * @param {((a: T, b: T) => number) | undefined} compareFn
      */
     readonly sort: (compareFn?: ((a: T, b: T) => number) | undefined) => void
     /** /**
-     * The same functionality as JS Array.reverse with the results applied to the array state
+     * Reverses the order of the elements in the array.
+     * Like JS `Array.reverse` with the results applied to the array state.
      *
      * @type {() => void)}
      */
@@ -197,5 +202,11 @@ export default useArray
 
 <Canvas withSource="open">
   <Story name="Burger" story={stories.burger} />
+</Canvas>
+
+### Bookshelf
+
+<Canvas withSource="open">
+  <Story name="Bookshelf" story={stories.bookshelf} />
 </Canvas>
 ```

@@ -3,6 +3,7 @@ import { useArray } from 'too-many-hooks'
 import { Button, Select } from '../../../components'
 import '../../../index.css'
 import {
+  DEFAULT_BURGER,
   INGREDIENTS,
   INGREDIENT_GROUPS,
   INGREDIENT_GROUP_OPTIONS,
@@ -11,21 +12,19 @@ import {
 import { Ingredient, IngredientGroup } from './types'
 
 const Burger: React.FC = () => {
-  const [ingredients, { push, insertAt, filter, updateAt, updateWhere, updateAll, clear }] =
-    useArray<{
-      type: Ingredient
-      isSelected: boolean
-    }>([])
+  const [
+    ingredients,
+    { push, insertAt, removeWhere, updateAt, updateWhere, updateAll, clear, reset },
+  ] = useArray<{
+    type: Ingredient
+    isSelected: boolean
+  }>(DEFAULT_BURGER)
   const [insertLocation, setInsertLocation] = useState<number | 'top' | 'bottom'>('bottom')
   const [toRemove, setToRemove] = useState<Ingredient | IngredientGroup | 'selected'>('selected')
   const [updateIngredientsWhere, setUpdateIngredientsWhere] = useState<{
     target: Ingredient | IngredientGroup | 'selected'
     new: Ingredient
   }>({ target: 'selected', new: 'ketchup' })
-  const [updateIngredientsAt, setUpdateIngredientsAt] = useState<{
-    target: number
-    new: Ingredient
-  }>({ target: 0, new: 'ketchup' })
 
   return (
     <div className="prose mx-auto flex h-screen max-w-4xl flex-col gap-8 p-4">
@@ -69,23 +68,26 @@ const Burger: React.FC = () => {
         </div>
 
         <div className="flex h-fit flex-col flex-wrap gap-8">
-          <Button onClick={clear}>Reset</Button>
+          <div className="grid w-full grid-cols-2 gap-1">
+            <Button onClick={reset}>Reset</Button>
+            <Button onClick={clear}>Clear</Button>
+          </div>
 
           <div className="grid w-full grid-cols-2 gap-1">
             <Button
               onClick={() => {
                 if (toRemove === 'selected') {
-                  return filter(({ isSelected }) => !isSelected)
+                  return removeWhere(({ isSelected }) => !isSelected)
                 }
 
                 const ingredientsToRemove = Object.keys(INGREDIENT_GROUPS).includes(toRemove)
                   ? INGREDIENT_GROUPS[toRemove as IngredientGroup]
                   : [toRemove]
 
-                filter(({ type }) => !ingredientsToRemove.includes(type))
+                removeWhere(({ type }) => !ingredientsToRemove.includes(type))
               }}
             >
-              Filter Out
+              Remove
             </Button>
             <Select
               options={[
@@ -125,7 +127,7 @@ const Burger: React.FC = () => {
                   )
                 }}
               >
-                Replace Where
+                Replace
               </Button>
               <Select
                 options={[
@@ -152,40 +154,9 @@ const Burger: React.FC = () => {
               color={INGREDIENTS[updateIngredientsWhere.new].color}
             />
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <div className="grid w-full grid-cols-2 items-baseline gap-1">
-              <Button
-                onClick={() =>
-                  updateAt(updateIngredientsAt.target, ({ isSelected }) => ({
-                    type: updateIngredientsAt.new,
-                    isSelected,
-                  }))
-                }
-              >
-                Replace At
-              </Button>
-              <Select
-                options={Object.values(ingredients).map((_, i) => ({
-                  label: i.toString(),
-                  value: i,
-                }))}
-                onChange={e =>
-                  setUpdateIngredientsAt(curr => ({ ...curr, target: parseInt(e.target.value) }))
-                }
-                defaultValue={updateIngredientsAt.target}
-              />
-            </div>
-            <Select
-              label="with"
-              options={INGREDIENT_OPTIONS}
-              onChange={e => setUpdateIngredientsAt(curr => ({ ...curr, new: e.target.value }))}
-              defaultValue={updateIngredientsAt.new}
-              color={INGREDIENTS[updateIngredientsAt.new].color}
-            />
-          </div>
         </div>
 
-        <div className="mx-auto flex h-full flex-col items-center justify-center gap-4">
+        <div className="mx-auto flex h-full flex-col items-center gap-4">
           <div className="flex gap-2">
             <Button onClick={() => updateAll(({ type }) => ({ type, isSelected: true }))}>
               Select All
@@ -201,7 +172,7 @@ const Burger: React.FC = () => {
               Invert Selection
             </Button>
           </div>
-          <div className="mx-auto flex flex-col items-center justify-center pb-4">
+          <div className="mx-auto flex h-full flex-col items-center justify-center pb-4">
             {ingredients.map((ingredient, i) => (
               <label
                 key={`${ingredient.type}-${i}`}
@@ -221,8 +192,8 @@ const Burger: React.FC = () => {
                 {<span className="absolute left-full pl-2">{i}</span>}
               </label>
             ))}
+            {ingredients.length === 0 && <h2 className="p-4 text-center">No ingredients added</h2>}
           </div>
-          {ingredients.length === 0 && <h2 className="p-4 text-center">No ingredients added</h2>}
         </div>
       </div>
     </div>

@@ -77,3 +77,8 @@ export const INGREDIENT_GROUP_OPTIONS: { label: string; value: IngredientGroup }
   { label: 'Vegetables', value: 'vegetables' },
   { label: 'Buns', value: 'buns' },
 ]
+
+export const DEFAULT_BURGER = Object.keys(INGREDIENTS).map(key => ({
+  type: key as keyof typeof INGREDIENTS,
+  isSelected: false,
+}))
