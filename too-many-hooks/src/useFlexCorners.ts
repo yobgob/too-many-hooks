@@ -196,13 +196,14 @@ const useFlexCorners = <T extends HTMLElement>(
   const resizeEntry = useResizeObserver(parent)
 
   const findCorners = useCallback(() => {
-    if (!elements.length) return null
+    const elementsInDOM = elements.filter(element => document.contains(element))
+    if (!elementsInDOM.length) return null
 
-    const boundingClientRects = elements.map(element => element.getBoundingClientRect())
+    const boundingClientRects = elementsInDOM.map(element => element.getBoundingClientRect())
 
-    const firstCorner = { index: 0, element: elements[0], isHanging: false }
+    const firstCorner = { index: 0, element: elementsInDOM[0], isHanging: false }
 
-    const corners = elements.reduce<Corners<T>>(
+    const corners = elementsInDOM.reduce<Corners<T>>(
       (curr, element, elementIndex) => {
         const newCorners: Corners<T> = { ...curr }
         const newCorner = { index: elementIndex, element, isHanging: false }
