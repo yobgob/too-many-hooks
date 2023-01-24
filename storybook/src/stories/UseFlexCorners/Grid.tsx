@@ -84,7 +84,7 @@ const Grid: React.FC = () => {
         )}
       </div>
       <div
-        className="m-auto flex h-96 w-96 resize flex-wrap content-start gap-1 overflow-scroll border-2 border-gray-400 p-2"
+        className="m-auto flex h-96 w-96 resize flex-wrap content-start gap-1 overflow-auto border-2 border-gray-400 p-2"
         ref={element => element && setResizeWrapper(element)}
       >
         {items}
