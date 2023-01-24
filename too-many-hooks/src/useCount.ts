@@ -46,6 +46,7 @@ export type UseCountReturn = [
      *
      * @readonly
      * @type {(stepOverride?: number) => void}
+     * @param {number?} stepOverride
      */
     readonly increment: (stepOverride?: number) => void
     /**
@@ -53,6 +54,7 @@ export type UseCountReturn = [
      *
      * @readonly
      * @type {(stepOverride?: number) => void}
+     * @param {number?} stepOverride
      */
     readonly decrement: (stepOverride?: number) => void
     /**
