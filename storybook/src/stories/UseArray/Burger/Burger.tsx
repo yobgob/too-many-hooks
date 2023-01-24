@@ -8,6 +8,7 @@ import {
   INGREDIENT_GROUPS,
   INGREDIENT_GROUP_OPTIONS,
   INGREDIENT_OPTIONS,
+  INGREDIENT_WIDTH,
 } from './constants'
 import { Ingredient, IngredientGroup } from './types'
 
@@ -188,7 +189,7 @@ const Burger: React.FC = () => {
                     updateAt(i, ({ type }) => ({ type, isSelected: e.target.checked }))
                   }
                 />
-                {INGREDIENTS[ingredient.type].svg}
+                {INGREDIENTS[ingredient.type].svg({ width: INGREDIENT_WIDTH })}
                 {<span className="absolute left-full pl-2">{i}</span>}
               </label>
             ))}

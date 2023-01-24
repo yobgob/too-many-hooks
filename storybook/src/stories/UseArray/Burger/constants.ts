@@ -11,52 +11,52 @@ import {
 } from './components'
 import { Ingredient, IngredientGroup } from './types'
 
-const INGREDIENT_WIDTH = '20rem'
+export const INGREDIENT_WIDTH = '20rem'
 
 export const INGREDIENTS = {
   top: {
     label: 'Top Bun',
-    svg: <TopBun width={INGREDIENT_WIDTH} />,
+    svg: TopBun,
     color: '#F4A335',
   },
   lettuce: {
     label: 'Lettuce',
-    svg: <Lettuce width={INGREDIENT_WIDTH} />,
+    svg: Lettuce,
     color: '#94C34A',
   },
   cheese: {
     label: 'Cheese',
-    svg: <Cheese width={INGREDIENT_WIDTH} />,
+    svg: Cheese,
     color: '#FCF28C',
   },
   patty: {
     label: 'Patty',
-    svg: <Patty width={INGREDIENT_WIDTH} />,
+    svg: Patty,
     color: '#6E4337',
   },
   tomato: {
     label: 'Tomato',
-    svg: <Tomato width={INGREDIENT_WIDTH} />,
+    svg: Tomato,
     color: '#F06453',
   },
   ketchup: {
     label: 'Ketchup',
-    svg: <Ketchup width={INGREDIENT_WIDTH} />,
+    svg: Ketchup,
     color: '#F06453',
   },
   mayo: {
     label: 'Mayo',
-    svg: <Mayo width={INGREDIENT_WIDTH} />,
+    svg: Mayo,
     color: '#f2efdb',
   },
   mustard: {
     label: 'Mustard',
-    svg: <Mustard width={INGREDIENT_WIDTH} />,
+    svg: Mustard,
     color: '#f2e35f',
   },
   bottom: {
     label: 'Bottom Bun',
-    svg: <BottomBun width={INGREDIENT_WIDTH} />,
+    svg: BottomBun,
     color: '#F4A335',
   },
 }
