@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from 'react'
 import { useFlexCorners } from 'too-many-hooks'
-import { GRID_ITEMS } from './constants'
 
 const Grid: React.FC = () => {
   const [resizeWrapper, setResizeWrapper] = useState<HTMLDivElement | null>(null)
   const { corners, setElement } = useFlexCorners(resizeWrapper)
+  const [itemCount, setItemCount] = useState<number>(15)
+
   const items = useMemo(
     () =>
-      GRID_ITEMS.map((label, i) => (
+      Array.from({ length: itemCount }, (_, i) => `Item ${i + 1}`).map((label, i) => (
         <div
           key={label}
           ref={element => element && setElement(i, element)}
@@ -33,6 +34,7 @@ const Grid: React.FC = () => {
         </div>
       )),
     [
+      itemCount,
       corners?.bottom.left.index,
       corners?.bottom.right.index,
       corners?.left.bottom.index,
@@ -46,9 +48,37 @@ const Grid: React.FC = () => {
   )
 
   return (
-    <div className="flex h-screen w-screen content-center items-center">
+    <div className="flex h-screen w-screen flex-col content-center items-center gap-2 bg-white p-8">
+      <div className="flex items-end gap-8">
+        <label className="flex flex-col gap-1">
+          Number of items
+          <input
+            type="number"
+            defaultValue={itemCount}
+            onChange={e => setItemCount(parseInt(e.target.value))}
+          />
+        </label>
+        {corners ? (
+          <div className="flex gap-2">
+            <div className="flex flex-col gap-1">
+              <div>Top left: Item {corners.top.left.index + 1}</div>
+              <div>Top right: Item {corners.top.right.index + 1}</div>
+              <div>Right top: Item {corners.right.top.index + 1}</div>
+              <div>Right bottom: Item {corners.right.bottom.index + 1}</div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div>Bottom left: Item {corners.bottom.left.index + 1}</div>
+              <div>Bottom right: Item {corners.bottom.right.index + 1}</div>
+              <div>Left top: Item {corners.left.top.index + 1}</div>
+              <div>Left bottom: Item {corners.left.bottom.index + 1}</div>
+            </div>
+          </div>
+        ) : (
+          <div>No items added</div>
+        )}
+      </div>
       <div
-        className="m-auto flex h-96 w-96 resize flex-wrap content-center gap-1 overflow-scroll border-2 border-gray-400 p-2"
+        className="m-auto flex h-96 w-96 resize flex-wrap content-start gap-1 overflow-scroll border-2 border-gray-400 p-2"
         ref={element => element && setResizeWrapper(element)}
       >
         {items}
