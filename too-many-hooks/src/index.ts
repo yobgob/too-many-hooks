@@ -24,8 +24,8 @@ export type {
   UseFlagReturn,
   UseFlexCorners,
   UseFlexCornersReturn,
-  UseWindowListener,
   UseResizeObserver,
+  UseWindowListener,
   UseWindowListenerOptions,
 }
 export {
@@ -34,6 +34,6 @@ export {
   useDeepCompareEffect,
   useFlag,
   useFlexCorners,
-  useWindowListener,
   useResizeObserver,
+  useWindowListener,
 }
