@@ -12,19 +12,25 @@ const Grid: React.FC = () => {
         <div
           key={label}
           ref={element => element && setElement(i, element)}
-          className={`flex h-16 w-16 items-center justify-center bg-blue-700 p-1 text-white 
-          ${i === corners?.top.left.index || i === corners?.left.top.index ? 'rounded-tl-lg ' : ''} 
+          className={`flex h-16 w-16 items-center justify-center bg-blue-700 p-1 text-white  
           ${
-            i === corners?.top.right.index || i === corners?.right.top.index ? 'rounded-tr-lg ' : ''
+            i === corners?.top.left.index || i === corners?.left.top.index
+              ? 'rounded-tl-3xl bg-emerald-500'
+              : ''
+          } 
+          ${
+            i === corners?.top.right.index || i === corners?.right.top.index
+              ? 'rounded-tr-3xl bg-emerald-500'
+              : ''
           }
           ${
             i === corners?.bottom.right.index || i === corners?.right.bottom.index
-              ? 'rounded-br-lg '
+              ? 'rounded-br-3xl bg-emerald-500'
               : ''
           }
           ${
             i === corners?.bottom.left.index || i === corners?.left.bottom.index
-              ? 'rounded-bl-lg '
+              ? 'rounded-bl-3xl bg-emerald-500'
               : ''
           }
         
