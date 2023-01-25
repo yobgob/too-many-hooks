@@ -1,6 +1,6 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
-import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
+import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 
 export type {
   UseTallyArgs,

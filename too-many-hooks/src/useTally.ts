@@ -98,11 +98,11 @@ export const useTally: UseTally = ({ initial = 0, step = 1 }: UseTallyArgs): Use
   const [tally, set] = useState<number>(initial)
 
   const increment = useCallback(
-    (stepOverride?: number) => set((c) => c + (stepOverride ?? step)),
+    (stepOverride?: number) => set(c => c + (stepOverride ?? step)),
     [step],
   )
   const decrement = useCallback(
-    (stepOverride?: number) => set((c) => c - (stepOverride ?? step)),
+    (stepOverride?: number) => set(c => c - (stepOverride ?? step)),
     [step],
   )
   const reset = useCallback(() => set(initial), [initial])
