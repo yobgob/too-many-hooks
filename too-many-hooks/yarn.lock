@@ -717,22 +717,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.isequal@npm:^4.5.6":
-  version: 4.5.6
-  resolution: "@types/lodash.isequal@npm:4.5.6"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 0f065989408a9e0584e6c27495be2cd4602e62650f55266aa195812582444463c0c8570c674ae84f947c11748f49ab43fd5b482fa120e08eeee4c23b162edc38
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
-  version: 4.14.191
-  resolution: "@types/lodash@npm:4.14.191"
-  checksum: ba0d5434e10690869f32d5ea49095250157cae502f10d57de0a723fd72229ce6c6a4979576f0f13e0aa9fbe3ce2457bfb9fa7d4ec3d6daba56730a51906d1491
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:12.20.24":
   version: 12.20.24
   resolution: "@types/node@npm:12.20.24"
@@ -3622,7 +3606,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "too-many-hooks@workspace:."
   dependencies:
-    "@types/lodash.isequal": ^4.5.6
     "@types/node": ^18.11.17
     "@types/react": ^18.0.26
     "@typescript-eslint/eslint-plugin": ^5.47.0
@@ -3631,7 +3614,6 @@ __metadata:
     eslint: ^8.30.0
     eslint-plugin-react: ^7.31.11
     eslint-plugin-react-hooks: ^4.6.0
-    lodash.isequal: ^4.5.0
     prettier: ^2.8.1
     prettier-plugin-organize-imports: ^3.2.1
     react: ^18.2.0
