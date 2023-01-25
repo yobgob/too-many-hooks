@@ -22,12 +22,5 @@ module.exports = {
       version: 'detect',
     },
   },
-  rules: {
-    'react-hooks/exhaustive-deps': [
-      'warn',
-      {
-        additionalHooks: '(useDeepCompareEffect|useDeepCompareMemoize)',
-      },
-    ],
-  },
+  rules: {},
 }
