@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import useArray from './useArray'
-import useDeepCompareEffect from './useDeepCompareEffect'
-import useResizeObserver from './useResizeObserver'
+import useMutationObserver from './useMutationObserver'
 import useWindowListener from './useWindowListener'
 
 /**
@@ -174,29 +173,27 @@ export interface UseFlexCornersReturn<T extends HTMLElement> {
  *
  * @export
  * @typedef {UseFlexCorners}
- * @param {(Element | null)} [parent=null] pass to observe resizes on the parent, updating corners when it resizes
  * @template T extends HTMLElement
  */
-export type UseFlexCorners<T extends HTMLElement> = (
-  parent?: Element | null,
-) => UseFlexCornersReturn<T>
+export type UseFlexCorners<T extends HTMLElement> = () => UseFlexCornersReturn<T>
 
 /**
  * Dynamically locates corner elements of elements positioned with wrapping flex
  *
  * @implements {UseFlexCorners}
  * @template T extends HTMLElement
- * @param {(Element | null)} [parent=null]
  * @returns {UseFlexCornersReturn<T>}
  */
-const useFlexCorners = <T extends HTMLElement>(
-  parent: Element | null = null,
-): UseFlexCornersReturn<T> => {
+const useFlexCorners = <T extends HTMLElement>(): UseFlexCornersReturn<T> => {
   const [elements, { updateAt: setElement }] = useArray<T>([])
-  const resizeEntry = useResizeObserver(parent)
+
+  const mutationRecord = useMutationObserver(document, {
+    attributes: true,
+    subtree: true,
+  })
 
   const findCorners = useCallback(() => {
-    const elementsInDOM = elements.filter(element => document.contains(element))
+    const elementsInDOM = elements.filter(element => document.body.contains(element))
     if (!elementsInDOM.length) return null
 
     const boundingClientRects = elementsInDOM.map(element => element.getBoundingClientRect())
@@ -210,61 +207,78 @@ const useFlexCorners = <T extends HTMLElement>(
 
         // top.left
         if (
-          boundingClientRects[elementIndex].y < boundingClientRects[curr.top.left.index].y ||
-          (boundingClientRects[elementIndex].y === boundingClientRects[curr.top.left.index].y &&
-            boundingClientRects[elementIndex].x < boundingClientRects[curr.top.left.index].x)
+          boundingClientRects[elementIndex].top < boundingClientRects[curr.top.left.index].top ||
+          (boundingClientRects[elementIndex].top === boundingClientRects[curr.top.left.index].top &&
+            boundingClientRects[elementIndex].left < boundingClientRects[curr.top.left.index].left)
         )
           newCorners.top.left = newCorner
         // top.right
         if (
-          boundingClientRects[elementIndex].y < boundingClientRects[curr.top.right.index].y ||
-          (boundingClientRects[elementIndex].y === boundingClientRects[curr.top.right.index].y &&
-            boundingClientRects[elementIndex].x > boundingClientRects[curr.top.right.index].x)
+          boundingClientRects[elementIndex].top < boundingClientRects[curr.top.right.index].top ||
+          (boundingClientRects[elementIndex].top ===
+            boundingClientRects[curr.top.right.index].top &&
+            boundingClientRects[elementIndex].right >
+              boundingClientRects[curr.top.right.index].right)
         )
           newCorners.top.right = newCorner
 
         // right.top
         if (
-          boundingClientRects[elementIndex].x > boundingClientRects[curr.right.top.index].x ||
-          (boundingClientRects[elementIndex].x === boundingClientRects[curr.right.top.index].x &&
-            boundingClientRects[elementIndex].y < boundingClientRects[curr.right.top.index].y)
+          boundingClientRects[elementIndex].right >
+            boundingClientRects[curr.right.top.index].right ||
+          (boundingClientRects[elementIndex].right ===
+            boundingClientRects[curr.right.top.index].right &&
+            boundingClientRects[elementIndex].top < boundingClientRects[curr.right.top.index].top)
         )
           newCorners.right.top = newCorner
         // right.bottom
         if (
-          boundingClientRects[elementIndex].x > boundingClientRects[curr.right.bottom.index].x ||
-          (boundingClientRects[elementIndex].x === boundingClientRects[curr.right.bottom.index].x &&
-            boundingClientRects[elementIndex].y > boundingClientRects[curr.right.bottom.index].y)
+          boundingClientRects[elementIndex].right >
+            boundingClientRects[curr.right.bottom.index].right ||
+          (boundingClientRects[elementIndex].right ===
+            boundingClientRects[curr.right.bottom.index].right &&
+            boundingClientRects[elementIndex].bottom >
+              boundingClientRects[curr.right.bottom.index].bottom)
         )
           newCorners.right.bottom = newCorner
 
         // bottom.left
         if (
-          boundingClientRects[elementIndex].y > boundingClientRects[curr.bottom.left.index].y ||
-          (boundingClientRects[elementIndex].y === boundingClientRects[curr.bottom.left.index].y &&
-            boundingClientRects[elementIndex].x < boundingClientRects[curr.bottom.left.index].x)
+          boundingClientRects[elementIndex].bottom >
+            boundingClientRects[curr.bottom.left.index].bottom ||
+          (boundingClientRects[elementIndex].bottom ===
+            boundingClientRects[curr.bottom.left.index].bottom &&
+            boundingClientRects[elementIndex].left <
+              boundingClientRects[curr.bottom.left.index].left)
         )
           newCorners.bottom.left = newCorner
         // bottom.right
         if (
-          boundingClientRects[elementIndex].y > boundingClientRects[curr.bottom.right.index].y ||
-          (boundingClientRects[elementIndex].y === boundingClientRects[curr.bottom.right.index].y &&
-            boundingClientRects[elementIndex].x > boundingClientRects[curr.bottom.right.index].x)
+          boundingClientRects[elementIndex].bottom >
+            boundingClientRects[curr.bottom.right.index].bottom ||
+          (boundingClientRects[elementIndex].bottom ===
+            boundingClientRects[curr.bottom.right.index].bottom &&
+            boundingClientRects[elementIndex].right >
+              boundingClientRects[curr.bottom.right.index].right)
         )
           newCorners.bottom.right = newCorner
 
         // left.top
         if (
-          boundingClientRects[elementIndex].x < boundingClientRects[curr.left.top.index].x ||
-          (boundingClientRects[elementIndex].x === boundingClientRects[curr.left.top.index].x &&
-            boundingClientRects[elementIndex].y < boundingClientRects[curr.left.top.index].y)
+          boundingClientRects[elementIndex].left < boundingClientRects[curr.left.top.index].left ||
+          (boundingClientRects[elementIndex].left ===
+            boundingClientRects[curr.left.top.index].left &&
+            boundingClientRects[elementIndex].top < boundingClientRects[curr.left.top.index].top)
         )
           newCorners.left.top = newCorner
         // left.bottom
         if (
-          boundingClientRects[elementIndex].x < boundingClientRects[curr.left.bottom.index].x ||
-          (boundingClientRects[elementIndex].x === boundingClientRects[curr.left.bottom.index].x &&
-            boundingClientRects[elementIndex].y > boundingClientRects[curr.left.bottom.index].y)
+          boundingClientRects[elementIndex].left <
+            boundingClientRects[curr.left.bottom.index].left ||
+          (boundingClientRects[elementIndex].left ===
+            boundingClientRects[curr.left.bottom.index].left &&
+            boundingClientRects[elementIndex].bottom >
+              boundingClientRects[curr.left.bottom.index].bottom)
         )
           newCorners.left.bottom = newCorner
 
@@ -308,7 +322,10 @@ const useFlexCorners = <T extends HTMLElement>(
     }
 
     return corners
-  }, [elements])
+    // must depend upon the mutationRecord so mutations to the document such as removing
+    // elements cause re-calculation
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mutationRecord, elements])
 
   const [corners, setCorners] = useState<Corners<T> | null>(findCorners())
 
@@ -316,7 +333,6 @@ const useFlexCorners = <T extends HTMLElement>(
     setCorners(findCorners())
   }, [findCorners])
   useEffect(onResize, [onResize])
-  useDeepCompareEffect(onResize, [onResize, resizeEntry])
   useWindowListener('resize', onResize)
 
   return {

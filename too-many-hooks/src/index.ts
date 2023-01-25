@@ -8,6 +8,7 @@ import useFlexCorners, {
   UseFlexCorners,
   UseFlexCornersReturn,
 } from './useFlexCorners'
+import useMutationObserver, { UseMutationObserver } from './useMutationObserver'
 import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
 import useWindowListener, { UseWindowListener, UseWindowListenerOptions } from './useWindowListener'
 
@@ -24,6 +25,7 @@ export type {
   UseFlagReturn,
   UseFlexCorners,
   UseFlexCornersReturn,
+  UseMutationObserver,
   UseResizeObserver,
   UseWindowListener,
   UseWindowListenerOptions,
@@ -34,6 +36,7 @@ export {
   useDeepCompareEffect,
   useFlag,
   useFlexCorners,
+  useMutationObserver,
   useResizeObserver,
   useWindowListener,
 }
