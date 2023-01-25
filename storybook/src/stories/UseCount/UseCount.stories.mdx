@@ -1,9 +1,9 @@
 import { Canvas, Meta, Story } from '@storybook/addon-docs'
 import * as stories from './stories'
 
-<Meta title="Example/UseCount" />
+<Meta title="Example/UseTally" />
 
-# useCount
+# useTally
 
 Increment and decrement numeric state
 
@@ -11,13 +11,13 @@ Increment and decrement numeric state
 
 ````ts
 /**
- * Arguments to the `useCount` hook
+ * Arguments to the `useTally` hook
  *
  * @export
- * @interface UseCountArgs
- * @typedef {UseCountArgs}
+ * @interface UseTallyArgs
+ * @typedef {UseTallyArgs}
  */
-export interface UseCountArgs {
+export interface UseTallyArgs {
   /**
    * Initial `count`
    *
@@ -35,12 +35,12 @@ export interface UseCountArgs {
   step?: number
 }
 /**
- * Return values of the `useCount` hook
+ * Return values of the `useTally` hook
  *
  * @export
- * @typedef {UseCountReturn}
+ * @typedef {UseTallyReturn}
  */
-export declare type UseCountReturn = [
+export declare type UseTallyReturn = [
   number,
   {
     /**
@@ -76,33 +76,33 @@ export declare type UseCountReturn = [
   },
 ]
 /**
- * `useCount` hook type
+ * `useTally` hook type
  *
  * @export
- * @typedef {UseCount}
- * @param {UseCountArgs}
- * @returns {UseCountReturn}
+ * @typedef {UseTally}
+ * @param {UseTallyArgs}
+ * @returns {UseTallyReturn}
  */
-export declare type UseCount = (args: UseCountArgs) => UseCountReturn
+export declare type UseTally = (args: UseTallyArgs) => UseTallyReturn
 /**
  * Returns a numeric `count` and functions to set, increment, decrement, or reset it
  *
  * @example
  * To count up by 2s
  * ```ts
- * const [count, { increment }] = useCount({step: 2})
+ * const [count, { increment }] = useTally({step: 2})
  * ```
  * @example
  * To count down by 1s
  * ```ts
- * const [count, { decrement }] = useCount()
+ * const [count, { decrement }] = useTally()
  * ```
- * @implements {UseCount}
- * @param {UseCountArgs} { initial = 0, step = 1 }
- * @returns {UseCountReturn}
+ * @implements {UseTally}
+ * @param {UseTallyArgs} { initial = 0, step = 1 }
+ * @returns {UseTallyReturn}
  */
-export declare const useCount: UseCount
-export default useCount
+export declare const useTally: UseTally
+export default useTally
 ````
 
 ## Examples

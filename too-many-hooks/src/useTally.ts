@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react'
 
 /**
- * Arguments to the `useCount` hook
+ * Arguments to the `useTally` hook
  *
  * @export
- * @interface UseCountArgs
- * @typedef {UseCountArgs}
+ * @interface UseTallyArgs
+ * @typedef {UseTallyArgs}
  */
-export interface UseCountArgs {
+export interface UseTallyArgs {
   /**
    * Initial `count`
    *
@@ -26,12 +26,12 @@ export interface UseCountArgs {
 }
 
 /**
- * Return values of the `useCount` hook
+ * Return values of the `useTally` hook
  *
  * @export
- * @typedef {UseCountReturn}
+ * @typedef {UseTallyReturn}
  */
-export type UseCountReturn = [
+export type UseTallyReturn = [
   number,
   {
     /**
@@ -68,14 +68,14 @@ export type UseCountReturn = [
 ]
 
 /**
- * `useCount` hook type
+ * `useTally` hook type
  *
  * @export
- * @typedef {UseCount}
- * @param {UseCountArgs}
- * @returns {UseCountReturn}
+ * @typedef {UseTally}
+ * @param {UseTallyArgs}
+ * @returns {UseTallyReturn}
  */
-export type UseCount = (args: UseCountArgs) => UseCountReturn
+export type UseTally = (args: UseTallyArgs) => UseTallyReturn
 
 /**
  * Returns a numeric `count` and functions to set, increment, decrement, or reset it
@@ -83,26 +83,26 @@ export type UseCount = (args: UseCountArgs) => UseCountReturn
  * @example
  * To count up by 2s
  * ```ts
- * const [count, { increment }] = useCount({step: 2})
+ * const [count, { increment }] = useTally({step: 2})
  * ```
  * @example
  * To count down by 1s
  * ```ts
- * const [count, { decrement }] = useCount()
+ * const [count, { decrement }] = useTally()
  * ```
- * @implements {UseCount}
- * @param {UseCountArgs} { initial = 0, step = 1 }
- * @returns {UseCountReturn}
+ * @implements {UseTally}
+ * @param {UseTallyArgs} { initial = 0, step = 1 }
+ * @returns {UseTallyReturn}
  */
-export const useCount: UseCount = ({ initial = 0, step = 1 }: UseCountArgs): UseCountReturn => {
+export const useTally: UseTally = ({ initial = 0, step = 1 }: UseTallyArgs): UseTallyReturn => {
   const [count, set] = useState<number>(initial)
 
   const increment = useCallback(
-    (stepOverride?: number) => set(c => c + (stepOverride ?? step)),
+    (stepOverride?: number) => set((c) => c + (stepOverride ?? step)),
     [step],
   )
   const decrement = useCallback(
-    (stepOverride?: number) => set(c => c - (stepOverride ?? step)),
+    (stepOverride?: number) => set((c) => c - (stepOverride ?? step)),
     [step],
   )
   const reset = useCallback(() => set(initial), [initial])
@@ -118,4 +118,4 @@ export const useCount: UseCount = ({ initial = 0, step = 1 }: UseCountArgs): Use
   ]
 }
 
-export default useCount
+export default useTally

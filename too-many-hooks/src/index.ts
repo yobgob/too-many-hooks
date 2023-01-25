@@ -1,14 +1,14 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
-import useCount, { UseCount, UseCountArgs, UseCountReturn } from './useCount'
+import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
 
 export type {
-  UseCountArgs,
-  UseCountReturn,
-  UseCount,
+  UseTallyArgs,
+  UseTallyReturn,
+  UseTally,
   UseFlag,
   UseFlagReturn,
   UseArray,
   UseArrayReturn,
 }
-export { useCount, useFlag, useArray }
+export { useTally, useFlag, useArray }

@@ -29,7 +29,7 @@ Peer dependencies:
 
 ### Hooks
 
-- `useCount` - Increment and decrement numeric state
+- `useTally` - Increment and decrement numeric state
 - `useFlag` - Simply manage boolean state
 
 ## Contributing
