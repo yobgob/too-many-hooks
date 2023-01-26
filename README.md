@@ -31,6 +31,7 @@ Peer dependencies:
 
 - `useCount` - Increment and decrement numeric state
 - `useFlag` - Simply manage boolean state
+- `useResizeObserver` - Observe an Element and rerender on resizes + get size information
 
 ## Contributing
 
