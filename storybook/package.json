@@ -11,6 +11,8 @@
     "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types"
   },
   "dependencies": {
+    "@types/lodash.throttle": "^4.1.7",
+    "lodash.throttle": "^4.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "too-many-hooks": "link:./../too-many-hooks"
