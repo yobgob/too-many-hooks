@@ -31,6 +31,7 @@ Peer dependencies:
 
 - `useCount` - Increment and decrement numeric state
 - `useFlag` - Simply manage boolean state
+- `useDeepCompareEffect` - Run function when dependencies change, checked deeply for equality
 
 ## Contributing
 
