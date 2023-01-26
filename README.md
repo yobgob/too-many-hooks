@@ -29,7 +29,7 @@ Peer dependencies:
 
 ### Hooks
 
-- `useCount` - Increment and decrement numeric state
+- `useTally` - Increment and decrement numeric state
 - `useFlag` - Simply manage boolean state
 
 ## Contributing
@@ -46,11 +46,15 @@ The monorepo contains both the `too-many-hooks` library at `/too-many-hooks` and
 
 The storybook imports the library via a symlink, and thus needs `too-many-hooks` built locally. To build the library, go to `/too-many-hooks` and install dependencies with:
 
-```yarn install```
+```sh
+yarn install
+```
 
 Then, build the library by running:
 
-```yarn build```
+```sh
+yarn build
+```
 
 The built library will be output to `/too-many-hooks/dist`.
 

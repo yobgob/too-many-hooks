@@ -6,8 +6,8 @@ import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
 export const socialMedia: StoryObj<Meta<typeof SocialMedia>> = {
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const countingButton = canvas.getByTitle('like')
-    userEvent.click(countingButton)
+    const tallyingButton = canvas.getByTitle('like')
+    userEvent.click(tallyingButton)
   },
   parameters: {
     layout: 'centered',
