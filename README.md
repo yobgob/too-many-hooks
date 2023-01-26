@@ -31,6 +31,10 @@ Peer dependencies:
 
 - `useCount` - Increment and decrement numeric state
 - `useFlag` - Simply manage boolean state
+- `useArray` - Simplify array state management with useful utilities
+- `useFlexCorners` - Dynamically find corners in items wrapped with flex
+- `useMutationObserver` - Observe a Node and rerender on mutations + get mutation information
+- `useWindowListener` - Easily add and remove listeners on the window
 
 ## Contributing
 
