@@ -5,12 +5,12 @@ import { useEffect, useRef, useState } from 'react'
  *
  * @export
  * @typedef {UseMutationObserver}
- * @param {(Node)} target
+ * @param {(Node | null)} target
  * @param {?MutationObserverInit} [options]
  * @returns {(MutationRecord | undefined)}
  */
 export type UseMutationObserver = (
-  target: Node,
+  target: Node | null,
   options?: MutationObserverInit,
 ) => MutationRecord | undefined
 
@@ -18,12 +18,12 @@ export type UseMutationObserver = (
  * Observes a node and returns the latest mutation record
  *
  * @implements {UseMutationObserver}
- * @param {(Node)} target
+ * @param {(Node | null)} target
  * @param {?MutationObserverInit} [options]
  * @returns {(MutationRecord | undefined)}
  */
 const useMutationObserver: UseMutationObserver = (
-  target: Node,
+  target: Node | null,
   options?: MutationObserverInit,
 ): MutationRecord | undefined => {
   const [record, setRecord] = useState<MutationRecord>()
