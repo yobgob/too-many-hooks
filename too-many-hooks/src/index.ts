@@ -4,13 +4,13 @@ import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
 import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
 
 export type {
-  UseCountArgs,
-  UseCountReturn,
-  UseCount,
-  UseFlag,
-  UseFlagReturn,
   UseArray,
   UseArrayReturn,
+  UseCount,
+  UseCountArgs,
+  UseCountReturn,
+  UseFlag,
+  UseFlagReturn,
   UseResizeObserver,
 }
-export { useCount, useFlag, useArray, useResizeObserver }
+export { useArray, useCount, useFlag, useResizeObserver }
