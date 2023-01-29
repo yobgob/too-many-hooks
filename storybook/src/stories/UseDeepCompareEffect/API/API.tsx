@@ -1,7 +1,7 @@
 import throttle from 'lodash.throttle'
 import React, { useRef, useState } from 'react'
 import { useDeepCompareEffect } from 'too-many-hooks'
-import { COUNTRY_CODES } from './constants'
+import COUNTRY_CODES from './countryCodes.json'
 
 interface Props {
   firstName: string
@@ -29,7 +29,12 @@ const API: React.FC<Props> = ({ firstName, countryKey }) => {
     }
   }, [fetchArgs])
 
-  return <p className="prose">Predicted age: {predictedAge}</p>
+  return (
+    <div className="prose flex flex-col items-center gap-4 text-4xl">
+      <p>Enter a name and country in &quot;Controls&quot; to get a predicted age</p>
+      <p>{predictedAge ? `Predicted age: ${predictedAge}` : 'No name entered'}</p>
+    </div>
+  )
 }
 
 export default API

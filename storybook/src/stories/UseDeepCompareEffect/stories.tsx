@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import API from './API'
 import API_CODE from './API/API.tsx?raw'
-import { COUNTRY_CODES } from './API/constants'
+import COUNTRY_CODES from './API/countryCodes.json'
 
 export const api: StoryObj<Meta<typeof API>> = {
   parameters: {
