@@ -2,15 +2,16 @@ import React from 'react'
 import { useWindowListener } from 'too-many-hooks'
 
 interface Props {
-  onResize: (name?: string | null) => string
+  addResizeAction: (...data: unknown[]) => void
 }
 
-const Resize: React.FC<Props> = ({ onResize }) => {
-  useWindowListener('resize', () =>
-    onResize(`Window resized to ${window.innerWidth} x ${window.innerHeight}`),
+const Resize: React.FC<Props> = ({ addResizeAction }) => {
+  useWindowListener('resize', e =>
+    addResizeAction(`Window resized to ${window.innerWidth} x ${window.innerHeight}`, e),
   )
+
   return (
-    <div className="prose">
+    <div className="prose text-4xl">
       Resize this window to trigger listener events, viewable in the &quot;Actions&quot; tab
     </div>
   )

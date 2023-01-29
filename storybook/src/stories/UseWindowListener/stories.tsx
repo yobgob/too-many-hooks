@@ -12,8 +12,8 @@ export const mouseMove: StoryObj<Meta<typeof MouseMove>> = {
     },
   },
   argTypes: {
-    onMouseMove: {
-      action: (name: string) => name,
+    addMouseMoveAction: {
+      action: (...data: unknown[]) => data,
     },
   },
   render: args => <MouseMove {...args} />,
@@ -27,8 +27,8 @@ export const resize: StoryObj<Meta<typeof Resize>> = {
     },
   },
   argTypes: {
-    onResize: {
-      action: (name: string) => name,
+    addResizeAction: {
+      action: (...data: unknown[]) => data,
     },
   },
   render: args => <Resize {...args} />,

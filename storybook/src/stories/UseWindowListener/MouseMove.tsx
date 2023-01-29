@@ -2,13 +2,15 @@ import React from 'react'
 import { useWindowListener } from 'too-many-hooks'
 
 interface Props {
-  onMouseMove: (name?: string | null) => string
+  addMouseMoveAction: (...data: unknown[]) => void
 }
 
-const MouseMove: React.FC<Props> = ({ onMouseMove }) => {
-  useWindowListener('mousemove', e => onMouseMove(`Mouse moved to (${e.clientX}, ${e.clientY})`))
+const MouseMove: React.FC<Props> = ({ addMouseMoveAction }) => {
+  useWindowListener('mousemove', e =>
+    addMouseMoveAction(`Mouse moved to (${e.clientX}, ${e.clientY})`, e),
+  )
   return (
-    <div className="prose">
+    <div className="prose text-4xl">
       Move your mouse around to trigger listener events, viewable in the &quot;Actions&quot; tab
     </div>
   )
