@@ -39,10 +39,7 @@ const useMutationObserver: UseMutationObserver = (
     if (target) {
       const current = observer.current
       current.observe(target, options)
-
-      return () => {
-        current.disconnect()
-      }
+      return () => current.disconnect()
     }
   }, [target, observer, options])
 
