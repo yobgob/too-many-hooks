@@ -193,6 +193,8 @@ const useFlexCorners = <T extends HTMLElement>(): UseFlexCornersReturn<T> => {
   })
 
   const findCorners = useCallback(() => {
+    if (!document) return null
+
     const elementsInDOM = elements.filter(element => document.body.contains(element))
     if (!elementsInDOM.length) return null
 
