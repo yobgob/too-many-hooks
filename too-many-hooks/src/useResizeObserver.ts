@@ -7,12 +7,12 @@ import { useEffect, useRef, useState } from 'react'
  * @typedef {UseResizeObserver}
  * @param {(Element | null)} target
  * @param {?ResizeObserverOptions} [options]
- * @returns {(ResizeObserverEntry | undefined)}
+ * @returns {(ResizeObserverEntry[] | undefined)}
  */
 export type UseResizeObserver = (
   target: Element | null,
   options?: ResizeObserverOptions,
-) => ResizeObserverEntry | undefined
+) => ResizeObserverEntry[] | undefined
 
 /**
  * Wraps a resize observer on an element
@@ -20,20 +20,15 @@ export type UseResizeObserver = (
  * @implements {UseResizeObserver}
  * @param {(Element | null)} target
  * @param {?ResizeObserverOptions} [options]
- * @returns {(ResizeObserverEntry | undefined)}
+ * @returns {(ResizeObserverEntry[] | undefined)}
  */
 const useResizeObserver: UseResizeObserver = (
   target: Element | null,
   options?: ResizeObserverOptions,
-): ResizeObserverEntry | undefined => {
-  const [entry, setEntry] = useState<ResizeObserverEntry>()
+): ResizeObserverEntry[] | undefined => {
+  const [entries, setEntries] = useState<ResizeObserverEntry[]>()
 
-  const observer = useRef(
-    new ResizeObserver(entries => {
-      const newEntry = entries[0]
-      setEntry(newEntry)
-    }),
-  )
+  const observer = useRef(new ResizeObserver(setEntries))
 
   useEffect(() => {
     if (target) {
@@ -46,7 +41,7 @@ const useResizeObserver: UseResizeObserver = (
     }
   }, [target, observer, options])
 
-  return entry
+  return entries
 }
 
 export default useResizeObserver
