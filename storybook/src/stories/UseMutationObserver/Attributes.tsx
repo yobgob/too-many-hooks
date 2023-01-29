@@ -7,20 +7,20 @@ interface Props {
 }
 
 const Attributes: React.FC<Props> = ({ attributeMutation, attribute }) => {
-  const record = useMutationObserver(document.body, {
+  const records = useMutationObserver(document.body, {
     attributes: true,
     subtree: true,
   })
   useEffect(() => {
     const currentAttribute = document.getElementById('example-div')?.dataset.attribute
-    if (record && currentAttribute !== undefined) {
+    if (records && currentAttribute !== undefined) {
       attributeMutation(
-        `Observed mutation with record attributeName ${record?.attributeName}, div data ${
+        `Observed mutation with record attributeName ${records?.[0].attributeName}, div data ${
           !currentAttribute ? 'cleared' : `set to ${currentAttribute}`
         }`,
       )
     }
-  }, [attributeMutation, record])
+  }, [attributeMutation, records])
   return (
     <div id="example-div" className="prose text-4xl" data-attribute={attribute}>
       Use the controls to trigger a mutation, viewable in the &quot;Actions&quot; tab

@@ -187,7 +187,7 @@ export type UseFlexCorners<T extends HTMLElement> = () => UseFlexCornersReturn<T
 const useFlexCorners = <T extends HTMLElement>(): UseFlexCornersReturn<T> => {
   const [elements, { updateAt: setElement }] = useArray<T>([])
 
-  const mutationRecord = useMutationObserver(document, {
+  const mutationRecords = useMutationObserver(document, {
     attributes: true,
     subtree: true,
   })
@@ -322,10 +322,10 @@ const useFlexCorners = <T extends HTMLElement>(): UseFlexCornersReturn<T> => {
     }
 
     return corners
-    // must depend upon the mutationRecord so mutations to the document such as removing
+    // must depend upon the mutationRecords so mutations to the document such as removing
     // elements cause re-calculation
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mutationRecord, elements])
+  }, [mutationRecords, elements])
 
   const [corners, setCorners] = useState<Corners<T> | null>(findCorners())
 
