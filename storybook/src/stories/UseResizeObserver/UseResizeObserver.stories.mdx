@@ -1,0 +1,27 @@
+import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
+import * as stories from './stories'
+import TYPES from '../../../../too-many-hooks/dist/useResizeObserver.d.ts?raw'
+
+<Meta title="Example/UseResizeObserver" />
+
+# useResizeObserver
+
+Handles adding and removing a `ResizeObserver` to observe an element and return the most recent `ResizeObserverEntry`
+
+## Types
+
+<Source language="ts" code={TYPES} />
+
+## Examples
+
+### Container Query Emulation
+
+<Canvas withSource="open">
+  <Story name="Container Query Emulation" story={stories.containerQuery} />
+</Canvas>
+
+### Text Area
+
+<Canvas withSource="open">
+  <Story name="Text Area" story={stories.textArea} />
+</Canvas>

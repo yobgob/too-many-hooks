@@ -1,14 +1,16 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
+import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
 import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 
 export type {
-  UseTallyArgs,
-  UseTallyReturn,
-  UseTally,
-  UseFlag,
-  UseFlagReturn,
   UseArray,
   UseArrayReturn,
+  UseFlag,
+  UseFlagReturn,
+  UseResizeObserver,
+  UseTally,
+  UseTallyArgs,
+  UseTallyReturn,
 }
-export { useTally, useFlag, useArray }
+export { useArray, useFlag, useResizeObserver, useTally }
