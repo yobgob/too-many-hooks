@@ -5,7 +5,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "test-storybook --stories-json",
-    "chromatic": "npx chromatic --exit-zero-on-changes --project-token=b1bb684c98a2",
+    "chromatic": "yarn dlx chromatic --exit-zero-on-changes --project-token=b1bb684c98a2",
     "format": "prettier --write src",
     "lint:code": "eslint src --max-warnings=0",
     "lint:formatting": "prettier --check src",
