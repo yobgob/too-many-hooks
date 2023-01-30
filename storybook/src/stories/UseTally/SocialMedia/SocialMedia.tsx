@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTally } from 'too-many-hooks'
-import { Button } from '../../components'
+import { Button } from '../../../components'
+import PFP from './assets/pfp.jpeg'
 
 export interface UseTallyStoryProps {
   step?: number
@@ -14,7 +15,7 @@ const SocialMedia: React.FC<UseTallyStoryProps> = ({ step, incrementStep, decrem
   return (
     <div className="flex w-full max-w-2xl flex-col items-start gap-2 rounded-md border bg-white py-2 px-4 text-black">
       <div className="flex items-center gap-2">
-        <img src="https://picsum.photos/30" alt="Random pfp" className="rounded-full" />
+        <img src={PFP} alt="pfp" className="rounded-full" width="30px" height="30px" />
         <div>Dawson Booth</div>
         <div className="text-slate-400">@DawsonBooth420</div>
       </div>
