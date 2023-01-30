@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import API from './API'
 import API_CODE from './API/API.tsx?raw'
-import COUNTRY_CODES from './API/countryCodes.json'
+import COUNTRIES from './API/assets/countries.json'
 
 export const api: StoryObj<Meta<typeof API>> = {
   parameters: {
@@ -13,16 +13,16 @@ export const api: StoryObj<Meta<typeof API>> = {
   },
   argTypes: {
     firstName: { type: 'string' },
-    countryKey: {
-      options: Object.keys(COUNTRY_CODES),
+    countryCode: {
       control: {
         type: 'select',
+        labels: COUNTRIES,
       },
     },
   },
   args: {
     firstName: '',
-    countryKey: 'United States',
+    countryCode: 'US',
   },
   render: args => <API {...args} />,
 }

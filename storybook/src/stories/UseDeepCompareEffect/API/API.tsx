@@ -1,19 +1,19 @@
 import throttle from 'lodash.throttle'
 import React, { useRef, useState } from 'react'
 import { useDeepCompareEffect } from 'too-many-hooks'
-import COUNTRY_CODES from './countryCodes.json'
+import COUNTRIES from './assets/countries.json'
 
 interface Props {
   firstName: string
-  countryKey: keyof typeof COUNTRY_CODES
+  countryCode: keyof typeof COUNTRIES
 }
 
-const API: React.FC<Props> = ({ firstName, countryKey }) => {
+const API: React.FC<Props> = ({ firstName, countryCode }) => {
   const [predictedAge, setPredictedAge] = useState<string>()
 
   const getThrottledPrediction = useRef(
     throttle(
-      (params: { name: string; country_id: typeof COUNTRY_CODES[keyof typeof COUNTRY_CODES] }) =>
+      (params: { name: string; country_id: keyof typeof COUNTRIES }) =>
         fetch('https://api.agify.io?' + new URLSearchParams(params))
           .then(res => res.json())
           .then(data => setPredictedAge(data.age)),
@@ -21,7 +21,7 @@ const API: React.FC<Props> = ({ firstName, countryKey }) => {
     ),
   )
 
-  const fetchArgs = { name: firstName, country_id: COUNTRY_CODES[countryKey] }
+  const fetchArgs = { name: firstName, country_id: countryCode }
 
   useDeepCompareEffect(() => {
     if (fetchArgs?.name && fetchArgs.country_id) {
