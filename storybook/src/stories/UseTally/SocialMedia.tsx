@@ -1,15 +1,15 @@
 import React from 'react'
-import { useCount } from 'too-many-hooks'
+import { useTally } from 'too-many-hooks'
 import { Button } from '../../components'
 
-export interface UseCountStoryProps {
+export interface UseTallyStoryProps {
   step?: number
   incrementStep?: number
   decrementStep?: number
 }
 
-const SocialMedia: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrementStep }) => {
-  const [value, { increment, decrement }] = useCount({ step })
+const SocialMedia: React.FC<UseTallyStoryProps> = ({ step, incrementStep, decrementStep }) => {
+  const [value, { increment, decrement }] = useTally({ step })
 
   return (
     <div className="flex w-full max-w-2xl flex-col items-start gap-2 rounded-md border bg-white py-2 px-4 text-black">
@@ -21,7 +21,7 @@ const SocialMedia: React.FC<UseCountStoryProps> = ({ step, incrementStep, decrem
       <div className="ml-3.5 border-l border-slate-400 pl-3.5">
         <p className="m-1">
           This new library too-many-hooks has huge potential. I hope they add a hook I can use to
-          easily count likes/dislikes on a post. Maybe a &quot;useCount&quot;?
+          easily tally likes/dislikes on a post. Maybe a &quot;useTally&quot;?
         </p>
       </div>
       <div className="flex items-baseline gap-2 pl-3.5">

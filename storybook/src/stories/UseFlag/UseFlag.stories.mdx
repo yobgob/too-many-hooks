@@ -1,5 +1,6 @@
-import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
 import * as stories from './stories'
+import TYPES from '../../../../too-many-hooks/dist/useFlag.d.ts?raw'
 
 <Meta title="Example/UseFlag" />
 
@@ -9,65 +10,7 @@ Simply manage boolean state
 
 ## Types
 
-```ts
-/**
- * Return values of the `useFlag` hook
- *
- * @export
- * @typedef {UseFlagReturn}
- */
-export declare type UseFlagReturn = [
-  boolean,
-  {
-    /**
-     * Sets the flag to a specific boolean value
-     *
-     * @readonly
-     * @type {React.Dispatch<React.SetStateAction<boolean>>}
-     */
-    readonly set: React.Dispatch<React.SetStateAction<boolean>>
-    /**
-     * Sets the flag to true
-     *
-     * @readonly
-     * @type {() => void}
-     */
-    readonly flag: () => void
-    /**
-     * Sets the flag to false
-     *
-     * @readonly
-     * @type {() => void}
-     */
-    readonly unflag: () => void
-    /**
-     * Inverts the flag
-     *
-     * @readonly
-     * @type {() => void}
-     */
-    readonly toggle: () => void
-  },
-]
-/**
- * `useFlag` hook type
- *
- * @export
- * @typedef {UseFlag}
- * @param {boolean} initial
- * @returns {UseFlagReturn}
- */
-export declare type UseFlag = (initial: boolean) => UseFlagReturn
-/**
- * Simplifies boolean state management
- *
- * @implements {UseFlag}
- * @param {boolean} initial
- * @returns {UseFlagReturn}
- */
-declare const useFlag: UseFlag
-export default useFlag
-```
+<Source language="ts" code={TYPES} />
 
 ## Examples
 

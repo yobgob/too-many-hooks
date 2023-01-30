@@ -1,0 +1,21 @@
+import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
+import * as stories from './stories'
+import TYPES from '../../../../too-many-hooks/dist/useTally.d.ts?raw'
+
+<Meta title="Example/UseTally" />
+
+# useTally
+
+Increment and decrement numeric state
+
+## Types
+
+<Source language="ts" code={TYPES} />
+
+## Examples
+
+### Social Media
+
+<Canvas withSource="open">
+  <Story name="Social Media" story={stories.socialMedia} />
+</Canvas>

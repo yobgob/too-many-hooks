@@ -1,16 +1,16 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
-import useCount, { UseCount, UseCountArgs, UseCountReturn } from './useCount'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
 import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
+import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 
 export type {
   UseArray,
   UseArrayReturn,
-  UseCount,
-  UseCountArgs,
-  UseCountReturn,
   UseFlag,
   UseFlagReturn,
   UseResizeObserver,
+  UseTally,
+  UseTallyArgs,
+  UseTallyReturn,
 }
-export { useArray, useCount, useFlag, useResizeObserver }
+export { useArray, useFlag, useResizeObserver, useTally }
