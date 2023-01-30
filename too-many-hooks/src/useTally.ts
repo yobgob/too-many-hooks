@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from 'react'
 
 /**
- * Arguments to the `useCount` hook
+ * Arguments to the `useTally` hook
  *
  * @export
- * @interface UseCountArgs
- * @typedef {UseCountArgs}
+ * @interface UseTallyArgs
+ * @typedef {UseTallyArgs}
  */
-export interface UseCountArgs {
+export interface UseTallyArgs {
   /**
-   * Initial `count`
+   * Initial `tally`
    *
    * @type {?number}
    * @default 0
@@ -26,23 +26,23 @@ export interface UseCountArgs {
 }
 
 /**
- * Return values of the `useCount` hook
+ * Return values of the `useTally` hook
  *
  * @export
- * @typedef {UseCountReturn}
+ * @typedef {UseTallyReturn}
  */
-export type UseCountReturn = [
+export type UseTallyReturn = [
   number,
   {
     /**
-     * Sets `count` to the provided value
+     * Sets `tally` to the provided value
      *
      * @readonly
      * @type {React.Dispatch<React.SetStateAction<number>>}
      */
     readonly set: React.Dispatch<React.SetStateAction<number>>
     /**
-     * Adds the `stepOverride` or, if `undefined`, `step` to `count`
+     * Adds the `stepOverride` or, if `undefined`, `step` to `tally`
      *
      * @readonly
      * @type {(stepOverride?: number) => void}
@@ -50,7 +50,7 @@ export type UseCountReturn = [
      */
     readonly increment: (stepOverride?: number) => void
     /**
-     * Subtracts the `stepOverride` or, if `undefined`, `step` from `count`
+     * Subtracts the `stepOverride` or, if `undefined`, `step` from `tally`
      *
      * @readonly
      * @type {(stepOverride?: number) => void}
@@ -58,7 +58,7 @@ export type UseCountReturn = [
      */
     readonly decrement: (stepOverride?: number) => void
     /**
-     * Resets `count` to its initial value
+     * Resets `tally` to its initial value
      *
      * @readonly
      * @type {() => void}
@@ -68,47 +68,47 @@ export type UseCountReturn = [
 ]
 
 /**
- * `useCount` hook type
+ * `useTally` hook type
  *
  * @export
- * @typedef {UseCount}
- * @param {UseCountArgs}
- * @returns {UseCountReturn}
+ * @typedef {UseTally}
+ * @param {UseTallyArgs}
+ * @returns {UseTallyReturn}
  */
-export type UseCount = (args: UseCountArgs) => UseCountReturn
+export type UseTally = (args: UseTallyArgs) => UseTallyReturn
 
 /**
- * Returns a numeric `count` and functions to set, increment, decrement, or reset it
+ * Returns a numeric `tally` and functions to set, increment, decrement, or reset it
  *
  * @example
- * To count up by 2s
+ * To increment by 2s
  * ```ts
- * const [count, { increment }] = useCount({step: 2})
+ * const [tally, { increment }] = useTally({step: 2})
  * ```
  * @example
- * To count down by 1s
+ * To decrement by 1s
  * ```ts
- * const [count, { decrement }] = useCount()
+ * const [tally, { decrement }] = useTally()
  * ```
- * @implements {UseCount}
- * @param {UseCountArgs} { initial = 0, step = 1 }
- * @returns {UseCountReturn}
+ * @implements {UseTally}
+ * @param {UseTallyArgs} { initial = 0, step = 1 }
+ * @returns {UseTallyReturn}
  */
-export const useCount: UseCount = ({ initial = 0, step = 1 }: UseCountArgs): UseCountReturn => {
-  const [count, set] = useState<number>(initial)
+export const useTally: UseTally = ({ initial = 0, step = 1 }: UseTallyArgs): UseTallyReturn => {
+  const [tally, set] = useState<number>(initial)
 
   const increment = useCallback(
-    (stepOverride?: number) => set(c => c + (stepOverride ?? step)),
+    (stepOverride?: number) => set(t => t + (stepOverride ?? step)),
     [step],
   )
   const decrement = useCallback(
-    (stepOverride?: number) => set(c => c - (stepOverride ?? step)),
+    (stepOverride?: number) => set(t => t - (stepOverride ?? step)),
     [step],
   )
   const reset = useCallback(() => set(initial), [initial])
 
   return [
-    count,
+    tally,
     {
       set,
       increment,
@@ -118,4 +118,4 @@ export const useCount: UseCount = ({ initial = 0, step = 1 }: UseCountArgs): Use
   ]
 }
 
-export default useCount
+export default useTally

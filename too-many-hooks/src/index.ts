@@ -1,5 +1,4 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
-import useCount, { UseCount, UseCountArgs, UseCountReturn } from './useCount'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
 import useFlexCorners, {
   Corner,
@@ -8,6 +7,7 @@ import useFlexCorners, {
   UseFlexCornersReturn,
 } from './useFlexCorners'
 import useMutationObserver, { UseMutationObserver } from './useMutationObserver'
+import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 import useWindowListener, { UseWindowListener, UseWindowListenerOptions } from './useWindowListener'
 
 export type {
@@ -15,15 +15,15 @@ export type {
   Corners,
   UseArray,
   UseArrayReturn,
-  UseCount,
-  UseCountArgs,
-  UseCountReturn,
   UseFlag,
   UseFlagReturn,
   UseFlexCorners,
   UseFlexCornersReturn,
   UseMutationObserver,
+  UseTally,
+  UseTallyArgs,
+  UseTallyReturn,
   UseWindowListener,
   UseWindowListenerOptions,
 }
-export { useArray, useCount, useFlag, useFlexCorners, useMutationObserver, useWindowListener }
+export { useArray, useFlag, useFlexCorners, useMutationObserver, useTally, useWindowListener }
