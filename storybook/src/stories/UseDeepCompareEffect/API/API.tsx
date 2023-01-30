@@ -32,7 +32,13 @@ const API: React.FC<Props> = ({ firstName, countryCode }) => {
   return (
     <div className="prose flex flex-col items-center gap-4 text-4xl">
       <p>Enter a name and country in &quot;Controls&quot; to get a predicted age</p>
-      <p>{predictedAge ? `Predicted age: ${predictedAge}` : 'No name entered'}</p>
+      <p>
+        {predictedAge
+          ? `Predicted age: ${predictedAge}`
+          : firstName
+          ? 'No age result for entered name and location'
+          : 'No name entered'}
+      </p>
     </div>
   )
 }

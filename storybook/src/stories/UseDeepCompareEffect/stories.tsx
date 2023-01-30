@@ -14,6 +14,7 @@ export const api: StoryObj<Meta<typeof API>> = {
   argTypes: {
     firstName: { type: 'string' },
     countryCode: {
+      options: Object.keys(COUNTRIES),
       control: {
         type: 'select',
         labels: COUNTRIES,

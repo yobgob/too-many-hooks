@@ -5,7 +5,8 @@ const useDeepCompareMemoize = <T>(value: T) => {
   const ref = useRef<T>(value)
   const signal = useRef<number>(0)
 
-  if (!isEqual(ref, value)) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  if (!isEqual(ref.current, value)) {
     ref.current = value
     signal.current += 1
   }
