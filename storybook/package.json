@@ -13,6 +13,7 @@
     "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types"
   },
   "dependencies": {
+    "@storybook/jest": "^0.0.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "too-many-hooks": "link:./../too-many-hooks"
