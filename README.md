@@ -35,6 +35,7 @@ Peer dependencies:
 - `useFlexCorners` - Dynamically find corners in items wrapped with flex
 - `useMutationObserver` - Observe a Node and rerender on mutations + get mutation information
 - `useWindowListener` - Easily add and remove listeners on the window
+- `useResizeObserver` - Observe an Element and rerender on resizes + get size information
 
 ## Contributing
 
@@ -66,11 +67,11 @@ The built library will be output to `/too-many-hooks/dist`.
 
 To run the storybook, go to `/storybook` and update dependencies with:
 
-```yarn install```
+`yarn install`
 
 Then, run the app locally at [http://localhost:6006/](http://localhost:6006/) by running:
 
-```yarn storybook```
+`yarn storybook`
 
 ### Checks
 

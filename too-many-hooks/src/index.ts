@@ -7,6 +7,7 @@ import useFlexCorners, {
   UseFlexCornersReturn,
 } from './useFlexCorners'
 import useMutationObserver, { UseMutationObserver } from './useMutationObserver'
+import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
 import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 import useWindowListener, { UseWindowListener, UseWindowListenerOptions } from './useWindowListener'
 
@@ -20,10 +21,19 @@ export type {
   UseFlexCorners,
   UseFlexCornersReturn,
   UseMutationObserver,
+  UseResizeObserver,
   UseTally,
   UseTallyArgs,
   UseTallyReturn,
   UseWindowListener,
   UseWindowListenerOptions,
 }
-export { useArray, useFlag, useFlexCorners, useMutationObserver, useTally, useWindowListener }
+export {
+  useArray,
+  useFlag,
+  useFlexCorners,
+  useMutationObserver,
+  useResizeObserver,
+  useTally,
+  useWindowListener,
+}
