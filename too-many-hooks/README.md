@@ -6,11 +6,15 @@ This directory contains a Vite app which builds to the `too-many-hooks` library
 
 Install / update dependencies with:
 
-```yarn install```
+```sh
+yarn install
+```
 
 Then, build the library with:
 
-```yarn build```
+```sh
+yarn build
+```
 
 The built package will output to `/dist`.
 

@@ -29,9 +29,10 @@ Peer dependencies:
 
 ### Hooks
 
-- `useCount` - Increment and decrement numeric state
+- `useTally` - Increment and decrement numeric state
 - `useFlag` - Simply manage boolean state
 - `useDeepCompareEffect` - Run function when dependencies change, checked deeply for equality
+- `useResizeObserver` - Observe an Element and rerender on resizes + get size information
 
 ## Contributing
 
@@ -47,11 +48,15 @@ The monorepo contains both the `too-many-hooks` library at `/too-many-hooks` and
 
 The storybook imports the library via a symlink, and thus needs `too-many-hooks` built locally. To build the library, go to `/too-many-hooks` and install dependencies with:
 
-```yarn install```
+```sh
+yarn install
+```
 
 Then, build the library by running:
 
-```yarn build```
+```sh
+yarn build
+```
 
 The built library will be output to `/too-many-hooks/dist`.
 
@@ -59,11 +64,11 @@ The built library will be output to `/too-many-hooks/dist`.
 
 To run the storybook, go to `/storybook` and update dependencies with:
 
-```yarn install```
+`yarn install`
 
 Then, run the app locally at [http://localhost:6006/](http://localhost:6006/) by running:
 
-```yarn storybook```
+`yarn storybook`
 
 ### Checks
 
