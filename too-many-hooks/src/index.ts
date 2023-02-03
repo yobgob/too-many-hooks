@@ -1,4 +1,5 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
+import useDeepCompareEffect, { UseDeepCompareEffect } from './useDeepCompareEffect'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
 import useFlexCorners, {
   Corner,
@@ -16,6 +17,7 @@ export type {
   Corners,
   UseArray,
   UseArrayReturn,
+  UseDeepCompareEffect,
   UseFlag,
   UseFlagReturn,
   UseFlexCorners,
@@ -30,6 +32,7 @@ export type {
 }
 export {
   useArray,
+  useDeepCompareEffect,
   useFlag,
   useFlexCorners,
   useMutationObserver,

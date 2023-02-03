@@ -29,13 +29,14 @@ Peer dependencies:
 
 ### Hooks
 
-- `useTally` - Increment and decrement numeric state
-- `useFlag` - Simply manage boolean state
 - `useArray` - Simplify array state management with useful utilities
+- `useDeepCompareEffect` - Run function when dependencies change, checked deeply for equality
+- `useFlag` - Simply manage boolean state
 - `useFlexCorners` - Dynamically find corners in items wrapped with flex
 - `useMutationObserver` - Observe a Node and rerender on mutations + get mutation information
-- `useWindowListener` - Easily add and remove listeners on the window
 - `useResizeObserver` - Observe an Element and rerender on resizes + get size information
+- `useTally` - Increment and decrement numeric state
+- `useWindowListener` - Easily add and remove listeners on the window
 
 ## Contributing
 
