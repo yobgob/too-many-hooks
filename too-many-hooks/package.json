@@ -17,11 +17,15 @@
   "version": "0.0.0",
   "scripts": {
     "build": "tsc && vite build",
-    "format": "prettier --write src",
-    "lint:code": "eslint src --max-warnings=0",
-    "lint:formatting": "prettier --check src",
+    "format": "prettier --write --cache --cache-location './lint-cache/.prettier-cache' src",
+    "format-all": "prettier --write src",
+    "lint:code": "eslint src --max-warnings=0 --cache --cache-location './lint-cache/'",
+    "lint-all:code": "eslint src --max-warnings=0",
+    "lint:formatting": "prettier --check --cache --cache-location './lint-cache/.prettier-cache' src",
+    "lint-all:formatting": "prettier --check src",
     "lint:types": "tsc --noEmit",
-    "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types"
+    "lint": "yarn lint:code && yarn lint:formatting && yarn lint:types",
+    "lint-all": "yarn lint-all:code && yarn lint-all:formatting && yarn lint:types"
   },
   "dependencies": {
     "lodash.isequal": "^4.5.0",
