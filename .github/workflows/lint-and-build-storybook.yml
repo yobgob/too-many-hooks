@@ -21,10 +21,17 @@ jobs:
       with:
         node-version: 18.x
 
-    - name: Restore package cache
+    - name: Restore package yarn cache
       uses: c-hive/gha-yarn-cache@v2
       with:
         directory: too-many-hooks
+
+    - name: Restore package lint cache
+      id: package-lint
+      uses: actions/cache@v3
+      with: 
+        path: too-many-hooks/lint-cache
+        key: ${{ runner.os }}-package-lint
 
     - name: Install package dependencies
       run: yarn install
@@ -34,10 +41,17 @@ jobs:
       run: yarn build
       working-directory: too-many-hooks
 
-    - name: Restore storybook cache
+    - name: Restore storybook yarn cache
       uses: c-hive/gha-yarn-cache@v2
       with:
         directory: storybook
+
+    - name: Restore storybook lint cache
+      id: storybook-lint
+      uses: actions/cache@v3
+      with: 
+        path: storybook/lint-cache
+        key: ${{ runner.os }}-storybook-lint
 
     - name: Install storybook dependencies
       run: yarn install
