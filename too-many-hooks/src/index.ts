@@ -1,4 +1,5 @@
 import useArray, { UseArray, UseArrayReturn } from './useArray'
+import useDeepCompareEffect, { UseDeepCompareEffect } from './useDeepCompareEffect'
 import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
 import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
 import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
@@ -6,6 +7,7 @@ import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
 export type {
   UseArray,
   UseArrayReturn,
+  UseDeepCompareEffect,
   UseFlag,
   UseFlagReturn,
   UseResizeObserver,
@@ -13,4 +15,4 @@ export type {
   UseTallyArgs,
   UseTallyReturn,
 }
-export { useArray, useFlag, useResizeObserver, useTally }
+export { useArray, useDeepCompareEffect, useFlag, useResizeObserver, useTally }
