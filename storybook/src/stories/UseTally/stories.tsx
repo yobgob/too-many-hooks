@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
 import SocialMedia from './SocialMedia'
-import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
+import SOCIAL_MEDIA_CODE from './SocialMedia/SocialMedia.tsx?raw'
 
 export const socialMedia: StoryObj<Meta<typeof SocialMedia>> = {
   play: ({ canvasElement }) => {
