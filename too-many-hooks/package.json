@@ -19,7 +19,7 @@
     "build": "tsc && vite build",
     "format": "prettier --write --cache --cache-location './lint-cache/.prettier-cache' src",
     "format-all": "prettier --write src",
-    "lint:code": "eslint src --max-warnings=0 --cache --cache-location './lint-cache/'",
+    "lint:code": "eslint src --max-warnings=0 --cache --cache-location './lint-cache/' --cache-strategy content",
     "lint-all:code": "eslint src --max-warnings=0",
     "lint:formatting": "prettier --check --cache --cache-location './lint-cache/.prettier-cache' src",
     "lint-all:formatting": "prettier --check src",
