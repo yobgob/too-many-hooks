@@ -32,7 +32,7 @@ const useResizeObserver: UseResizeObserver = (
 
   useEffect(() => {
     if (target) {
-      const current = observer.current
+      const current = observer.current,,,,,,, , , , , , ., .,    
       current.observe(target, options)
 
       return () => {
