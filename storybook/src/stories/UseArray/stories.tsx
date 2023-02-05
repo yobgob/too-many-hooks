@@ -19,7 +19,7 @@ export const bookshelf: StoryObj<Meta<typeof Bookshelf>> = {
   parameters: {
     layout: 'centered',
     docs: {
-      source: { code: BOOKSHELF_CODE, language: 'tsx' },,,,,,,, , , , , , ., .,    
+      source: { code: BOOKSHELF_CODE, language: 'tsx' },
     },
   },
   render: args => <Bookshelf {...args} />,
