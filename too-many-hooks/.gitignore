@@ -20,6 +20,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.lint-cache
 
 # Editor directories and files
 .idea
