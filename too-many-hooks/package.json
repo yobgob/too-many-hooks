@@ -29,7 +29,6 @@
     "lint-all:formatting": "prettier --check src",
     "lint-pattern:formatting": "prettier --check",
     "lint:formatting": "yarn if-get-changed yarn lint-pattern:formatting $(cat ./.lint-cache/changes.txt)",
-    "tests": "echo test",
     "lint:types": "tsc --noEmit",
     "lint": "yarn get-changed && yarn if-changed yarn lint-pattern:formatting $(cat ./.lint-cache/changes.txt) & yarn if-changed yarn lint-pattern:code $(cat ./.lint-cache/changes.txt) & yarn lint:types",
     "lint-all": "yarn lint-all:formatting & yarn lint-all:code & yarn lint:types"
