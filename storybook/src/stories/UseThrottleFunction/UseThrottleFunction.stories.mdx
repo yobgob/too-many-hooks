@@ -1,0 +1,22 @@
+import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
+import * as stories from './stories'
+import TYPES from '../../../../too-many-hooks/dist/useThrottleFunction.d.ts?raw'
+
+<Meta title="Example/UseThrottleFunction" />
+
+# useThrottleFunction
+
+Ensures a function is called whenever its args change, at most once every `delay`ms.
+Immediately calls then function then re-calls the function and updates the result whenever the args change, at most once every `delay`ms.
+
+## Types
+
+<Source language="ts" code={TYPES} />
+
+## Examples
+
+### API call
+
+<Canvas withSource="open">
+  <Story name="API Call" story={stories.api} />
+</Canvas>
