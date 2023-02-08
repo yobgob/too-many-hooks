@@ -15,6 +15,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:you-dont-need-lodash-underscore/compatible',
   ],
   ignorePatterns: ['*.cjs'],
   settings: {
