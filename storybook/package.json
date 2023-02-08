@@ -20,7 +20,7 @@
     "lint:format": "yarn if-get-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)",
     "lint:code": "yarn if-get-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)",
     "lint:types": "tsc --noEmit",
-    "lint": "yarn get-changed && concurrently \"yarn if-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"yarn if-changed yarn lint-pattern:code $(cat ./.lint-cache/changes.txt)\" \"yarn lint:types\""
+    "lint": "yarn get-changed && concurrently \"yarn if-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"yarn if-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)\" \"yarn lint:types\""
   },
   "dependencies": {
     "@storybook/jest": "^0.0.10",
