@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFlag } from 'too-many-hooks'
-import { Button } from '../../components'
+import { Button } from '../../common/components'
 
 const Form: React.FC = () => {
   const [hasUnsavedChanges, { flag: setUnsaved, unflag: setSaved }] = useFlag(false)

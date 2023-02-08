@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTally } from 'too-many-hooks'
-import { Button } from '../../../components'
+import { Button } from '../../../common/components'
 import PFP from './assets/pfp.jpeg'
 
 export interface UseTallyStoryProps {
