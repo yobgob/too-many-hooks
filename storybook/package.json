@@ -11,7 +11,7 @@
     "if-get-changed": "yarn get-changed && yarn if-changed",
     "format:all": "prettier --write src",
     "format:pattern": "prettier --write --cache --cache-location './.lint-cache/.prettier-cache'",
-    "format": "yarn if-get-changed yarn format-pattern $(cat ./.lint-cache/changes.txt)",
+    "format": "yarn if-get-changed yarn format:pattern $(cat ./.lint-cache/changes.txt)",
     "lint:all:format": "prettier --check src",
     "lint:all:code": "eslint src --max-warnings=0",
     "lint:all": "concurrently \"yarn:lint:all:*\" \"yarn:lint:types\"",
