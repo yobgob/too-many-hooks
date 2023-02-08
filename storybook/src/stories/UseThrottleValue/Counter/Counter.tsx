@@ -16,7 +16,7 @@ const Counter: React.FC = () => {
   }, [increment])
 
   return (
-    <div className="prose flex flex-col gap-2">
+    <div className="prose flex flex-col gap-2 text-4xl">
       <div>Value: {tally}</div>
       <div>Throttled value (500ms): {throttledHalf}</div>
       <div>Throttled value (1s): {throttledOne}</div>
