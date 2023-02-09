@@ -48,6 +48,7 @@ jobs:
       id: chromatic
       with:
         projectToken: b1bb684c98a2
+        path: storybook
         onlyChanged: true
         exitZeroOnChanges: true
         storybookBaseDir: storybook
