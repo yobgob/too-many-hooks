@@ -16,15 +16,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 18.x
+    - name: Use Node.js 18.x for package
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
-
-    - name: Restore package yarn cache
-      uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: too-many-hooks
+        cache: 'yarn'
+        cache-dependency-path: too-many-hooks/yarn.lock
 
     - name: Install package dependencies
       run: yarn install
@@ -34,10 +31,12 @@ jobs:
       run: yarn build
       working-directory: too-many-hooks
 
-    - name: Restore storybook yarn cache
-      uses: c-hive/gha-yarn-cache@v2
+    - name: Use Node.js 18.x for storybook
+      uses: actions/setup-node@v3
       with:
-        directory: storybook
+        node-version: 18.x
+        cache: 'yarn'
+        cache-dependency-path: storybook/yarn.lock
 
     - name: Install storybook dependencies
       run: yarn install
@@ -48,7 +47,6 @@ jobs:
       id: chromatic
       with:
         projectToken: b1bb684c98a2
-        path: storybook
         onlyChanged: true
         exitZeroOnChanges: true
         storybookBaseDir: storybook
