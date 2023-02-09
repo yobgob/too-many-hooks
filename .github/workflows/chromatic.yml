@@ -1,0 +1,70 @@
+name: Chromatic
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - 'storybook/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Restore package yarn cache
+      uses: c-hive/gha-yarn-cache@v2
+      with:
+        directory: too-many-hooks
+
+    - name: Install package dependencies
+      run: yarn install
+      working-directory: too-many-hooks
+
+    - name: Build package
+      run: yarn build
+      working-directory: too-many-hooks
+
+    - name: Restore storybook yarn cache
+      uses: c-hive/gha-yarn-cache@v2
+      with:
+        directory: storybook
+
+    - name: Install storybook dependencies
+      run: yarn install
+      working-directory: storybook
+
+    - name: Publish to Chromatic
+      uses: chromaui/action@v1
+      id: chromatic
+      with:
+        projectToken: b1bb684c98a2
+        onlyChanged: true
+        exitZeroOnChanges: true
+
+    - name: Find Chromatic Comment
+      uses: peter-evans/find-comment@v2
+      id: fc
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: Chromatic build
+
+    - name: Create or update comment
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Chromatic build
+          | Results |  |\n| --- | --- |\n| Build Results | ${{steps.chromatic.outputs.buildUrl}} |\n| Storybook Preview | ${{steps.chromatic.outputs.storybookUrl}} |\n| Component Count | ${{steps.chromatic.outputs.componentCount}} |
+        edit-mode: replace
