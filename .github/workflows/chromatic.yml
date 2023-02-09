@@ -50,6 +50,8 @@ jobs:
         onlyChanged: true
         exitZeroOnChanges: true
         storybookBaseDir: storybook
+        storybookConfigDir: storybook
+        workingDir: storybook
 
     - name: Find Chromatic Comment
       uses: peter-evans/find-comment@v2
