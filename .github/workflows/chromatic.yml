@@ -50,6 +50,7 @@ jobs:
         projectToken: b1bb684c98a2
         onlyChanged: true
         exitZeroOnChanges: true
+        storybookBaseDir: storybook
 
     - name: Find Chromatic Comment
       uses: peter-evans/find-comment@v2
