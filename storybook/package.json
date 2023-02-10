@@ -5,7 +5,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "test-storybook --stories-json",
-    "get-changed": "mkdirp .lint-cache && git diff --relative -r --name-only --diff-filter=ACMRTUXB origin/main | grep -E '(.ts$|.tsx$|.js$|.jsx$)' | tr '\n' ' ' > ./.lint-cache/changes.txt",
+    "get-changed": "mkdirp .lint-cache && git diff --relative -r --name-only --diff-filter=ACMRTUXB origin/main | grep -E '.*\\.ts$|.*\\.tsx$|.*\\.js$|.*\\.jsx$' | tr '\n' ' ' > ./.lint-cache/changes.txt",
     "if-changed": "changed=$(cat ./.lint-cache/changes.txt) && (node -e \"if ('$changed' !== ''){process.exit(1)} else {console.log('No changes detected')}\" ||  \"${@}\")",
     "if-get-changed": "yarn get-changed && yarn if-changed",
     "format:all": "prettier --write src",
