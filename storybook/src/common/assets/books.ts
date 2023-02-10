@@ -1,4 +1,4 @@
-import BOOK_NAMES from './bookNames.json'
+import BOOK_NAMES from './book-names.json'
 
 export const BOOK_COLORS = [
   'border-l-lime-600 border-b-lime-600 bg-lime-500 before:border-r-lime-600',

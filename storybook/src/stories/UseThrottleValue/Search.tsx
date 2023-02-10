@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useThrottleValue } from 'too-many-hooks'
-import BOOK_NAMES from '../../common/assets/bookNames.json'
+import BOOK_NAMES from '../../common/assets/book-names.json'
 
 interface Props {
   search: string
