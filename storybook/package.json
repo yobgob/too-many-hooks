@@ -11,7 +11,7 @@
     "if-get-changed": "yarn get-changed && yarn if-changed",
     "format:all": "prettier --write src",
     "format:pattern": "prettier --write --cache --cache-location './.lint-cache/.prettier-cache'",
-    "format": "yarn if-get-changed yarn format-pattern $(cat ./.lint-cache/changes.txt)",
+    "format": "yarn if-get-changed yarn format:pattern $(cat ./.lint-cache/changes.txt)",
     "lint:all:format": "prettier --check src",
     "lint:all:code": "eslint src --max-warnings=0",
     "lint:all": "concurrently \"yarn:lint:all:*\" \"yarn:lint:types\"",
@@ -20,7 +20,7 @@
     "lint:format": "yarn if-get-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)",
     "lint:code": "yarn if-get-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)",
     "lint:types": "tsc --noEmit",
-    "lint": "yarn get-changed && concurrently \"yarn if-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"yarn if-changed yarn lint-pattern:code $(cat ./.lint-cache/changes.txt)\" \"yarn lint:types\""
+    "lint": "yarn get-changed && concurrently \"yarn if-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"yarn if-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)\" \"yarn lint:types\""
   },
   "dependencies": {
     "@storybook/jest": "^0.0.10",

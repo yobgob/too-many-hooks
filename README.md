@@ -4,8 +4,8 @@ An opinionated collection of typed React hooks
 
 ## Storybook
 
-- The storybook for the current main version can be found at: [https://dawsonbooth.github.io/too-many-hooks](https://dawsonbooth.github.io/too-many-hooks)
-- Storybooks will also be build and deployed for each PR at `https://dawsonbooth.github.io/too-many-hooks/pr-preview/pr-[PR number]`
+- The storybook for the current main version can be found at: [https://yobgob.github.io/too-many-hooks](https://yobgob.github.io/too-many-hooks)
+- Storybooks will also be build and deployed for each PR at `https://yobgob.github.io/too-many-hooks/pr-preview/pr-[PR number]`
 
 ## Guiding Principles
 

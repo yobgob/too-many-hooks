@@ -17,9 +17,12 @@ export const socialMedia: StoryObj<Meta<typeof SocialMedia>> = {
     },
   },
   argTypes: {
-    step: { type: 'number', defaultValue: 1 },
+    step: { type: 'number' },
     incrementStep: { type: 'number' },
     decrementStep: { type: 'number' },
+  },
+  args: {
+    step: 1,
   },
   render: args => <SocialMedia {...args} />,
 }
