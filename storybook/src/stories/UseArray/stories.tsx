@@ -24,5 +24,3 @@ export const bookshelf: StoryObj<Meta<typeof Bookshelf>> = {
   },
   render: args => <Bookshelf {...args} />,
 }
-
-// trigger workflows
