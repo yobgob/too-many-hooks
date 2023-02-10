@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFlag } from 'too-many-hooks'
-import { Button, Modal as Modal_ } from '../../components'
+import { Button, Modal as Modal_ } from '../../common/components'
 import '../../index.css'
 
 const Modal: React.FC = () => {

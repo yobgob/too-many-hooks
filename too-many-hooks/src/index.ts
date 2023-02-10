@@ -10,6 +10,8 @@ import useFlexCorners, {
 import useMutationObserver, { UseMutationObserver } from './useMutationObserver'
 import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
 import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
+import useThrottleFunction, { UseThrottleFunction } from './useThrottleFunction'
+import useThrottleValue, { UseThrottleValue } from './useThrottleValue'
 import useWindowListener, { UseWindowListener, UseWindowListenerOptions } from './useWindowListener'
 
 export type {
@@ -27,6 +29,8 @@ export type {
   UseTally,
   UseTallyArgs,
   UseTallyReturn,
+  UseThrottleFunction,
+  UseThrottleValue,
   UseWindowListener,
   UseWindowListenerOptions,
 }
@@ -38,5 +42,7 @@ export {
   useMutationObserver,
   useResizeObserver,
   useTally,
+  useThrottleFunction,
+  useThrottleValue,
   useWindowListener,
 }

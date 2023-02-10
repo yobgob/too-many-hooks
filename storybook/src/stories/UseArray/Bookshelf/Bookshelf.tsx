@@ -1,6 +1,6 @@
 import React from 'react'
 import { useArray } from 'too-many-hooks'
-import { Button } from '../../../components'
+import { Button } from '../../../common/components'
 import { BOOKS, UNUSED_BOOKS } from './constants'
 
 const Bookshelf: React.FC = () => {

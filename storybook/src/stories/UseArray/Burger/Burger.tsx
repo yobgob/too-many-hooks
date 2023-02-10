@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useArray } from 'too-many-hooks'
-import { Button, Select } from '../../../components'
+import { Button, Select } from '../../../common/components'
 import '../../../index.css'
 import {
   DEFAULT_BURGER,
