@@ -1,0 +1,53 @@
+name: Chromatic
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'storybook/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 18.x for package
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'yarn'
+        cache-dependency-path: too-many-hooks/yarn.lock
+
+    - name: Install package dependencies
+      run: yarn install
+      working-directory: too-many-hooks
+
+    - name: Build package
+      run: yarn build
+      working-directory: too-many-hooks
+
+    - name: Use Node.js 18.x for storybook
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'yarn'
+        cache-dependency-path: storybook/yarn.lock
+
+    - name: Install storybook dependencies
+      run: yarn install
+      working-directory: storybook
+
+    - name: Publish to Chromatic
+      uses: chromaui/action@v1
+      id: chromatic
+      with:
+        projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        onlyChanged: true
+        exitZeroOnChanges: true
+        storybookBaseDir: storybook
+        storybookConfigDir: storybook
+        workingDir: storybook
+
+    - name: Publish Summary
+      run: echo -e "| Results |  |\n| --- | --- |\n| Build Results | ${{steps.chromatic.outputs.buildUrl}} |\n| Storybook Preview | ${{steps.chromatic.outputs.storybookUrl}} |\n| Component Count | ${{steps.chromatic.outputs.componentCount}} |" >> $GITHUB_STEP_SUMMARY

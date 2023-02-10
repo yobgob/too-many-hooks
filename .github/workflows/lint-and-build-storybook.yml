@@ -64,8 +64,3 @@ jobs:
     - name: Build
       run: yarn build-storybook
       working-directory: storybook
-
-    - name: Chromatic
-      run: yarn chromatic
-      working-directory: storybook
-
