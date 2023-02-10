@@ -1,13 +1,8 @@
 name: Chromatic
 on:
-  pull_request_target:
+  push:
     branches:
       - main
-    types:
-      - opened
-      - reopened
-      - edited
-      - synchronize
     paths:
       - 'storybook/**'
 
@@ -47,27 +42,12 @@ jobs:
       uses: chromaui/action@v1
       id: chromatic
       with:
-        projectToken: b1bb684c98a2
+        projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
         onlyChanged: true
         exitZeroOnChanges: true
         storybookBaseDir: storybook
         storybookConfigDir: storybook
         workingDir: storybook
 
-    - name: Find Chromatic Comment
-      uses: peter-evans/find-comment@v2
-      id: fc
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        comment-author: 'github-actions[bot]'
-        body-includes: Chromatic build
-
-    - name: Create or update comment
-      uses: peter-evans/create-or-update-comment@v2
-      with:
-        comment-id: ${{ steps.fc.outputs.comment-id }}
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          Chromatic build
-          | Results |  |\n| --- | --- |\n| Build Results | ${{steps.chromatic.outputs.buildUrl}} |\n| Storybook Preview | ${{steps.chromatic.outputs.storybookUrl}} |\n| Component Count | ${{steps.chromatic.outputs.componentCount}} |
-        edit-mode: replace
+    - name: Publish Summary
+      run: echo -e "| Results |  |\n| --- | --- |\n| Build Results | ${{steps.chromatic.outputs.buildUrl}} |\n| Storybook Preview | ${{steps.chromatic.outputs.storybookUrl}} |\n| Component Count | ${{steps.chromatic.outputs.componentCount}} |" >> $GITHUB_STEP_SUMMARY
