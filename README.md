@@ -1,6 +1,8 @@
-# <img src="./assets/too-many-hooks-outlined.svg" alt="Too Many Hooks" width="50%">
+<div align="center">
+<img src="./assets/too-many-hooks-outlined.svg" alt="Too Many Hooks" width="50%">
 
-An opinionated collection of typed React hooks
+<h3>An opinionated collection of typed React hooks</h3>
+</div>
 
 ## Storybook
 
@@ -17,11 +19,11 @@ An opinionated collection of typed React hooks
 
 ### Requirements
 
-- Node >= 16.0.0
+- [![Node version](https://img.shields.io/badge/Node-16.0.0%2B-brightgreen.svg)](http://nodejs.org/download/)
 
-Peer dependencies:
+**Peer dependencies:**
 
-- react ^18.0.0
+- [![React version](https://img.shields.io/badge/React-18.0.0%2B-brightgreen.svg)](https://reactjs.org/)
 
 ### Installation
 
@@ -40,9 +42,13 @@ Peer dependencies:
 
 ## Contributing
 
-Pick a ticket from the GitHub project's issues and drop a comment to have it assigned to you. Make sure branch names are descriptive and commit messages are valuable and in the imperative mood. When a change is ready, simply open a PR and make sure to link it to the issue it references.
++ Pick a ticket from the GitHub project's issues and drop a comment to have it assigned to you. 
++ Make sure branch names are descriptive and commit messages are valuable and in the imperative mood. 
++ When a change is ready, simply open a PR and make sure to link it to the issue it references.
 
-Note that all PRs will be squashed, so PR titles must also adhere to the commit message rules. Ensure they are descriptive, concise, and in the imperative mood. For example: "Add useFlag hook" rather than "New hook" or "Added useFlag hook". The title will be the commit message that remains in the `main` history, it is important they are well-written.
+<br>
+
+>Note that all PRs will be squashed, so PR titles must also adhere to the commit message rules. Ensure they are descriptive, concise, and in the imperative mood. For example: "Add useFlag hook" rather than "New hook" or "Added useFlag hook". The title will be the commit message that remains in the `main` history, it is important they are well-written.
 
 ### Structure
 
