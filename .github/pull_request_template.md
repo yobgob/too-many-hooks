@@ -6,8 +6,8 @@ Thank you for contributing to `too-many-hooks`! You must fill out the informatio
 
 Closes ISSUE
 
-<!-- If there's an existing issue for your change, please replace ISSUE above with a link to the issue.
-If there's _not_ an existing issue, please open one first to make it more likely that this update will be accepted: https://github.com/yobgob/too-many-hooks/issues/new. -->
+<!-- If there's an existing issue for your change, please replace ISSUE above with a link to the issue (e.g. "Closes #29").
+If there's _not_ an existing issue, please replace the above with the rationale for the changes being made. -->
 
 ### What's being changed (if available, include any code snippets, screenshots, or gifs):
 
