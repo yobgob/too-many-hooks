@@ -57,11 +57,11 @@ Available hooks and a short summary of their purpose:
 
 ## Contributing
 
-See the [contribution guide](.github/contributing.md) for details on getting started and contributing to the project.
+See the [contribution guide](.github/CONTRIBUTING.md) for details on getting started and contributing to the project.
 
 All are welcome to open issues and PRs in the styles described in the contributing guide.
 
-When opening PRs, make sure to use the [pull request template](.github/pull_request_template.md)
+When opening PRs, make sure to use the [pull request template](.github/PULL_REQUEST_TEMPLATE.md)
 
 ### Structure
 
