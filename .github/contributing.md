@@ -15,7 +15,7 @@ To get an overview of the project, read the [README](README.md). Here are some r
 
 ## Getting started
 
-Anyone can open an issue or PR so if there is something you'd like to see added to `too-many-hooks` feel free to open an issue, PR, or both according to the guidelines below
+Anyone can contribute so if there is something you'd like to see added to `too-many-hooks`, feel free to open an issue, pull request, or both, according to the guidelines below.
 
 ### Issues
 
@@ -23,13 +23,13 @@ Anyone can open an issue or PR so if there is something you'd like to see added 
 
 If you find an issue with one of the hooks or stories, [search if an issue already exists](https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-issues-and-pull-requests#search-by-the-title-body-or-comments). If a related issue doesn't exist, open a new issue.
 
-When creating an issue ensure the title is in the imperative mood i.e. `Update contributing guide`  and that the description describes the requested feature / steps to reproduce an issue.
+When creating an issue, ensure the title is in the imperative mood (e.g. "Update contributing guide"), and that the description describes the requested feature or steps to reproduce the issue.
 
 #### Claim an issue
 
 Scan through our [existing issues](https://github.com/yobgob/too-many-hooks/issues) to find one that interests you. You can narrow down the search using `labels` as filters. If you find one that has no assignees or has had no updates for a while, leave a comment asking for it to be assigned to you.
 
-Assignees are only used for tracking purposes to prevent redundant work. As long as an issue has no assignees or comments claiming it, you can drop a comment and get started.
+Assignees are used for tracking purposes to prevent redundant work. As long as an issue has no assignees or comments claiming it, you can drop a comment and get started.
 
 ### Contributing changes
 
@@ -41,7 +41,7 @@ Assignees are only used for tracking purposes to prevent redundant work. As long
 
 [Create a branch](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/making-changes-in-a-branch/managing-branches) on your fork for the issue you are working on.
 
-> Branch names should be descriptive and include the issue number like `<issue-number>/imperative-description` e.g. `29/update-contributing-guide`.
+> Branch names should be descriptive of the changes being made (e.g. `update-contributing-guide`).
 
 #### Commit your changes
 
@@ -57,7 +57,7 @@ When you're finished with the changes, create a pull request, also known as a PR
 - Don't forget to [link PR to issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) if you are solving one.
 - Enable the checkbox to [allow maintainer edits](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so the branch can be updated for a merge.
 
-> PR titles should be in the imperative mood and summarize the changes the PR makes e.g. `Update contributing guide`.
+> PR titles should be in the imperative mood and summarize the changes the PR makes (e.g. "Update contributing guide").
 
 #### PR review
 
@@ -65,9 +65,9 @@ Once you submit your PR, one or more of the organizations members will assign th
 
 - We may ask for changes to be made before a PR can be merged, either using [suggested changes](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/incorporating-feedback-in-your-pull-request) or pull request comments. You can apply suggested changes directly through the UI. You can make any other changes in your fork, then commit them to your branch.
 - As you update your PR and apply changes, mark each conversation as [resolved](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/commenting-on-a-pull-request#resolving-conversations).
-- When all changes are resolved or you need another review to proceed please re-request review from the reviewer
+- When all changes are resolved or you need another review to proceed, please re-request review from the reviewer.
 - If you run into any merge issues, checkout this [git tutorial](https://github.com/skills/resolve-merge-conflicts) to help you resolve merge conflicts and other issues.
-- Once a PR is approved the creator or an organization member will merge it
+- Once a PR is approved the creator or an organization member will merge it.
 
 #### Merging PRs
 
