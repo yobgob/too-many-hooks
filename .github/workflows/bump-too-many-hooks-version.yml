@@ -30,6 +30,7 @@ jobs:
 
       - name: Set package version
         run: yarn version ${{ steps.semver-bump.outputs.version }}
+        working-directory: too-many-hooks
 
       - name: Create version update PR
         uses: peter-evans/create-pull-request@v4
