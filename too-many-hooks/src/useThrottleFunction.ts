@@ -21,7 +21,7 @@ export type UseThrottleFunction = <A extends unknown[], R>(
 
 /**
  * Ensures a function is called whenever its args change, at most once every `delay`ms. Immediately calls then function then re-calls
- * the function and updates the result whenever the args change, at most once every `delay`ms.sdfgdf
+ * the function and updates the result whenever the args change, at most once every `delay`ms.
  *
  * @template A extends unknown[]
  * @template R
