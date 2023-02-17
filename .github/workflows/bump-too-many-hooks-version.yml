@@ -46,10 +46,21 @@ jobs:
             Includes PRs:
             - ${{ join(github.event.commits.*.message, '\\n- ') }}
 
-      - name: Comment release notes
-        uses: thollander/actions-comment-pull-request@v2
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
         with:
-          message: |
+          issue-number: ${{ steps.open-pr.outputs.pull-request-number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Release notes
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ steps.open-pr.outputs.pull-request-number }}
+          body: |
+            Release notes
             ${{ steps.semver-bump.outputs.release-notes }}
-          pr_number: ${{ steps.open-pr.outputs.pull-request-number }}
+          edit-mode: append
 
