@@ -1,0 +1,42 @@
+name: Bump too-many-hooks version
+on:
+  push:
+    branches:
+      - main
+    paths: 
+      - 'too-many-hooks/**.ts'
+
+jobs:
+  bump-tag-version:
+    name: Bump and Tag Version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jefflinse/pr-semver-bump@v1
+        id: semver-bump
+        name: Bump and Tag Version
+        with:
+          mode: bump
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install
+        working-directory: too-many-hooks
+
+      - name: Set package version
+        run: yarn version ${{ steps.semver-bump.outputs.version }}
+
+      - name: Create version update PR
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Bump package version
+          branch: create-pull-request/bump-version
+          delete-branch: true
+          title: Bump `too-many-hooks` version to `${{ steps.semver-bump.outputs.version }}`
+          labels: documentation
+          body: ${{ steps.semver-bump.outputs.release-notes }}
