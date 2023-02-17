@@ -44,7 +44,7 @@ jobs:
           body: |
             Bumps from `${{ steps.semver-bump.outputs.old-version }}` to `${{ steps.semver-bump.outputs.version }}`
             Includes PRs:
-            - ${{ join(github.event.commits. '\n- ' }}
+            - ${{ join(github.event.commits.*.message, '\n- ' }}
 
       - name: Comment release notes
         uses: thollander/actions-comment-pull-request@v2
