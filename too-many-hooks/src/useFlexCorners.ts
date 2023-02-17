@@ -25,7 +25,7 @@ export interface Corner<T extends HTMLElement> {
   element: T
   /**
    * `true` if the element is hanging. For example, if the top row's leftmost element is not in the leftmost column.
-   *
+   * AAAAAAAAAAAHHAHAHAHAHHAHAHHAHAHHAHAHAHHAHAHAHAHAH
    * @type {boolean}
    */
   isHanging: boolean
