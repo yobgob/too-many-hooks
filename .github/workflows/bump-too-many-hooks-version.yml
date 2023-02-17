@@ -60,7 +60,7 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ steps.open-pr.outputs.pull-request-number }}
           body: |
-            Release notes
+            ${{ steps.fc.outputs.comment-id == 0 && 'Release notes' || ''
             ${{ steps.semver-bump.outputs.release-notes }}
           edit-mode: append
 
