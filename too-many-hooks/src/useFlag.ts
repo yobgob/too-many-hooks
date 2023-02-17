@@ -37,13 +37,6 @@ export type UseFlagReturn = [
      * @type {() => void}
      */
     readonly toggle: () => void
-    /**
-     * Inverts the flag then does it again!
-     *
-     * @readonly
-     * @type {() => void}
-     */
-    readonly superToggle: () => void
   },
 ]
 
@@ -73,7 +66,6 @@ const useFlag: UseFlag = (
   const flag = useCallback(() => set(true), [])
   const unflag = useCallback(() => set(false), [])
   const toggle = useCallback(() => set(value => !value), [])
-  const superToggle = useCallback(() => set(value => !!value), [])
 
   return [
     value,
@@ -82,7 +74,6 @@ const useFlag: UseFlag = (
       flag,
       unflag,
       toggle,
-      superToggle,
     },
   ]
 }
