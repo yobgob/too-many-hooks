@@ -33,6 +33,7 @@ jobs:
         working-directory: too-many-hooks
 
       - name: Create version update PR
+        id: open-pr
         uses: peter-evans/create-pull-request@v4
         with:
           commit-message: Bump package version
@@ -43,6 +44,12 @@ jobs:
           body: |
             Bumps from `${{ steps.semver-bump.outputs.old-version }}` to `${{ steps.semver-bump.outputs.version }}`
             Includes PRs:
-            - ${{ github.event.commits }}
+            - ${{ join(github.event.commits. '\n- ' }}
+
+      - name: Comment release notes
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
             ${{ steps.semver-bump.outputs.release-notes }}
+          pr_number: ${{ steps.open-pr.outputs.pull-request-number }}
 
