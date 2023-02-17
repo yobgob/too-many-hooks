@@ -1,4 +1,4 @@
-name: Bump too-many-hooks version
+name: Bump `too-many-hooks` version
 on:
   push:
     branches:
@@ -39,4 +39,9 @@ jobs:
           delete-branch: true
           title: Bump `too-many-hooks` version to `${{ steps.semver-bump.outputs.version }}`
           labels: documentation
-          body: ${{ steps.semver-bump.outputs.release-notes }}
+          body: |
+            Bumps from `${{ steps.semver-bump.outputs.old-version }}` to `${{ steps.semver-bump.outputs.version }}`
+            Includes PRs:
+            - ${{ github.event.commits }}
+            ${{ steps.semver-bump.outputs.release-notes }}
+

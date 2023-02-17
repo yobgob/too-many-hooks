@@ -1,3 +1,4 @@
+name: Publish `too-many-hooks`
 on: 
   workflow_dispatch:
     inputs:
