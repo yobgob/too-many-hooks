@@ -31,24 +31,33 @@
 
 ### Hooks
 
+Available hooks and a short summary of their purpose:
+
+#### State tools
+
 - `useArray` - Simplify array state management with useful utilities
-- `useDeepCompareEffect` - Run function when dependencies change, checked deeply for equality
 - `useFlag` - Simply manage boolean state
-- `useFlexCorners` - Dynamically find corners in items wrapped with flex
+- `useTally` - Increment and decrement numeric state
+
+#### Listeners/Observers
+
 - `useMutationObserver` - Observe a Node and rerender on mutations + get mutation information
 - `useResizeObserver` - Observe an Element and rerender on resizes + get size information
-- `useTally` - Increment and decrement numeric state
 - `useWindowListener` - Easily add and remove listeners on the window
+
+#### Styling tools
+
+- `useFlexCorners` - Dynamically find corners in items wrapped with flex
+
+#### Utilities
+
+- `useDeepCompareEffect` - Run function when dependencies change, checked deeply for equality
+- `useThrottleFunction` - Run a function when its args change up to a maximum number of calls per time period in ms
+- `useThrottleValue` - Reduce frequency of state updates on a variable to a maximum number of updates per time period in ms
 
 ## Contributing
 
-+ Pick a ticket from the GitHub project's issues and drop a comment to have it assigned to you. 
-+ Make sure branch names are descriptive and commit messages are valuable and in the imperative mood. 
-+ When a change is ready, simply open a PR and make sure to link it to the issue it references.
-
-<br>
-
->Note that all PRs will be squashed, so PR titles must also adhere to the commit message rules. Ensure they are descriptive, concise, and in the imperative mood. For example: "Add useFlag hook" rather than "New hook" or "Added useFlag hook". The title will be the commit message that remains in the `main` history, it is important they are well-written.
+Anyone is welcome to contribute! See the [contribution guide](.github/CONTRIBUTING.md) for details on getting started!
 
 ### Structure
 
