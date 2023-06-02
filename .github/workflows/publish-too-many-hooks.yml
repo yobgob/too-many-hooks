@@ -49,6 +49,7 @@ jobs:
         tag: ${{ inputs.tag }}
         dry-run: ${{ inputs.dry-run }}
         check-version: ${{ inputs.check-version }}
+        access: public
 
     - if: steps.publish.outputs.type != 'none'
       run: |
