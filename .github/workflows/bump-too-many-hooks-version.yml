@@ -25,8 +25,7 @@ jobs:
           node-version: 18.x
 
       - name: Install dependencies
-        run: yarn install
-        working-directory: packages/too-many-hooks
+        run: yarn workspaces focus @yobgob/too-many-hooks
 
       - name: Set package version
         run: yarn version ${{ steps.semver-bump.outputs.version }}

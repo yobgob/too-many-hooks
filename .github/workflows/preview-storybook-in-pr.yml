@@ -24,27 +24,15 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Restore package cache
+      - name: Restore yarn cache
         uses: c-hive/gha-yarn-cache@v2
-        with:
-          directory: packages/too-many-hooks
 
       - name: Install package dependencies
         run: yarn install
-        working-directory: packages/too-many-hooks
 
       - name: Build package
         run: yarn build
         working-directory: packages/too-many-hooks
-
-      - name: Restore storybook cache
-        uses: c-hive/gha-yarn-cache@v2
-        with:
-          directory: packages/storybook
-
-      - name: Install storybook dependencies
-        run: yarn install
-        working-directory: packages/storybook
 
       - name: Build storybook
         run: yarn build-storybook

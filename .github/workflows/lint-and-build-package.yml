@@ -23,8 +23,6 @@ jobs:
 
       - name: Restore yarn cache
         uses: c-hive/gha-yarn-cache@v2
-        with:
-          directory: packages/too-many-hooks
 
       - name: Restore lint cache
         id: package-lint
@@ -34,8 +32,7 @@ jobs:
           key: ${{ runner.os }}-package-lint
 
       - name: Install dependencies
-        run: yarn install
-        working-directory: packages/too-many-hooks
+        run: yarn workspaces focus @yobgob/too-many-hooks
 
       - name: Lint
         run: yarn lint
