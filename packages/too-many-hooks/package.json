@@ -1,0 +1,69 @@
+{
+  "name": "@yobgob/too-many-hooks",
+  "version": "0.0.1",
+  "description": "Collection of typed React hooks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yobgob/too-many-hooks"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "typescript"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/too-many-hooks.umd.cjs",
+  "module": "./dist/too-many-hooks.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/too-many-hooks.js",
+      "require": "./dist/too-many-hooks.umd.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsc && vite build",
+    "get-changed": "mkdirp .lint-cache && git diff --relative -r --name-only --diff-filter=ACMRTUXB origin/main | grep -E '.*\\.ts$|.*\\.tsx$|.*\\.js$|.*\\.jsx$' | tr '\n' ' ' > ./.lint-cache/changes.txt",
+    "if-changed": "changed=$(cat ./.lint-cache/changes.txt) && (node -e \"if ('$changed' !== ''){process.exit(1)} else {console.log('No changes detected')}\" ||  \"${@}\")",
+    "if-get-changed": "yarn get-changed && yarn if-changed",
+    "format:all": "prettier --write src",
+    "format:pattern": "prettier --write --cache --cache-location './.lint-cache/.prettier-cache'",
+    "format": "yarn if-get-changed yarn format:pattern $(cat ./.lint-cache/changes.txt)",
+    "lint:all:format": "prettier --check src",
+    "lint:all:code": "eslint src --max-warnings=0",
+    "lint:all": "concurrently \"yarn:lint:all:*\" \"yarn:lint:types\"",
+    "lint:pattern:format": "prettier --check",
+    "lint:pattern:code": "eslint --max-warnings=0 --cache --cache-location './.lint-cache/' --cache-strategy content",
+    "lint:format": "yarn if-get-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)",
+    "lint:code": "yarn if-get-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)",
+    "lint:types": "tsc --noEmit",
+    "lint": "yarn get-changed && concurrently \"yarn if-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"yarn if-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)\" \"yarn lint:types\""
+  },
+  "dependencies": {
+    "lodash.isequal": "^4.5.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/lodash.isequal": "^4.5.6",
+    "@types/node": "^18.11.17",
+    "@types/react": "^18.0.26",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
+    "@vitejs/plugin-react": "^3.0.0",
+    "concurrently": "^7.6.0",
+    "eslint": "^8.30.0",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-you-dont-need-lodash-underscore": "^6.12.0",
+    "mkdirp": "^2.1.3",
+    "prettier": "^2.8.1",
+    "prettier-plugin-organize-imports": "^3.2.1",
+    "typescript": "4.9.4",
+    "vite": "^4.0.3",
+    "vite-plugin-dts": "^1.7.1"
+  }
+}
