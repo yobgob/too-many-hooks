@@ -14,6 +14,18 @@ import useThrottleFunction, { UseThrottleFunction } from './useThrottleFunction'
 import useThrottleValue, { UseThrottleValue } from './useThrottleValue'
 import useWindowListener, { UseWindowListener, UseWindowListenerOptions } from './useWindowListener'
 
+export {
+  useArray,
+  useDeepCompareEffect,
+  useFlag,
+  useFlexCorners,
+  useMutationObserver,
+  useResizeObserver,
+  useTally,
+  useThrottleFunction,
+  useThrottleValue,
+  useWindowListener,
+}
 export type {
   Corner,
   Corners,
@@ -33,16 +45,4 @@ export type {
   UseThrottleValue,
   UseWindowListener,
   UseWindowListenerOptions,
-}
-export {
-  useArray,
-  useDeepCompareEffect,
-  useFlag,
-  useFlexCorners,
-  useMutationObserver,
-  useResizeObserver,
-  useTally,
-  useThrottleFunction,
-  useThrottleValue,
-  useWindowListener,
 }

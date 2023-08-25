@@ -13,12 +13,12 @@ const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
     ? ReactDOM.createPortal(
         <>
           <div
-            className="fixed top-0 left-0 z-50 h-screen w-screen bg-black opacity-50"
+            className="fixed left-0 top-0 z-50 h-screen w-screen bg-black opacity-50"
             onClick={onClose}
             aria-hidden
           />
           <div
-            className="fixed top-2/4 left-2/4 z-50 -translate-y-2/4 -translate-x-2/4"
+            className="fixed left-2/4 top-2/4 z-50 -translate-x-2/4 -translate-y-2/4"
             aria-modal
             tabIndex={-1}
             role="dialog"
@@ -29,7 +29,7 @@ const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
                   variant="text"
                   title="Close"
                   onClick={onClose}
-                  className="absolute top-2 right-2"
+                  className="absolute right-2 top-2"
                 >
                   &#10005;
                 </Button>
