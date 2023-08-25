@@ -8,40 +8,39 @@ on:
       - reopened
       - synchronize
     paths:
-      - 'too-many-hooks/**'
+      - "packages/too-many-hooks/**"
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.x
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
 
-    - name: Restore yarn cache
-      uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: too-many-hooks
+      - name: Restore yarn cache
+        uses: c-hive/gha-yarn-cache@v2
+        with:
+          directory: packages/too-many-hooks
 
-    - name: Restore lint cache
-      id: package-lint
-      uses: actions/cache@v3
-      with: 
-        path: too-many-hooks/lint-cache
-        key: ${{ runner.os }}-package-lint
+      - name: Restore lint cache
+        id: package-lint
+        uses: actions/cache@v3
+        with:
+          path: packages/too-many-hooks/lint-cache
+          key: ${{ runner.os }}-package-lint
 
-    - name: Install dependencies
-      run: yarn install
-      working-directory: too-many-hooks
+      - name: Install dependencies
+        run: yarn install
+        working-directory: packages/too-many-hooks
 
-    - name: Lint
-      run: yarn lint
-      working-directory: too-many-hooks
+      - name: Lint
+        run: yarn lint
+        working-directory: packages/too-many-hooks
 
-    - name: Build
-      run: yarn build
-      working-directory: too-many-hooks
-
+      - name: Build
+        run: yarn build
+        working-directory: packages/too-many-hooks

@@ -10,50 +10,50 @@ on:
       - synchronize
       - closed
     paths:
-      - 'too-many-hooks/**'
-      - 'storybook/**'
+      - "packages/too-many-hooks/**"
+      - "packages/storybook/**"
 
 jobs:
   storybook:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.x
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
 
-    - name: Restore package cache
-      uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: too-many-hooks
+      - name: Restore package cache
+        uses: c-hive/gha-yarn-cache@v2
+        with:
+          directory: packages/too-many-hooks
 
-    - name: Install package dependencies
-      run: yarn install
-      working-directory: too-many-hooks
+      - name: Install package dependencies
+        run: yarn install
+        working-directory: packages/too-many-hooks
 
-    - name: Build package
-      run: yarn build
-      working-directory: too-many-hooks
+      - name: Build package
+        run: yarn build
+        working-directory: packages/too-many-hooks
 
-    - name: Restore storybook cache
-      uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: storybook
+      - name: Restore storybook cache
+        uses: c-hive/gha-yarn-cache@v2
+        with:
+          directory: packages/storybook
 
-    - name: Install storybook dependencies
-      run: yarn install
-      working-directory: storybook
+      - name: Install storybook dependencies
+        run: yarn install
+        working-directory: packages/storybook
 
-    - name: Build storybook
-      run: yarn build-storybook
-      working-directory: storybook
+      - name: Build storybook
+        run: yarn build-storybook
+        working-directory: packages/storybook
 
-    - name: Deploy to PR Preview
-      uses: rossjrw/pr-preview-action@v1
-      with:
-        source-dir: storybook/storybook-static
-        preview-branch: gh-pages
-        umbrella-dir: pr-preview
-        action: auto
+      - name: Deploy to PR Preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: packages/storybook/storybook-static
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: auto
