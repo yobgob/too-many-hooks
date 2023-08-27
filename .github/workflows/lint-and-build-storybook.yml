@@ -8,59 +8,47 @@ on:
       - reopened
       - synchronize
     paths:
-      - 'storybook/**'
+      - "packages/storybook/**"
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.x
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
 
-    - name: Restore package yarn cache
-      uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: too-many-hooks
+      - name: Restore package yarn cache
+        uses: c-hive/gha-yarn-cache@v2
 
-    - name: Restore package lint cache
-      id: package-lint
-      uses: actions/cache@v3
-      with: 
-        path: too-many-hooks/lint-cache
-        key: ${{ runner.os }}-package-lint
+      - name: Restore package lint cache
+        id: package-lint
+        uses: actions/cache@v3
+        with:
+          path: packages/too-many-hooks/lint-cache
+          key: ${{ runner.os }}-package-lint
 
-    - name: Install package dependencies
-      run: yarn install
-      working-directory: too-many-hooks
+      - name: Install package dependencies
+        run: yarn install
 
-    - name: Build package
-      run: yarn build
-      working-directory: too-many-hooks
+      - name: Build package
+        run: yarn build
+        working-directory: packages/too-many-hooks
 
-    - name: Restore storybook yarn cache
-      uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: storybook
+      - name: Restore storybook lint cache
+        id: storybook-lint
+        uses: actions/cache@v3
+        with:
+          path: packages/storybook/lint-cache
+          key: ${{ runner.os }}-storybook-lint
 
-    - name: Restore storybook lint cache
-      id: storybook-lint
-      uses: actions/cache@v3
-      with: 
-        path: storybook/lint-cache
-        key: ${{ runner.os }}-storybook-lint
+      - name: Lint
+        run: yarn lint
+        working-directory: packages/storybook
 
-    - name: Install storybook dependencies
-      run: yarn install
-      working-directory: storybook
-
-    - name: Lint
-      run: yarn lint
-      working-directory: storybook
-
-    - name: Build
-      run: yarn build-storybook
-      working-directory: storybook
+      - name: Build
+        run: yarn build-storybook
+        working-directory: packages/storybook

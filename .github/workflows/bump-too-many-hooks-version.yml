@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-    paths: 
-      - 'too-many-hooks/**.ts'
+    paths:
+      - "packages/too-many-hooks/**.ts"
 
 jobs:
   bump-tag-version:
@@ -25,12 +25,11 @@ jobs:
           node-version: 18.x
 
       - name: Install dependencies
-        run: yarn install
-        working-directory: too-many-hooks
+        run: yarn workspaces focus @yobgob/too-many-hooks
 
       - name: Set package version
         run: yarn version ${{ steps.semver-bump.outputs.version }}
-        working-directory: too-many-hooks
+        working-directory: packages/too-many-hooks
 
       - name: Create version update PR
         id: open-pr
@@ -51,7 +50,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ steps.open-pr.outputs.pull-request-number }}
-          comment-author: 'github-actions[bot]'
+          comment-author: "github-actions[bot]"
           body-includes: Release notes
 
       - name: Create or update comment
@@ -63,4 +62,3 @@ jobs:
             ${{ steps.fc.outputs.comment-id == 0 && 'Release notes' || '' }}
             ${{ steps.semver-bump.outputs.release-notes }}
           edit-mode: append
-

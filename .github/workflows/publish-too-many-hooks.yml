@@ -1,18 +1,18 @@
 name: Publish `too-many-hooks`
-on: 
+on:
   workflow_dispatch:
     inputs:
-      tag: 
-        description: 'Release tag'
+      tag:
+        description: "Release tag"
         required: false
-        default: 'latest'
+        default: "latest"
       dry-run:
-        description: 'Run with the dry run flag to prevent publication'
+        description: "Run with the dry run flag to prevent publication"
         required: false
         default: false
         type: boolean
       check-version:
-        description: 'Prevent publishing if the version number is the same as the current published version'
+        description: "Prevent publishing if the version number is the same as the current published version"
         required: false
         default: true
         type: boolean
@@ -21,36 +21,35 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.x
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
 
-    - name: Install dependencies
-      run: yarn install
-      working-directory: too-many-hooks
+      - name: Install dependencies
+        run: yarn workspaces focus @yobgob/too-many-hooks
 
-    - name: Lint
-      run: yarn lint:all
-      working-directory: too-many-hooks
+      - name: Lint
+        run: yarn lint:all
+        working-directory: packages/too-many-hooks
 
-    - name: Build
-      run: yarn build
-      working-directory: too-many-hooks
+      - name: Build
+        run: yarn build
+        working-directory: packages/too-many-hooks
 
-    - name: Publish
-      id: publish
-      uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.NPM_TOKEN }}
-        package: ./too-many-hooks/package.json
-        tag: ${{ inputs.tag }}
-        dry-run: ${{ inputs.dry-run }}
-        check-version: ${{ inputs.check-version }}
-        access: public
+      - name: Publish
+        id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/too-many-hooks/package.json
+          tag: ${{ inputs.tag }}
+          dry-run: ${{ inputs.dry-run }}
+          check-version: ${{ inputs.check-version }}
+          access: public
 
-    - if: steps.publish.outputs.type != 'none'
-      run: |
-        echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }} (${{ steps.publish.outputs.tag }})"
+      - if: steps.publish.outputs.type != 'none'
+        run: |
+          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }} (${{ steps.publish.outputs.tag }})"
