@@ -17,7 +17,6 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:you-dont-need-lodash-underscore/compatible',
   ],
-  ignorePatterns: ['*.cjs'],
   settings: {
     react: {
       version: 'detect',

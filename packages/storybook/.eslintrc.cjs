@@ -19,7 +19,6 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
   ],
-  ignorePatterns: ['!.storybook', '*.cjs'],
   overrides: [
     {
       files: ['.tsx', '.ts'],
