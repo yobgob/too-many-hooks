@@ -1,9 +1,10 @@
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.eslint.json'],
+    project: ['./tsconfig.json'],
     extraFileExtensions: ['.mdx'],
     ecmaFeatures: {
       jsx: true,
@@ -18,7 +19,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
   ],
-  ignorePatterns: ['*.cjs'],
+  ignorePatterns: ['!.storybook', '*.cjs'],
   overrides: [
     {
       files: ['.tsx', '.ts'],

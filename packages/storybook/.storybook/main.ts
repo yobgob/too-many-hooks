@@ -1,5 +1,6 @@
-const path = require('path')
-module.exports = {
+import { StorybookConfig } from '@storybook/react-vite'
+
+export default {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.docs.mdx'],
   addons: [
     '@storybook/addon-links',
@@ -14,4 +15,4 @@ module.exports = {
     autodocs: true,
     defaultName: 'Docs',
   },
-}
+} satisfies StorybookConfig
