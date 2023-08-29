@@ -6,11 +6,11 @@ This directory contains the storybook application for testing and demoing `too-m
 
 Install / update dependencies with:
 
-```yarn install```
+`yarn install`
 
 Then, run the storybook at [http://localhost:6006/](http://localhost:6006/) with:
 
-```yarn storybook```
+`yarn storybook`
 
 ## Tooling
 
