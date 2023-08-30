@@ -44,7 +44,10 @@ const Burger: React.FC = () => {
                       ? insertAt(0, { type: typedKey, isSelected: false })
                       : insertLocation === 'bottom'
                       ? push({ type: typedKey, isSelected: false })
-                      : insertAt(insertLocation, { type: typedKey, isSelected: false })
+                      : insertAt(insertLocation, {
+                          type: typedKey,
+                          isSelected: false,
+                        })
                   }}
                 >
                   Add {label}
@@ -112,7 +115,10 @@ const Burger: React.FC = () => {
                   if (updateIngredientsWhere.target === 'selected') {
                     return updateWhere(
                       ({ isSelected }) => isSelected,
-                      ({ isSelected }) => ({ type: updateIngredientsWhere.new, isSelected }),
+                      ({ isSelected }) => ({
+                        type: updateIngredientsWhere.new,
+                        isSelected,
+                      }),
                     )
                   }
 
@@ -124,7 +130,10 @@ const Burger: React.FC = () => {
 
                   updateWhere(
                     ({ type }) => ingredientsToReplace.includes(type),
-                    ({ isSelected }) => ({ type: updateIngredientsWhere.new, isSelected }),
+                    ({ isSelected }) => ({
+                      type: updateIngredientsWhere.new,
+                      isSelected,
+                    }),
                   )
                 }}
               >
@@ -137,7 +146,10 @@ const Burger: React.FC = () => {
                   ...INGREDIENT_OPTIONS,
                 ]}
                 onChange={e =>
-                  setUpdateIngredientsWhere(curr => ({ ...curr, target: e.target.value }))
+                  setUpdateIngredientsWhere(curr => ({
+                    ...curr,
+                    target: e.target.value,
+                  }))
                 }
                 defaultValue={updateIngredientsWhere.target}
                 color={
@@ -150,7 +162,12 @@ const Burger: React.FC = () => {
             <Select
               label="with"
               options={INGREDIENT_OPTIONS}
-              onChange={e => setUpdateIngredientsWhere(curr => ({ ...curr, new: e.target.value }))}
+              onChange={e =>
+                setUpdateIngredientsWhere(curr => ({
+                  ...curr,
+                  new: e.target.value,
+                }))
+              }
               defaultValue={updateIngredientsWhere.new}
               color={INGREDIENTS[updateIngredientsWhere.new].color}
             />
@@ -167,7 +184,10 @@ const Burger: React.FC = () => {
             </Button>
             <Button
               onClick={() =>
-                updateAll(({ type, isSelected }) => ({ type, isSelected: !isSelected }))
+                updateAll(({ type, isSelected }) => ({
+                  type,
+                  isSelected: !isSelected,
+                }))
               }
             >
               Invert Selection
@@ -186,7 +206,10 @@ const Burger: React.FC = () => {
                   className="hidden"
                   checked={ingredient.isSelected}
                   onChange={e =>
-                    updateAt(i, ({ type }) => ({ type, isSelected: e.target.checked }))
+                    updateAt(i, ({ type }) => ({
+                      type,
+                      isSelected: e.target.checked,
+                    }))
                   }
                 />
                 {INGREDIENTS[ingredient.type].svg({ width: INGREDIENT_WIDTH })}

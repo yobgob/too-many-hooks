@@ -8,7 +8,7 @@ interface Props extends ComponentProps<'button'> {
 const Button: React.FC<Props> = ({ variant = 'fill', color, className, ...props }) => {
   return (
     <button
-      className={`rounded-md border border-transparent bg-transparent px-1.5 py-1 disabled:hover:no-underline  ${
+      className={`rounded-md border border-transparent px-1.5 py-1 disabled:hover:no-underline  ${
         variant === 'fill'
           ? 'bg-blue-500 text-white hover:underline disabled:bg-slate-500 '
           : variant === 'outline'

@@ -72,7 +72,10 @@ export const INGREDIENT_GROUPS = {
   buns: ['top', 'bottom'],
 }
 
-export const INGREDIENT_GROUP_OPTIONS: { label: string; value: IngredientGroup }[] = [
+export const INGREDIENT_GROUP_OPTIONS: {
+  label: string
+  value: IngredientGroup
+}[] = [
   { label: 'Condiments', value: 'condiments' },
   { label: 'Vegetables', value: 'vegetables' },
   { label: 'Buns', value: 'buns' },
