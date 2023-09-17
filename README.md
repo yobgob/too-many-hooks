@@ -68,13 +68,13 @@ The monorepo contains both the `too-many-hooks` library at `/packages/too-many-h
 The storybook imports the library via a symlink, and thus needs `too-many-hooks` built locally. To build the library, go to `/packages/too-many-hooks` and install dependencies with:
 
 ```sh
-yarn install
+bun install
 ```
 
 Then, build the library by running:
 
 ```sh
-yarn build
+bun build
 ```
 
 The built library will be output to `/too-many-hooks/dist`.
@@ -83,11 +83,11 @@ The built library will be output to `/too-many-hooks/dist`.
 
 To run the storybook, go to `/packages/storybook` and update dependencies with:
 
-`yarn install`
+`bun install`
 
 Then, run the app locally at [http://localhost:6006/](http://localhost:6006/) by running:
 
-`yarn storybook`
+`bun storybook`
 
 ### Checks
 

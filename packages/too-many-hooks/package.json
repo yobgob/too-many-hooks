@@ -26,22 +26,22 @@
     }
   },
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "get-changed": "mkdirp .lint-cache && git diff --relative -r --name-only --diff-filter=ACMRTUXB origin/main | grep -E '.*\\.ts$|.*\\.tsx$|.*\\.js$|.*\\.jsx$' | tr '\n' ' ' > ./.lint-cache/changes.txt",
     "if-changed": "changed=$(cat ./.lint-cache/changes.txt) && (node -e \"if ('$changed' !== ''){process.exit(1)} else {console.log('No changes detected')}\" ||  \"${@}\")",
-    "if-get-changed": "yarn get-changed && yarn if-changed",
+    "if-get-changed": "bun get-changed && bun if-changed",
     "format:all": "prettier --write .",
     "format:pattern": "prettier --write --cache --cache-location './.lint-cache/.prettier-cache'",
-    "format": "yarn if-get-changed yarn format:pattern $(cat ./.lint-cache/changes.txt)",
+    "format": "bun if-get-changed bun format:pattern $(cat ./.lint-cache/changes.txt)",
     "lint:all:format": "prettier --check .",
     "lint:all:code": "eslint . --max-warnings=0",
-    "lint:all": "concurrently \"yarn:lint:all:*\" \"yarn:lint:types\"",
+    "lint:all": "concurrently \"bun:lint:all:*\" \"bun:lint:types\"",
     "lint:pattern:format": "prettier --check",
     "lint:pattern:code": "eslint --max-warnings=0 --cache --cache-location './.lint-cache/' --cache-strategy content",
-    "lint:format": "yarn if-get-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)",
-    "lint:code": "yarn if-get-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)",
+    "lint:format": "bun if-get-changed bun lint:pattern:format $(cat ./.lint-cache/changes.txt)",
+    "lint:code": "bun if-get-changed bun lint:pattern:code $(cat ./.lint-cache/changes.txt)",
     "lint:types": "tsc --noEmit",
-    "lint": "yarn get-changed && concurrently \"yarn if-changed yarn lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"yarn if-changed yarn lint:pattern:code $(cat ./.lint-cache/changes.txt)\" \"yarn lint:types\""
+    "lint": "bun get-changed && concurrently \"bun if-changed bun lint:pattern:format $(cat ./.lint-cache/changes.txt)\" \"bun if-changed bun lint:pattern:code $(cat ./.lint-cache/changes.txt)\" \"bun lint:types\""
   },
   "dependencies": {
     "lodash.isequal": "^4.5.0",
