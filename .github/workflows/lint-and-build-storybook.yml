@@ -16,13 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18.x
-
-      - name: Restore package yarn cache
-        uses: c-hive/gha-yarn-cache@v2
+          bun-version: latest
 
       - name: Restore package lint cache
         id: package-lint
@@ -32,10 +29,10 @@ jobs:
           key: ${{ runner.os }}-package-lint
 
       - name: Install package dependencies
-        run: yarn install
+        run: bun install
 
       - name: Build package
-        run: yarn build
+        run: bun run build
         working-directory: packages/too-many-hooks
 
       - name: Restore storybook lint cache
@@ -46,9 +43,9 @@ jobs:
           key: ${{ runner.os }}-storybook-lint
 
       - name: Lint
-        run: yarn lint
+        run: bun lint
         working-directory: packages/storybook
 
       - name: Build
-        run: yarn build-storybook
+        run: bun build-storybook
         working-directory: packages/storybook
