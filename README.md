@@ -19,8 +19,6 @@
 
 ### Requirements
 
-- [![Node version](https://img.shields.io/badge/Node-16.0.0%2B-brightgreen.svg)](http://nodejs.org/download/)
-
 **Peer dependencies:**
 
 - [![React version](https://img.shields.io/badge/React-18.0.0%2B-brightgreen.svg)](https://reactjs.org/)
