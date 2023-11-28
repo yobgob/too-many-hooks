@@ -21,26 +21,12 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Restore package lint cache
-        id: package-lint
-        uses: actions/cache@v3
-        with:
-          path: packages/too-many-hooks/lint-cache
-          key: ${{ runner.os }}-package-lint
-
       - name: Install package dependencies
         run: bun install
 
       - name: Build package
         run: bun run build
         working-directory: packages/too-many-hooks
-
-      - name: Restore storybook lint cache
-        id: storybook-lint
-        uses: actions/cache@v3
-        with:
-          path: packages/storybook/lint-cache
-          key: ${{ runner.os }}-storybook-lint
 
       - name: Lint
         run: bun lint
