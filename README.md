@@ -72,7 +72,7 @@ bun install
 Then, build the library by running:
 
 ```sh
-bun build
+bun run build
 ```
 
 The built library will be output to `/too-many-hooks/dist`.

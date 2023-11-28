@@ -13,7 +13,7 @@ bun install
 Then, build the library with:
 
 ```sh
-bun build
+bun run build
 ```
 
 The built package will output to `/dist`.
