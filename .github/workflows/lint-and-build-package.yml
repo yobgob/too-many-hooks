@@ -16,13 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18.x
-
-      - name: Restore yarn cache
-        uses: c-hive/gha-yarn-cache@v2
+          bun-version: latest
 
       - name: Restore lint cache
         id: package-lint
@@ -32,12 +29,13 @@ jobs:
           key: ${{ runner.os }}-package-lint
 
       - name: Install dependencies
-        run: yarn workspaces focus @yobgob/too-many-hooks
+        run: bun install
+        working-directory: packages/too-many-hooks
 
       - name: Lint
-        run: yarn lint
+        run: bun lint
         working-directory: packages/too-many-hooks
 
       - name: Build
-        run: yarn build
+        run: bun run build
         working-directory: packages/too-many-hooks

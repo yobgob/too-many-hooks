@@ -13,23 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18.x
-
-      - name: Restore yarn cache
-        uses: c-hive/gha-yarn-cache@v2
+          bun-version: latest
 
       - name: Install package dependencies
-        run: yarn install
+        run: bun install
 
       - name: Build package
-        run: yarn build
+        run: bun run build
         working-directory: packages/too-many-hooks
 
       - name: Build storybook
-        run: yarn build-storybook && touch storybook-static/.nojekyll
+        run: bun build-storybook && touch storybook-static/.nojekyll
         working-directory: packages/storybook
 
       - name: Deploy to GitHub Pages
