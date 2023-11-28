@@ -19,6 +19,8 @@
 
 ### Requirements
 
+- [![Bun version](https://img.shields.io/github/v/release/oven-sh/bun?label=Bun&)](https://bun.sh/)
+
 **Peer dependencies:**
 
 - [![React version](https://img.shields.io/badge/React-18.0.0%2B-brightgreen.svg)](https://reactjs.org/)
