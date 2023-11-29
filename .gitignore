@@ -7,7 +7,6 @@ dist
 dist-ssr
 *.local
 storybook-static
-.lint-cache
 
 # Editor directories and files
 .idea

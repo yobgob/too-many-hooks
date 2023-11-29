@@ -21,13 +21,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Restore lint cache
-        id: package-lint
-        uses: actions/cache@v3
-        with:
-          path: packages/too-many-hooks/lint-cache
-          key: ${{ runner.os }}-package-lint
-
       - name: Install dependencies
         run: bun install
         working-directory: packages/too-many-hooks
