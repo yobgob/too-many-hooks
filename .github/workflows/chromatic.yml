@@ -12,18 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18.x
-          cache: "yarn"
-          cache-dependency-path: yarn.lock
+          bun-version: latest
 
       - name: Install dependencies
-        run: yarn install
+        run: bun install
 
       - name: Build package
-        run: yarn build
+        run: bun run build
         working-directory: packages/too-many-hooks
 
       - name: Publish to Chromatic

@@ -23,20 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18.x
+          bun-version: latest
 
       - name: Install dependencies
-        run: yarn workspaces focus @yobgob/too-many-hooks
+        run: bun install
+        working-directory: packages/too-many-hooks
 
       - name: Lint
-        run: yarn lint:all
+        run: bun lint:all
         working-directory: packages/too-many-hooks
 
       - name: Build
-        run: yarn build
+        run: bun run build
         working-directory: packages/too-many-hooks
 
       - name: Publish
