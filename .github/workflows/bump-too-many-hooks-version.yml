@@ -19,16 +19,17 @@ jobs:
           mode: bump
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18.x
+          bun-version: latest
 
       - name: Install dependencies
-        run: yarn workspaces focus @yobgob/too-many-hooks
+        run: bun install
+        working-directory: packages/too-many-hooks
 
       - name: Set package version
-        run: yarn version ${{ steps.semver-bump.outputs.version }}
+        run: npm version ${{ steps.semver-bump.outputs.version }}
         working-directory: packages/too-many-hooks
 
       - name: Create version update PR
