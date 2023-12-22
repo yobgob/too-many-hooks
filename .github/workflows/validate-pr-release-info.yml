@@ -13,9 +13,15 @@ on:
       ]
     paths:
       - "packages/too-many-hooks/**.ts"
+
+env: 
+  IS_LABELED_RELEASE: contains(github.event.pull_request.labels.*.name, 'release')
+  IS_LABELED_NON_LOGICAL: contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure')
+
 jobs:
   check-pr:
     name: Validate Release Label and Notes
+    if: $IS_LABELED_RELEASE || !IS_LABELED_NON_LOGICAL
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
