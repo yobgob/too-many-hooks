@@ -45,7 +45,6 @@ jobs:
 
       - name: Swap READMEs
         run: |
-          mv ./packages/too-many-hooks/README.md ./packages/too-many-hooks/dev.README.md
           mv ./README.md ./packages/too-many-hooks/README.md
 
       - name: Publish
