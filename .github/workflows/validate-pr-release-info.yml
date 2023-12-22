@@ -16,6 +16,7 @@ on:
 jobs:
   check-pr:
     name: Validate Release Label and Notes
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'release') || !(contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure'))}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
