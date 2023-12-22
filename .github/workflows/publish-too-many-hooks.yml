@@ -11,11 +11,14 @@ on:
         required: false
         default: false
         type: boolean
-      check-version:
-        description: "Prevent publishing if the version number is the same as the current published version"
+      strategy:
+        description: "Publish only if the semantic version is an upgrade (upgrade) or is not in the registry yet (all)"
         required: false
-        default: true
-        type: boolean
+        default: all
+        type: choice
+        options: 
+          - upgrade
+          - all
 
 jobs:
   publish:
@@ -40,17 +43,21 @@ jobs:
         run: bun run build
         working-directory: packages/too-many-hooks
 
+      - name: Swap READMEs
+        run: |
+          mv ./README.md ./packages/too-many-hooks/README.md
+
       - name: Publish
         id: publish
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/too-many-hooks/package.json
           tag: ${{ inputs.tag }}
           dry-run: ${{ inputs.dry-run }}
-          check-version: ${{ inputs.check-version }}
+          strategy: ${{ inputs.strategy }}
           access: public
 
-      - if: steps.publish.outputs.type != 'none'
+      - if: ${{ steps.publish.outputs.type }}
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }} (${{ steps.publish.outputs.tag }})"
