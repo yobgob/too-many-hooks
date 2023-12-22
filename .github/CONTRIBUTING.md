@@ -59,6 +59,14 @@ When you're finished with the changes, create a pull request, also known as a PR
 
 > PR titles should be in the imperative mood and summarize the changes the PR makes (e.g. "Update contributing guide").
 
+##### Labels
+
+- PRs that make logical changes must include a semver release label ("patch release", "minor release", "major release")
+- PRs that make changes to documentation must include the "documentation" label
+- PRs that make changes to tooling must include the "tooling" label
+- PRs that restructure code must include the "restructure" label
+- All PRs must include a release label ("patch release", "minor release", "major release") or a label for another kind of change ("documentation", "tooling", "restructure")
+
 #### PR review
 
 Once you submit your PR, one or more of the organizations members will assign the review to themselves and review your changes. We may ask questions or request additional information.
@@ -71,7 +79,7 @@ Once you submit your PR, one or more of the organizations members will assign th
 
 #### Merging PRs
 
-<img src="https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif" width="20" height="20" /> Thank you for contributing! <img src="https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif" width="20" height="20" /> 
+<img src="https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif" width="20" height="20" /> Thank you for contributing! <img src="https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif" width="20" height="20" />
 
 Once your PR is merged, your contributions will be publicly visible in the [Storybook](https://yobgob.github.io/too-many-hooks/) and included in the next release of `too-many-hooks`.
 
