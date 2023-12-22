@@ -9,12 +9,6 @@
 - The storybook for the current main version can be found at: [https://yobgob.github.io/too-many-hooks](https://yobgob.github.io/too-many-hooks)
 - Storybooks will also be build and deployed for each PR at `https://yobgob.github.io/too-many-hooks/pr-preview/pr-[PR number]`
 
-## Guiding Principles
-
-- There should be one obvious way to do each thing
-- Explicit is better than implicit
-- Code should be extensible but not unopinionated
-
 ## Getting Started
 
 ### Requirements
@@ -25,9 +19,17 @@
 
 - [![React version](https://img.shields.io/badge/React-18.0.0%2B-brightgreen.svg)](https://reactjs.org/)
 
-### Installation
+### Install
 
-- Coming soon to an NPM near you
+```sh
+bun install @yobgob/too-many-hooks
+```
+
+## Features
+
+- Simplifies commonly repeated React code
+- [Small](https://bundlephobia.com/package/@yobgob/too-many-hooks) bundle size
+- Bundled with [Vite](https://vitejs.dev/guide/why.html#why-bundle-for-production) so you get only what you use
 
 ### Hooks
 
@@ -57,7 +59,13 @@ Available hooks and a short summary of their purpose:
 
 ## Contributing
 
-Anyone is welcome to contribute! See the [contribution guide](.github/CONTRIBUTING.md) for details on getting started!
+Anyone is welcome to contribute! See the [contribution guide](https://github.com/yobgob/too-many-hooks/blob/main/.github/CONTRIBUTING.md) for details on getting started!
+
+### Guiding Principles
+
+- There should be one obvious way to do each thing
+- Explicit is better than implicit
+- Code should be extensible but not unopinionated
 
 ### Structure
 
