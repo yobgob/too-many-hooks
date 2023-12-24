@@ -43,11 +43,11 @@ const Burger: React.FC = () => {
                     insertLocation === 'top'
                       ? insertAt(0, { type: typedKey, isSelected: false })
                       : insertLocation === 'bottom'
-                      ? push({ type: typedKey, isSelected: false })
-                      : insertAt(insertLocation, {
-                          type: typedKey,
-                          isSelected: false,
-                        })
+                        ? push({ type: typedKey, isSelected: false })
+                        : insertAt(insertLocation, {
+                            type: typedKey,
+                            isSelected: false,
+                          })
                   }}
                 >
                   Add {label}

@@ -29,8 +29,8 @@ const API: React.FC<Props> = ({ firstName, countryCode }) => {
         {predictedAge
           ? `Predicted age: ${predictedAge}`
           : firstName
-          ? 'No age result for entered name and location'
-          : 'No name entered'}
+            ? 'No age result for entered name and location'
+            : 'No name entered'}
       </p>
     </div>
   )
