@@ -22,8 +22,7 @@
     "@storybook/jest": "^0.2.3",
     "@yobgob/too-many-hooks": "workspace:*",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "^5.3.3"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.6",
