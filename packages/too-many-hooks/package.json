@@ -45,12 +45,12 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.0.0",
     "@types/lodash.isequal": "^4.5.8",
     "@types/react": "^18.2.45",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "bun-types": "^1.0.20",
     "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.33.2",
