@@ -1,11 +1,12 @@
 repo_name: yobgob/too-many-hooks
-report_id: 30fd20289c791db2c01d62548fd03c01
+report_id: a36fd401ce070a3e94e2ce31454a84e5
+version: 0.1
 repo_type: Public
-timestamp: '2023-12-14T09:35:24+00:00'
-requested_by: dawsonbooth
+timestamp: '2024-01-11T12:21:05+00:00'
+requested_by: PatrickDeVries
 provider: github
 branch: main
-detected_tools_count: 37
+detected_tools_count: 35
 tools:
 - name: CSS 3
   description: The latest evolution of the Cascading Style Sheets language
@@ -15,6 +16,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/6727/css.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks
   detection_source: Repo Metadata
 - name: JavaScript
   description: Lightweight, interpreted, object-oriented language with first-class
@@ -25,6 +27,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/yobgob/too-many-hooks
   detection_source: Repo Metadata
 - name: TypeScript
   description: A superset of JavaScript that compiles to clean JavaScript output
@@ -35,6 +38,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1612/bynNY5dJ.jpg
+  detection_source_url: https://github.com/yobgob/too-many-hooks
   detection_source: Repo Metadata
 - name: Autoprefixer
   description: PostCSS plugin to parse CSS and add vendor prefixes to CSS rules
@@ -44,21 +48,10 @@ tools:
   category: Languages & Frameworks
   sub_category: CSS Pre-processors / Extensions
   image_url: https://img.stackshare.io/service/2202/72d087642cfce6fef6f2dabec5bf49e8_400x400.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
-- name: Node.js
-  description: A platform built on Chrome's JavaScript runtime for easily building
-    fast, scalable network applications
-  website_url: http://nodejs.org/
-  open_source: true
-  hosted_saas: false
-  category: Languages & Frameworks
-  sub_category: Frameworks (Full Stack)
-  image_url: https://img.stackshare.io/service/1011/n1JRsFeB_400x400.png
-  detection_source: packages/too-many-hooks/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2022-12-19 16:32:07.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: PostCSS
   description: Transform CSS with JS plugins
   website_url: https://github.com/postcss/postcss
@@ -68,6 +61,7 @@ tools:
   category: Languages & Frameworks
   sub_category: CSS Pre-processors / Extensions
   image_url: https://img.stackshare.io/service/3339/rlFcjEdI.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
   last_updated_by: Dawson Booth
   last_updated_on: 2022-12-19 16:32:07.000000000 Z
@@ -83,8 +77,8 @@ tools:
   image_url: https://img.stackshare.io/service/1020/OYIaJ1KK.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: Storybook
   description: Build bulletproof UI components faster
   website_url: https://storybook.js.org/
@@ -94,9 +88,10 @@ tools:
   category: Libraries
   sub_category: JavaScript Framework Components
   image_url: https://img.stackshare.io/service/9240/sOct-Txm_400x400.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: Tailwind CSS
   description: A utility-first CSS framework for rapid UI development
   website_url: https://tailwindcss.com
@@ -106,13 +101,14 @@ tools:
   category: Languages & Frameworks
   sub_category: Front-End Frameworks
   image_url: https://img.stackshare.io/service/8158/default_660b7c41c3ba489cb581eec89c04655404258c19.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: Babel
   description: Use next generation JavaScript, today.
   website_url: http://babeljs.io/
-  version: 7.22.11
+  version: 7.23.6
   license: MIT
   open_source: true
   hosted_saas: false
@@ -121,8 +117,8 @@ tools:
   image_url: https://img.stackshare.io/service/2739/-1wfGjNw.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: ESLint
   description: The fully pluggable JavaScript code quality tool
   website_url: http://eslint.org/
@@ -132,6 +128,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Code Review
   image_url: https://img.stackshare.io/service/3337/Q4L7Jncy.jpg
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
   last_updated_by: Dawson Booth
   last_updated_on: 2022-12-19 16:32:07.000000000 Z
@@ -143,6 +140,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks
   detection_source: Repo Metadata
 - name: GitHub Actions
   description: Automate your workflow from idea to production
@@ -152,13 +150,14 @@ tools:
   category: Build, Test, Deploy
   sub_category: Continuous Integration
   image_url: https://img.stackshare.io/service/11563/actions.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/.github/workflows/build-and-deploy-storybook.yml
   detection_source: ".github/workflows/build-and-deploy-storybook.yml"
   last_updated_by: Dawson Booth
   last_updated_on: 2023-08-27 00:04:11.000000000 Z
 - name: Prettier
   description: 'Prettier is an opinionated code formatter. '
   website_url: https://prettier.io/
-  version: 3.0.2
+  version: 3.1.1
   license: MIT
   open_source: true
   hosted_saas: false
@@ -167,8 +166,8 @@ tools:
   image_url: https://img.stackshare.io/service/7035/default_66f265943abed56bcdbfca1c866a4261b1fbb063.jpg
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-09-25 00:24:42.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: Vite
   description: Native-ESM powered web dev build tool
   website_url: https://vitejs.dev/
@@ -178,6 +177,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: JS Build Tools / JS Task Runners
   image_url: https://img.stackshare.io/service/21547/default_1aeac791cde11ff66cc0b20dcc6144eeb185c905.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
   last_updated_by: Dawson Booth
   last_updated_on: 2022-12-19 16:32:07.000000000 Z
@@ -189,16 +189,8 @@ tools:
   category: Build, Test, Deploy
   sub_category: Front End Package Manager
   image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/too-many-hooks/package.json
   detection_source: packages/too-many-hooks/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2022-12-19 16:32:07.000000000 Z
-- name: HTML
-  description: Hypertext Markup Language for creating web pages.
-  website_url: http://
-  open_source: false
-  hosted_saas: false
-  image_url: https://img.stackshare.io/service/2270/no-img-open-source.png
-  detection_source: packages/storybook/.storybook/preview-head.html
   last_updated_by: Dawson Booth
   last_updated_on: 2022-12-19 16:32:07.000000000 Z
 - name: Shell
@@ -210,11 +202,12 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/4631/default_c2062d40130562bdc836c13dbca02d318205a962.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks
   detection_source: Repo Metadata
 - name: "@babel/core"
   description: Babel compiler core
   package_url: https://www.npmjs.com/@babel/core
-  version: 7.22.11
+  version: 7.23.6
   license: MIT
   open_source: true
   hosted_saas: false
@@ -223,12 +216,12 @@ tools:
   image_url: https://img.stackshare.io/package/15810/default_004658cda9b38934f2871435e9dc15608c86e8be.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@storybook/addon-docs"
   description: Superior documentation for your components
   package_url: https://www.npmjs.com/@storybook/addon-docs
-  version: 7.3.2
+  version: 7.6.6
   license: MIT
   open_source: true
   hosted_saas: false
@@ -237,12 +230,12 @@ tools:
   image_url: https://img.stackshare.io/package/17835/default_abcc2eea82e62d338a749f334647866df76198b8.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@storybook/addon-links"
   description: Story Links addon for storybook
   package_url: https://www.npmjs.com/@storybook/addon-links
-  version: 7.3.2
+  version: 7.6.6
   license: MIT
   open_source: true
   hosted_saas: false
@@ -251,13 +244,13 @@ tools:
   image_url: https://img.stackshare.io/package/16204/default_41f04716a804e853d5c38a5b81ee0ea8a842ad82.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@storybook/react"
   description: 'Storybook for React: Develop React Component in isolation with Hot
     Reloading'
   package_url: https://www.npmjs.com/@storybook/react
-  version: 7.3.2
+  version: 7.6.6
   license: MIT
   open_source: true
   hosted_saas: false
@@ -266,26 +259,26 @@ tools:
   image_url: https://img.stackshare.io/package/16042/default_72d4237e6719b7d75d0307bf8b5718584fdc3425.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
-- name: "@types/node"
-  description: TypeScript definitions for Node.js
-  package_url: https://www.npmjs.com/@types/node
-  version: 20.5.6
-  license: MIT
-  open_source: true
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
+- name: "@tailwindcss/typography"
+  description: A Tailwind CSS plugin for automatically styling plain HTML content
+    with beautiful typographic defaults
+  package_url: https://www.npmjs.com/@tailwindcss/typography
+  version: 0.5.10
+  open_source: false
   hosted_saas: false
-  category: Libraries
-  sub_category: npm Packages
-  image_url: https://img.stackshare.io/package/15809/default_5e5e8ac63beda29f31f1844df64d4b8247570a66.png
-  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/too-many-hooks/package.json
-  detection_source: packages/too-many-hooks/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-28 13:19:44.000000000 Z
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/npm/image.png
+  detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
+  detection_source: packages/storybook/package.json
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@types/react"
   description: TypeScript definitions for React
   package_url: https://www.npmjs.com/@types/react
-  version: 18.2.21
+  version: 18.2.45
   license: MIT
   open_source: true
   hosted_saas: false
@@ -294,12 +287,12 @@ tools:
   image_url: https://img.stackshare.io/package/15894/default_1d65e37e65b7f80761374f0202776043277d505d.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-28 13:19:44.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@types/react-dom"
   description: TypeScript definitions for React
   package_url: https://www.npmjs.com/@types/react-dom
-  version: 18.2.7
+  version: 18.2.18
   license: MIT
   open_source: true
   hosted_saas: false
@@ -308,12 +301,12 @@ tools:
   image_url: https://img.stackshare.io/package/15946/default_54b691c123fc8979741e800e4dcd3936c0f3b246.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-28 13:19:44.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@typescript-eslint/eslint-plugin"
   description: TypeScript plugin for ESLint
   package_url: https://www.npmjs.com/@typescript-eslint/eslint-plugin
-  version: 6.4.1
+  version: 6.15.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -322,12 +315,12 @@ tools:
   image_url: https://img.stackshare.io/package/15982/default_8b5680d4e916298d08363c291a0d6e34c07ceb15.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-29 15:09:20.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: "@typescript-eslint/parser"
   description: An ESLint custom parser which leverages TypeScript ESTree
   package_url: https://www.npmjs.com/@typescript-eslint/parser
-  version: 6.4.1
+  version: 6.15.0
   license: BSD-2-Clause
   open_source: true
   hosted_saas: false
@@ -336,8 +329,8 @@ tools:
   image_url: https://img.stackshare.io/package/15980/default_732016a20524708efe7a4c77497fe9bfeea19ba6.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-29 15:09:20.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: babel-loader
   description: Babel module loader for webpack
   package_url: https://www.npmjs.com/babel-loader
@@ -350,12 +343,12 @@ tools:
   image_url: https://img.stackshare.io/package/15800/default_4acafe585186b4157fa23322ae7ca89e24b5cdef.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: concurrently
   description: Run commands concurrently
   package_url: https://www.npmjs.com/concurrently
-  version: 8.2.1
+  version: 8.2.2
   license: MIT
   open_source: true
   hosted_saas: false
@@ -364,12 +357,12 @@ tools:
   image_url: https://img.stackshare.io/package/16041/default_5fd43aeff4d6a935abc13737de01a0355210499d.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-28 13:19:44.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: eslint-plugin-jsx-a11y
   description: Static AST checker for accessibility rules on JSX elements
   package_url: https://www.npmjs.com/eslint-plugin-jsx-a11y
-  version: 6.7.1
+  version: 6.8.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -378,8 +371,8 @@ tools:
   image_url: https://img.stackshare.io/package/15845/default_6743ba96cf149a3c3c68a185199f9705d6eff80e.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-29 15:09:20.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: eslint-plugin-react
   description: React specific linting rules for ESLint
   package_url: https://www.npmjs.com/eslint-plugin-react
@@ -392,8 +385,8 @@ tools:
   image_url: https://img.stackshare.io/package/15817/default_14fd11531839d935f920b6d55bd6f3528c890ad7.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-29 15:09:20.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: eslint-plugin-react-hooks
   description: ESLint rules for React Hooks
   package_url: https://www.npmjs.com/eslint-plugin-react-hooks
@@ -406,8 +399,8 @@ tools:
   image_url: https://img.stackshare.io/package/16149/default_1f3a2fc7d882e29a43394ecdf491b8989ea3f0fa.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-11-29 15:09:20.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: lodash.isequal
   description: The Lodash method `_.isEqual` exported as a module
   package_url: https://www.npmjs.com/lodash.isequal
@@ -420,8 +413,8 @@ tools:
   image_url: https://img.stackshare.io/package/16523/default_28df1e698b81279fa78b702212cd6185de706683.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/too-many-hooks/package.json
   detection_source: packages/too-many-hooks/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: mkdirp
   description: Recursively mkdir, like `mkdir -p`
   package_url: https://www.npmjs.com/mkdirp
@@ -448,12 +441,12 @@ tools:
   image_url: https://img.stackshare.io/package/15808/default_14fd11531839d935f920b6d55bd6f3528c890ad7.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: tailwindcss
   description: A utility-first CSS framework for rapidly building custom user interfaces
   package_url: https://www.npmjs.com/tailwindcss
-  version: 3.3.3
+  version: 3.4.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -462,12 +455,12 @@ tools:
   image_url: https://img.stackshare.io/package/17398/default_2cd7ed1c123f2fca074a6f4b16c4e73d5bfe82be.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
 - name: vite
   description: Native-ESM powered web dev build tool
   package_url: https://www.npmjs.com/vite
-  version: 4.4.9
+  version: 5.0.10
   open_source: false
   hosted_saas: false
   category: Build, Test, Deploy
@@ -475,12 +468,5 @@ tools:
   image_url: https://img.stackshare.io/package/npm/image.png
   detection_source_url: https://github.com/yobgob/too-many-hooks/blob/main/packages/storybook/package.json
   detection_source: packages/storybook/package.json
-  last_updated_by: Dawson Booth
-  last_updated_on: 2023-08-27 00:04:11.000000000 Z
-  vulnerabilities:
-  - name: Vite XSS vulnerability in `server.transformIndexHtml` via URL payload
-    cve_id: CVE-2023-49293
-    cve_url: https://github.com/advisories/GHSA-92r3-m2mg-pj97
-    detected_date: Dec 6
-    severity: moderate
-    first_patched: 4.4.12
+  last_updated_by: Patrick DeVries
+  last_updated_on: 2023-12-25 10:12:35.000000000 Z
