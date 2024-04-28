@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from 'react'
  * @param {string} query - a CSS media query to match on
  * @returns {boolean}
  */
-export type UseMatchMedia = (query: string, defaultValue?: boolean) => MediaQueryList
+export type UseMatchMedia = (query: string) => MediaQueryList
 
 /**
  * Returns a boolean indicating whether or not a media query matches
