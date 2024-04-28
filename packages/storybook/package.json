@@ -30,6 +30,7 @@
     "@storybook/addon-essentials": "^7.6.6",
     "@storybook/addon-interactions": "^7.6.6",
     "@storybook/addon-links": "^7.6.6",
+    "@storybook/addon-viewport": "^8.0.9",
     "@storybook/blocks": "^7.6.6",
     "@storybook/react": "^7.6.6",
     "@storybook/react-vite": "^7.6.6",
