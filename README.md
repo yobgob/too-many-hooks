@@ -43,6 +43,7 @@ Available hooks and a short summary of their purpose:
 
 #### Listeners/Observers
 
+- `useMatchMedia` - Watch for if the window matches a media query
 - `useMutationObserver` - Observe a Node and rerender on mutations + get mutation information
 - `useResizeObserver` - Observe an Element and rerender on resizes + get size information
 - `useWindowListener` - Easily add and remove listeners on the window
