@@ -7,13 +7,13 @@ interface Props {
 }
 
 const Form: React.FC<Props> = ({ minWidth, maxWidth }) => {
-  const isMatching = useMatchMedia(
+  const { matches } = useMatchMedia(
     `screen and (min-width: ${minWidth}) and (max-width: ${maxWidth})`,
   )
 
   return (
-    <div className={`p-10 text-white ${isMatching ? 'bg-green-500' : 'bg-red-500'}`}>
-      {isMatching ? 'Matches' : 'Does not match'}
+    <div className={`p-10 text-white ${matches ? 'bg-green-500' : 'bg-red-500'}`}>
+      {matches ? 'Matches' : 'Does not match'}
     </div>
   )
 }

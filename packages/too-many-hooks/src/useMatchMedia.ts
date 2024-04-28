@@ -6,10 +6,9 @@ import { useCallback, useEffect, useState } from 'react'
  * @export
  * @typedef {UseMatchMedia}
  * @param {string} query - a CSS media query to match on
- * @param {?boolean} [default=false] - default match value
  * @returns {boolean}
  */
-export type UseMatchMedia = (query: string, defaultValue?: boolean) => boolean
+export type UseMatchMedia = (query: string, defaultValue?: boolean) => MediaQueryList
 
 /**
  * Returns a boolean indicating whether or not a media query matches
@@ -22,29 +21,28 @@ export type UseMatchMedia = (query: string, defaultValue?: boolean) => boolean
  * @example
  * To check if the browser is printing the page
  * ```ts
- * const isPrinting = useMAtchMedia("print")
+ * const isPrinting = useMatchMedia("print")
  * ```
  * @implements {UseMatchMedia}
  * @param {string} query - a CSS media query to match on
- * @param {?boolean} [default=false] - default match value
- * @returns {boolean}
+ * @returns {MediaQueryList}
  */
-const useMatchMedia: UseMatchMedia = (query: string, defaultValue = false): boolean => {
-  const [isMediaQueryMatching, setIsMediaQueryMatching] = useState<boolean>(defaultValue)
+const useMatchMedia: UseMatchMedia = (query: string): MediaQueryList => {
+  const [mediaQueryList, setMediaQueryList] = useState<MediaQueryList>(window.matchMedia(query))
 
   const onMediaQueryListChange = useCallback(
-    (e: MediaQueryListEvent) => setIsMediaQueryMatching(e.matches),
-    [],
+    () => setMediaQueryList(window.matchMedia(query)),
+    [query],
   )
 
   useEffect(() => {
-    const mediaQueryList = window.matchMedia(query)
-    setIsMediaQueryMatching(mediaQueryList.matches)
-    mediaQueryList.addEventListener('change', onMediaQueryListChange)
-    return () => mediaQueryList.removeEventListener('change', onMediaQueryListChange)
+    const newMediaQueryList = window.matchMedia(query)
+    setMediaQueryList(newMediaQueryList)
+    newMediaQueryList.addEventListener('change', onMediaQueryListChange)
+    return () => newMediaQueryList.removeEventListener('change', onMediaQueryListChange)
   }, [query, onMediaQueryListChange])
 
-  return isMediaQueryMatching
+  return mediaQueryList
 }
 
 export default useMatchMedia
