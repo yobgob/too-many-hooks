@@ -1,24 +1,29 @@
-import useArray, { UseArray, UseArrayReturn } from './useArray'
-import useDeepCompareEffect, { UseDeepCompareEffect } from './useDeepCompareEffect'
-import useFlag, { UseFlag, UseFlagReturn } from './useFlag'
+import useArray, { type UseArray, type UseArrayReturn } from './useArray'
+import useDeepCompareEffect, { type UseDeepCompareEffect } from './useDeepCompareEffect'
+import useFlag, { type UseFlag, type UseFlagReturn } from './useFlag'
 import useFlexCorners, {
-  Corner,
-  Corners,
-  UseFlexCorners,
-  UseFlexCornersReturn,
+  type Corner,
+  type Corners,
+  type UseFlexCorners,
+  type UseFlexCornersReturn,
 } from './useFlexCorners'
-import useMutationObserver, { UseMutationObserver } from './useMutationObserver'
-import useResizeObserver, { UseResizeObserver } from './useResizeObserver'
-import useTally, { UseTally, UseTallyArgs, UseTallyReturn } from './useTally'
-import useThrottleFunction, { UseThrottleFunction } from './useThrottleFunction'
-import useThrottleValue, { UseThrottleValue } from './useThrottleValue'
-import useWindowListener, { UseWindowListener, UseWindowListenerOptions } from './useWindowListener'
+import useMatchMedia, { type UseMatchMedia } from './useMatchMedia'
+import useMutationObserver, { type UseMutationObserver } from './useMutationObserver'
+import useResizeObserver, { type UseResizeObserver } from './useResizeObserver'
+import useTally, { type UseTally, type UseTallyArgs, type UseTallyReturn } from './useTally'
+import useThrottleFunction, { type UseThrottleFunction } from './useThrottleFunction'
+import useThrottleValue, { type UseThrottleValue } from './useThrottleValue'
+import useWindowListener, {
+  type UseWindowListener,
+  type UseWindowListenerOptions,
+} from './useWindowListener'
 
 export {
   useArray,
   useDeepCompareEffect,
   useFlag,
   useFlexCorners,
+  useMatchMedia,
   useMutationObserver,
   useResizeObserver,
   useTally,
@@ -36,6 +41,7 @@ export type {
   UseFlagReturn,
   UseFlexCorners,
   UseFlexCornersReturn,
+  UseMatchMedia,
   UseMutationObserver,
   UseResizeObserver,
   UseTally,
