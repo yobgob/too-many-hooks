@@ -5,7 +5,7 @@ import MOUSE_MOVE_CODE from './MouseMove.tsx?raw'
 type MouseMoveMeta = Meta<typeof MouseMove>
 
 export default {
-  title: 'UseWindowListener',
+  title: 'useWindowListener/Examples/MouseMove',
   component: MouseMove,
 } satisfies MouseMoveMeta
 

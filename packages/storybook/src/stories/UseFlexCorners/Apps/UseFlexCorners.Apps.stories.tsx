@@ -5,7 +5,7 @@ import APPS_CODE from './Apps.tsx?raw'
 type AppsMeta = Meta<typeof Apps>
 
 export default {
-  title: 'UseFlexCorners',
+  title: 'useFlexCorners/Examples/Apps',
   component: Apps,
 } satisfies AppsMeta
 

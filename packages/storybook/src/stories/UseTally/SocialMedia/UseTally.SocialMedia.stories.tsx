@@ -6,7 +6,7 @@ import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
 type SocialMediaMeta = Meta<typeof SocialMedia>
 
 export default {
-  title: 'UseTally',
+  title: 'useTally/Examples/SocialMedia',
   component: SocialMedia,
 } satisfies SocialMediaMeta
 

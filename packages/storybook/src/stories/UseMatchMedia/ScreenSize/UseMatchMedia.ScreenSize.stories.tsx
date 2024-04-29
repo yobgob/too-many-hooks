@@ -6,7 +6,7 @@ import SCREEN_SIZE_CODE from './ScreenSize.tsx?raw'
 type ScreenSizeMeta = Meta<typeof ScreenSize>
 
 export default {
-  title: 'UseMatchMedia',
+  title: 'useMatchMedia/Examples/ScreenSize',
   component: ScreenSize,
 } satisfies ScreenSizeMeta
 

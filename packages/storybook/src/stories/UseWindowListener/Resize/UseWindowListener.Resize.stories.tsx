@@ -5,7 +5,7 @@ import RESIZE_CODE from './Resize.tsx?raw'
 type ResizeMeta = Meta<typeof Resize>
 
 export default {
-  title: 'UseWindowListener',
+  title: 'useWindowListener/Examples/Resize',
   component: Resize,
 } satisfies ResizeMeta
 

@@ -5,7 +5,7 @@ import CONTAINER_QUERY_CODE from './ContainerQuery.tsx?raw'
 type ContainerQueryMeta = Meta<typeof ContainerQuery>
 
 export default {
-  title: 'UseResizeObserver',
+  title: 'UseResizeObserver/Examples/ContainerQuery',
   component: ContainerQuery,
 } satisfies ContainerQueryMeta
 
