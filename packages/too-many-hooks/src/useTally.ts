@@ -105,7 +105,6 @@ export const useTally: UseTally = ({ initial = 0, step = 1 }: UseTallyArgs): Use
     (stepOverride?: number) => set(t => t - (stepOverride ?? step)),
     [step],
   )
-
   const reset = useCallback(() => set(initial), [initial])
 
   return [
