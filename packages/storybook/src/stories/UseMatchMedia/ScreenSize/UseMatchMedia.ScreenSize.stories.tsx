@@ -3,7 +3,16 @@ import type { Meta, StoryObj } from '@storybook/react'
 import ScreenSize from './ScreenSize'
 import SCREEN_SIZE_CODE from './ScreenSize.tsx?raw'
 
-export const screenSize: StoryObj<Meta<typeof ScreenSize>> = {
+type ScreenSizeMeta = Meta<typeof ScreenSize>
+
+const meta: ScreenSizeMeta = {
+  title: 'UseMatchMedia',
+  component: ScreenSize,
+}
+export default meta
+
+export const screenSize: StoryObj<ScreenSizeMeta> = {
+  name: 'Screen Size',
   parameters: {
     layout: 'centered',
     docs: {
