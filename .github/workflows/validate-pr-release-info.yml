@@ -21,7 +21,7 @@ env:
 jobs:
   check-pr:
     name: Validate Release Label and Notes
-    if: IS_LABELED_RELEASE || !IS_LABELED_NON_LOGICAL
+    if: env.IS_LABELED_RELEASE || !env.IS_LABELED_NON_LOGICAL
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
