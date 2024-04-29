@@ -4,11 +4,10 @@ import MOUSE_MOVE_CODE from './MouseMove.tsx?raw'
 
 type MouseMoveMeta = Meta<typeof MouseMove>
 
-const meta: MouseMoveMeta = {
+export default {
   title: 'UseWindowListener',
   component: MouseMove,
-}
-export default meta
+} satisfies MouseMoveMeta
 
 export const mouseMove: StoryObj<MouseMoveMeta> = {
   name: 'Mouse Move',

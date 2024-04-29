@@ -4,11 +4,10 @@ import BURGER_CODE from './Burger.tsx?raw'
 
 type BurgerMeta = Meta<typeof Burger>
 
-const meta: BurgerMeta = {
+export default {
   title: 'UseArray',
   component: Burger,
-}
-export default meta
+} satisfies BurgerMeta
 
 export const burger: StoryObj<BurgerMeta> = {
   name: 'Burger',

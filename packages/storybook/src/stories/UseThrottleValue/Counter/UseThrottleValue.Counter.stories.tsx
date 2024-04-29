@@ -4,11 +4,10 @@ import COUNTER_CODE from './Counter.tsx?raw'
 
 type CounterMeta = Meta<typeof Counter>
 
-const meta: CounterMeta = {
+export default {
   title: 'UseThrottleValue',
   component: Counter,
-}
-export default meta
+} satisfies CounterMeta
 
 export const counter: StoryObj<CounterMeta> = {
   name: 'Counter',

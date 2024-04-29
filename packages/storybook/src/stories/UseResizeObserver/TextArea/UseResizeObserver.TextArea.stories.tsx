@@ -4,11 +4,10 @@ import TEXT_AREA_CODE from './TextArea.tsx?raw'
 
 type TextAreaMeta = Meta<typeof TextArea>
 
-const meta: TextAreaMeta = {
+export default {
   title: 'UseResizeObserver',
   component: TextArea,
-}
-export default meta
+} satisfies TextAreaMeta
 
 export const textArea: StoryObj<TextAreaMeta> = {
   name: 'Text Area',

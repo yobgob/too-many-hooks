@@ -4,11 +4,10 @@ import FORM_CODE from './Form.tsx?raw'
 
 type FormMeta = Meta<typeof Form>
 
-const meta: FormMeta = {
+export default {
   title: 'UseFlag',
   component: Form,
-}
-export default meta
+} satisfies FormMeta
 
 export const form: StoryObj<FormMeta> = {
   name: 'Form',

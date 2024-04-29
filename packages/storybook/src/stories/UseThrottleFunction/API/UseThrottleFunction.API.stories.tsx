@@ -5,11 +5,10 @@ import COUNTRIES from './assets/countries.json'
 
 type APIMeta = Meta<typeof API>
 
-const meta: APIMeta = {
+export default {
   title: 'UseThrottleFunction',
   component: API,
-}
-export default meta
+} satisfies APIMeta
 
 export const api: StoryObj<APIMeta> = {
   name: 'API Call',

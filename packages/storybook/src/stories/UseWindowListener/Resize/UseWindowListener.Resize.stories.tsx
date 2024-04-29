@@ -4,11 +4,10 @@ import RESIZE_CODE from './Resize.tsx?raw'
 
 type ResizeMeta = Meta<typeof Resize>
 
-const meta: ResizeMeta = {
+export default {
   title: 'UseWindowListener',
   component: Resize,
-}
-export default meta
+} satisfies ResizeMeta
 
 export const resize: StoryObj<ResizeMeta> = {
   name: 'Resize',

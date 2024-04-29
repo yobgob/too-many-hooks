@@ -4,11 +4,10 @@ import APPS_CODE from './Apps.tsx?raw'
 
 type AppsMeta = Meta<typeof Apps>
 
-const meta: AppsMeta = {
+export default {
   title: 'UseFlexCorners',
   component: Apps,
-}
-export default meta
+} satisfies AppsMeta
 
 export const apps: StoryObj<AppsMeta> = {
   name: 'Apps',

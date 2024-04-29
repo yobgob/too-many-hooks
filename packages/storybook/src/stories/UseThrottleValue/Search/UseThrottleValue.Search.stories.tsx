@@ -4,11 +4,10 @@ import SEARCH_CODE from './Search.tsx?raw'
 
 type SearchMeta = Meta<typeof Search>
 
-const meta: SearchMeta = {
+export default {
   title: 'UseThrottleValue',
   component: Search,
-}
-export default meta
+} satisfies SearchMeta
 
 export const search: StoryObj<SearchMeta> = {
   name: 'Search',

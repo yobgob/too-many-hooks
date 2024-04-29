@@ -4,11 +4,10 @@ import CONTAINER_QUERY_CODE from './ContainerQuery.tsx?raw'
 
 type ContainerQueryMeta = Meta<typeof ContainerQuery>
 
-const meta: ContainerQueryMeta = {
+export default {
   title: 'UseResizeObserver',
   component: ContainerQuery,
-}
-export default meta
+} satisfies ContainerQueryMeta
 
 export const containerQuery: StoryObj<ContainerQueryMeta> = {
   name: 'Container Query',

@@ -5,11 +5,10 @@ import SCREEN_SIZE_CODE from './ScreenSize.tsx?raw'
 
 type ScreenSizeMeta = Meta<typeof ScreenSize>
 
-const meta: ScreenSizeMeta = {
+export default {
   title: 'UseMatchMedia',
   component: ScreenSize,
-}
-export default meta
+} satisfies ScreenSizeMeta
 
 export const screenSize: StoryObj<ScreenSizeMeta> = {
   name: 'Screen Size',

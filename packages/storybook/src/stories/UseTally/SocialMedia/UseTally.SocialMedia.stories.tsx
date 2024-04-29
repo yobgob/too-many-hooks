@@ -5,11 +5,10 @@ import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
 
 type SocialMediaMeta = Meta<typeof SocialMedia>
 
-const meta: SocialMediaMeta = {
+export default {
   title: 'UseTally',
   component: SocialMedia,
-}
-export default meta
+} satisfies SocialMediaMeta
 
 export const socialMedia: StoryObj<SocialMediaMeta> = {
   name: 'Social Media',

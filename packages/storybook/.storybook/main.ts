@@ -1,7 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 
 export default {
-  stories: ['../src/**/*.stories.{ts,tsx}', '../src/**/*.mdx', '../src/**/*.docs.mdx'],
+  stories: ['../src/**/*.stories.{ts,tsx}', '../src/**/*.mdx'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -12,7 +12,6 @@ export default {
     options: {},
   },
   docs: {
-    autodocs: true,
     defaultName: 'Docs',
   },
 } satisfies StorybookConfig

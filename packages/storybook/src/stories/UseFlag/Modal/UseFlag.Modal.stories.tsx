@@ -6,11 +6,10 @@ import MODAL_CODE from './Modal.tsx?raw'
 
 type ModalMeta = Meta<typeof Modal>
 
-const meta: ModalMeta = {
+export default {
   title: 'UseFlag',
   component: Modal,
-}
-export default meta
+} satisfies ModalMeta
 
 export const modal: StoryObj<ModalMeta> = {
   name: 'Modal',

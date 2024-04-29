@@ -4,11 +4,10 @@ import ATTRIBUTES_CODE from './Attributes.tsx?raw'
 
 type AttributesMeta = Meta<typeof Attributes>
 
-const meta: AttributesMeta = {
+export default {
   title: 'UseMutationObserver',
   component: Attributes,
-}
-export default meta
+} satisfies AttributesMeta
 
 export const attributes: StoryObj<Meta<typeof Attributes>> = {
   name: 'Attributes',

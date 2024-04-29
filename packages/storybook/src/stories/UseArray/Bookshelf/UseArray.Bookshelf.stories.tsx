@@ -4,11 +4,10 @@ import BOOKSHELF_CODE from './Bookshelf.tsx?raw'
 
 type BookshelfMeta = Meta<typeof Bookshelf>
 
-const meta: BookshelfMeta = {
+export default {
   title: 'UseArray',
   component: Bookshelf,
-}
-export default meta
+} satisfies BookshelfMeta
 
 export const bookshelf: StoryObj<BookshelfMeta> = {
   name: 'Bookshelf',
