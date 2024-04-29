@@ -5,7 +5,7 @@ import TEXT_AREA_CODE from './TextArea.tsx?raw'
 type TextAreaMeta = Meta<typeof TextArea>
 
 export default {
-  title: 'useResizeObserver/Examples/TextArea',
+  title: 'useResizeObserver/TextArea',
   component: TextArea,
 } satisfies TextAreaMeta
 

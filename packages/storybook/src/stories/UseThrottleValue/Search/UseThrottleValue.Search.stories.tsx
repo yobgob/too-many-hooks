@@ -5,7 +5,7 @@ import SEARCH_CODE from './Search.tsx?raw'
 type SearchMeta = Meta<typeof Search>
 
 export default {
-  title: 'useThrottleValue/Examples/Search',
+  title: 'useThrottleValue/Search',
   component: Search,
 } satisfies SearchMeta
 

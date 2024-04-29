@@ -7,7 +7,7 @@ import MODAL_CODE from './Modal.tsx?raw'
 type ModalMeta = Meta<typeof Modal>
 
 export default {
-  title: 'useFlag/Examples/Modal',
+  title: 'useFlag/Modal',
   component: Modal,
 } satisfies ModalMeta
 

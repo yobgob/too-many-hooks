@@ -5,7 +5,7 @@ import BURGER_CODE from './Burger.tsx?raw'
 type BurgerMeta = Meta<typeof Burger>
 
 export default {
-  title: 'useArray/Examples/Burger',
+  title: 'useArray/Burger',
   component: Burger,
 } satisfies BurgerMeta
 

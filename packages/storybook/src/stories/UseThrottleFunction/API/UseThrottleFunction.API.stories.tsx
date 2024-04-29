@@ -6,7 +6,7 @@ import COUNTRIES from './assets/countries.json'
 type APIMeta = Meta<typeof API>
 
 export default {
-  title: 'useThrottleFunction/Examples/API',
+  title: 'useThrottleFunction/API',
   component: API,
 } satisfies APIMeta
 

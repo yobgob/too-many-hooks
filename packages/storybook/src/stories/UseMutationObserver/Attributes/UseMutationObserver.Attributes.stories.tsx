@@ -5,7 +5,7 @@ import ATTRIBUTES_CODE from './Attributes.tsx?raw'
 type AttributesMeta = Meta<typeof Attributes>
 
 export default {
-  title: 'useMutationObserver/Examples/Attributes',
+  title: 'useMutationObserver/Attributes',
   component: Attributes,
 } satisfies AttributesMeta
 

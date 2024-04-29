@@ -5,7 +5,7 @@ import FORM_CODE from './Form.tsx?raw'
 type FormMeta = Meta<typeof Form>
 
 export default {
-  title: 'useFlag/Examples/Form',
+  title: 'useFlag/Form',
   component: Form,
 } satisfies FormMeta
 

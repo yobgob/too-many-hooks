@@ -5,7 +5,7 @@ import COUNTER_CODE from './Counter.tsx?raw'
 type CounterMeta = Meta<typeof Counter>
 
 export default {
-  title: 'useThrottleValue/Examples/Counter',
+  title: 'useThrottleValue/Counter',
   component: Counter,
 } satisfies CounterMeta
 
