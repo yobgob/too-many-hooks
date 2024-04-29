@@ -25,7 +25,9 @@ jobs:
     outputs: 
       IS_LABELED_RELEASE: ${{ IS_LABELED_RELEASE }}
       IS_LABELED_NON_LOGICAL: ${{ IS_LABELED_NON_LOGICAL }}
-
+    steps:
+      - run: echo "null"
+      
   check-pr:
     name: Validate Release Label and Notes
     needs: [get-env-vars]
