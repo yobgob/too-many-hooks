@@ -5,7 +5,7 @@ import BOOKSHELF_CODE from './Bookshelf.tsx?raw'
 type BookshelfMeta = Meta<typeof Bookshelf>
 
 export default {
-  title: 'UseArray',
+  title: 'UseArray/Examples/Bookshelf',
   component: Bookshelf,
 } satisfies BookshelfMeta
 
