@@ -32,7 +32,7 @@ jobs:
     name: Validate Release Label and Notes
     needs: [get-env-vars]
     runs-on: ubuntu-latest
-    if: needs.get-env-vars.IS_LABELED_RELEASE || !needs.get-env-varsIS_LABELED_NON_LOGICAL
+    if: needs.get-env-vars.IS_LABELED_RELEASE || !needs.get-env-vars.IS_LABELED_NON_LOGICAL
     steps:
       - uses: actions/checkout@v2
       - uses: jefflinse/pr-semver-bump@v1
