@@ -1,7 +1,7 @@
 import { useFlag } from '@yobgob/too-many-hooks'
 import React from 'react'
-import { Button, Modal as Modal_ } from '../../common/components'
-import '../../index.css'
+import { Button, Modal as Modal_ } from '../../../common/components'
+import '../../../index.css'
 
 const Modal: React.FC = () => {
   const [isOpen, { flag: open, unflag: close }] = useFlag(false)

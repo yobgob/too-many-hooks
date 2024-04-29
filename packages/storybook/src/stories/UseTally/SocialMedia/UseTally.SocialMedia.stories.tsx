@@ -1,9 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
 import SocialMedia from './SocialMedia'
-import SOCIAL_MEDIA_CODE from './SocialMedia/SocialMedia.tsx?raw'
+import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
 
-export const socialMedia: StoryObj<Meta<typeof SocialMedia>> = {
+type SocialMediaMeta = Meta<typeof SocialMedia>
+
+const meta: SocialMediaMeta = {
+  title: 'UseTally',
+  component: SocialMedia,
+}
+export default meta
+
+export const socialMedia: StoryObj<SocialMediaMeta> = {
+  name: 'Social Media',
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const tallyingButton = canvas.getByTitle('like')

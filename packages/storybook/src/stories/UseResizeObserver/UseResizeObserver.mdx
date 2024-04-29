@@ -1,0 +1,14 @@
+import { Meta, Source } from '@storybook/blocks'
+import TYPES from '../../../../too-many-hooks/dist/useResizeObserver.d.ts?raw'
+import * as ContainerQueryStories from './ContainerQuery/UseResizeObserver.ContainerQuery.stories'
+
+<Meta of={ContainerQueryStories} />
+
+# useResizeObserver
+
+Handles adding and removing a `ResizeObserver` to observe an element and return the most recent `ResizeObserverEntry`
+
+## Types
+
+<Source language="ts" code={TYPES} />
+./UseResizeObserver.stories

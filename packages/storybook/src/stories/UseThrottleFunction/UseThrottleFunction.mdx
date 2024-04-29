@@ -1,8 +1,8 @@
-import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
-import * as stories from './stories'
+import { Meta, Source } from '@storybook/blocks'
 import TYPES from '../../../../too-many-hooks/dist/useThrottleFunction.d.ts?raw'
+import * as APIStories from './API/UseThrottleFunction.API.stories'
 
-<Meta title="Example/UseThrottleFunction" />
+<Meta of={APIStories} />
 
 # useThrottleFunction
 
@@ -12,11 +12,3 @@ Immediately calls then function then re-calls the function and updates the resul
 ## Types
 
 <Source language="ts" code={TYPES} />
-
-## Examples
-
-### API call
-
-<Canvas withSource="open">
-  <Story name="API Call" story={stories.api} />
-</Canvas>

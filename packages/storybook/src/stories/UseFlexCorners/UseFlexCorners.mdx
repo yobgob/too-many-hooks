@@ -1,8 +1,8 @@
-import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
-import * as stories from './stories'
+import { Meta, Source } from '@storybook/blocks'
 import TYPES from '../../../../too-many-hooks/dist/useFlexCorners.d.ts?raw'
+import * as AppStories from './Apps/UseFlexCorners.Apps.stories'
 
-<Meta title="Example/UseFlexCorners" />
+<Meta of={AppStories} />
 
 # useFlexCorners
 
@@ -11,11 +11,3 @@ Dynamic selection of elements laid out with wrapping flex, enabling styling elem
 ## Types
 
 <Source language="ts" code={TYPES} />
-
-## Examples
-
-### Apps
-
-<Canvas withSource="open">
-  <Story name="Apps" story={stories.apps} />
-</Canvas>

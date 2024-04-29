@@ -1,8 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import Attributes from './Attributes'
+import Attributes from '.'
 import ATTRIBUTES_CODE from './Attributes.tsx?raw'
 
+type AttributesMeta = Meta<typeof Attributes>
+
+const meta: AttributesMeta = {
+  title: 'UseMutationObserver',
+  component: Attributes,
+}
+export default meta
+
 export const attributes: StoryObj<Meta<typeof Attributes>> = {
+  name: 'Attributes',
   parameters: {
     layout: 'centered',
     docs: {

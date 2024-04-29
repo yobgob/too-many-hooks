@@ -2,7 +2,16 @@ import type { Meta, StoryObj } from '@storybook/react'
 import Apps from './Apps'
 import APPS_CODE from './Apps.tsx?raw'
 
-export const apps: StoryObj<Meta<typeof Apps>> = {
+type AppsMeta = Meta<typeof Apps>
+
+const meta: AppsMeta = {
+  title: 'UseFlexCorners',
+  component: Apps,
+}
+export default meta
+
+export const apps: StoryObj<AppsMeta> = {
+  name: 'Apps',
   parameters: {
     layout: 'fullscreen',
     docs: {

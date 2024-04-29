@@ -16,5 +16,11 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["**/*.ts", "**/*.tsx", ".storybook/*.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".storybook/*.ts",
+    "src/stories/UseArray/stories.tsx",
+    "src/stories/UseArray/Burger/UseArray.Burger.stories.ts"
+  ]
 }

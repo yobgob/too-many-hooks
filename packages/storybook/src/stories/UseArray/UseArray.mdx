@@ -1,8 +1,8 @@
-import { Canvas, Meta, Source, Story } from '@storybook/addon-docs'
-import * as stories from './stories'
+import { Meta, Source } from '@storybook/blocks'
 import TYPES from '../../../../too-many-hooks/dist/useArray.d.ts?raw'
+import * as BookshelfStories from './Bookshelf/UseArray.Bookshelf.stories'
 
-<Meta title="Example/UseArray" />
+<Meta of={BookshelfStories} />
 
 # useArray
 
@@ -39,18 +39,3 @@ Wrap array state with powerful helper functions for simpler updates
 ## Types
 
 <Source language="ts" code={TYPES} />
-
-## Examples
-
-### Burger
-
-<Canvas withSource="open">
-  <Story name="Burger" story={stories.burger} />
-</Canvas>
-
-### Bookshelf
-
-<Canvas withSource="open">
-  <Story name="Bookshelf" story={stories.bookshelf} />
-</Canvas>
-```
