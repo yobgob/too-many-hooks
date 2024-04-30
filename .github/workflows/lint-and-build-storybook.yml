@@ -8,7 +8,7 @@ on:
       - reopened
       - synchronize
     paths:
-      - "packages/storybook/**"
+      - 'packages/storybook/**'
 
 jobs:
   check:

@@ -8,7 +8,7 @@ on:
       - reopened
       - synchronize
     paths:
-      - "packages/too-many-hooks/**"
+      - 'packages/too-many-hooks/**'
 
 jobs:
   check:

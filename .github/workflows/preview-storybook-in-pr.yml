@@ -10,8 +10,8 @@ on:
       - synchronize
       - closed
     paths:
-      - "packages/too-many-hooks/**"
-      - "packages/storybook/**"
+      - 'packages/too-many-hooks/**'
+      - 'packages/storybook/**'
 
 jobs:
   storybook:
