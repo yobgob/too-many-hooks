@@ -26,8 +26,6 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.get-env-vars.outputs.IS_LABELED_RELEASE || !needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL
     steps:
-      - run: echo ${{ needs.get-env-vars.outputs.IS_LABELED_RELEASE }}
-      - run: echo ${{ needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL }}
       - uses: actions/checkout@v2
       - uses: jefflinse/pr-semver-bump@v1
         name: Validate Pull Request Metadata
