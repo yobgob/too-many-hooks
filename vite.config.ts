@@ -14,7 +14,7 @@ export default defineConfig({
       fileName: 'too-many-hooks',
     },
     rollupOptions: {
-      external: ['react', '.storybook'],
+      external: ['react', 'react-dom', '.storybook'],
       output: {
         globals: {
           react: 'React',
