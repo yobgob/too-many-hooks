@@ -9,9 +9,6 @@ on:
       - reopened
       - synchronize
       - closed
-    paths:
-      - 'packages/too-many-hooks/**'
-      - 'packages/storybook/**'
 
 jobs:
   storybook:
@@ -29,16 +26,14 @@ jobs:
 
       - name: Build package
         run: bun run build
-        working-directory: packages/too-many-hooks
 
       - name: Build storybook
         run: bun build-storybook
-        working-directory: packages/storybook
 
       - name: Deploy to PR Preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: packages/storybook/storybook-static
+          source-dir: storybook-static
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto

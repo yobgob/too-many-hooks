@@ -33,26 +33,18 @@ jobs:
 
       - name: Install dependencies
         run: bun install
-        working-directory: packages/too-many-hooks
 
       - name: Lint
         run: bun lint:all
-        working-directory: packages/too-many-hooks
 
       - name: Build
         run: bun run build
-        working-directory: packages/too-many-hooks
-
-      - name: Swap READMEs
-        run: |
-          mv ./README.md ./packages/too-many-hooks/README.md
 
       - name: Publish
         id: publish
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/too-many-hooks/package.json
           tag: ${{ inputs.tag }}
           dry-run: ${{ inputs.dry-run }}
           strategy: ${{ inputs.strategy }}

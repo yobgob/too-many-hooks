@@ -70,33 +70,7 @@ Anyone is welcome to contribute! See the [contribution guide](https://github.com
 
 ### Structure
 
-The monorepo contains both the `too-many-hooks` library at `/packages/too-many-hooks` and the storybook for testing and demoing hooks at `/packages/storybook`. Contributions will usually include changes to both apps.
-
-### Building the library
-
-The storybook imports the library via a symlink, and thus needs `too-many-hooks` built locally. To build the library, go to `/packages/too-many-hooks` and install dependencies with:
-
-```sh
-bun install
-```
-
-Then, build the library by running:
-
-```sh
-bun run build
-```
-
-The built library will be output to `/too-many-hooks/dist`.
-
-### Running the storybook
-
-To run the storybook, go to `/packages/storybook` and update dependencies with:
-
-`bun install`
-
-Then, run the app locally at [http://localhost:6006/](http://localhost:6006/) by running:
-
-`bun storybook`
+The monorepo contains both the `too-many-hooks` library and the storybook for testing and demoing hooks. Contributions will usually include changes to both apps.
 
 ### Checks
 

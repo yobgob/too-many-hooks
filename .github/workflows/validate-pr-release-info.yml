@@ -3,8 +3,8 @@ on:
   pull_request:
     types: [labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review]
     paths:
-      - 'packages/too-many-hooks/**.ts'
-
+      - 'src/hooks/**/use*.ts'
+      - 'src/index.ts'
 env:
   IS_LABELED_RELEASE: contains(github.event.pull_request.labels.*.name, 'release')
   IS_LABELED_NON_LOGICAL: contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure')

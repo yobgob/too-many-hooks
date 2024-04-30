@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'packages/storybook/**'
 
 jobs:
   check:
@@ -22,7 +20,6 @@ jobs:
 
       - name: Build package
         run: bun run build
-        working-directory: packages/too-many-hooks
 
       - name: Publish to Chromatic
         uses: chromaui/action@v1
@@ -31,9 +28,6 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
           exitZeroOnChanges: true
-          storybookBaseDir: packages/storybook
-          storybookConfigDir: packages/storybook
-          workingDir: packages/storybook
 
       - name: Publish Summary
         run: echo -e "| Results |  |\n| --- | --- |\n| Build Results | ${{steps.chromatic.outputs.buildUrl}} |\n| Storybook Preview | ${{steps.chromatic.outputs.storybookUrl}} |\n| Component Count | ${{steps.chromatic.outputs.componentCount}} |" >> $GITHUB_STEP_SUMMARY

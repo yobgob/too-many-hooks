@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'packages/too-many-hooks/**'
-      - 'packages/storybook/**'
 
 jobs:
   storybook:
@@ -23,16 +20,14 @@ jobs:
 
       - name: Build package
         run: bun run build
-        working-directory: packages/too-many-hooks
 
       - name: Build storybook
         run: bun build-storybook && touch storybook-static/.nojekyll
-        working-directory: packages/storybook
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: packages/storybook/storybook-static
+          folder: storybook-static
           branch: gh-pages
           clean-exclude: pr-preview
           force: false
