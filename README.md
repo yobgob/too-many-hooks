@@ -58,10 +58,6 @@ Available hooks and a short summary of their purpose:
 - `useThrottleFunction` - Run a function when its args change up to a maximum number of calls per time period in ms
 - `useThrottleValue` - Reduce frequency of state updates on a variable to a maximum number of updates per time period in ms
 
-## Contributing
-
-Anyone is welcome to contribute! See the [contribution guide](https://github.com/yobgob/too-many-hooks/blob/main/.github/CONTRIBUTING.md) for details on getting started!
-
 ### Guiding Principles
 
 - There should be one obvious way to do each thing
@@ -75,6 +71,10 @@ The monorepo contains both the `too-many-hooks` library and the storybook for te
 ### Checks
 
 To ensure code quality, PRs are automatically linted and checked for adherence to formatting rules before merging. These checks are performed by GitHub workflows at `/.github/workflow/lint-and-build-package.yml` and `/.github/workflow/lint-and-build-storybook.yml`. Each app also has their own scripts for formatting and linting locally.
+
+## Contributing
+
+Anyone is welcome to contribute! See the [contribution guide](https://github.com/yobgob/too-many-hooks/blob/main/.github/CONTRIBUTING.md) for details on getting started!
 
 ## Contributors
 
