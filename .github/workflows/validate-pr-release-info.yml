@@ -27,6 +27,7 @@ jobs:
       IS_LABELED_NON_LOGICAL: ${{ env.IS_LABELED_NON_LOGICAL }}
     steps:
       - run: echo "null"
+      # A step that does something is required for a job to be valid, so this does nothing but allows the job to exist
 
   check-pr:
     name: Validate Release Label and Notes
