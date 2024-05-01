@@ -5,30 +5,25 @@ on:
     paths:
       - 'src/hooks/**/use*.ts'
       - 'src/index.ts'
-env:
-  IS_LABELED_RELEASE: contains(github.event.pull_request.labels.*.name, 'release')
-  IS_LABELED_NON_LOGICAL: contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure')
+
+env: 
+  IS_LABELED_RELEASE: ${{ contains(github.event.pull_request.labels.*.name, 'patch release') || contains(github.event.pull_request.labels.*.name, 'minor release') || contains(github.event.pull_request.labels.*.name, 'major release') }}
+  IS_LABELED_NON_LOGICAL: ${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
 
 jobs:
-  get-env-vars:
-    name: Load Environment Vars Into Outputs
-    runs-on: ubuntu-latest
-    outputs: 
-      IS_LABELED_RELEASE: ${{ env.IS_LABELED_RELEASE }}
-      IS_LABELED_NON_LOGICAL: ${{ env.IS_LABELED_NON_LOGICAL }}
-    steps:
-      - run: echo "null"
-      # A step that does something is required for a job to be valid, so this does nothing but allows the job to exist
-
   check-pr:
     name: Validate Release Label and Notes
-    needs: get-env-vars
     runs-on: ubuntu-latest
-    if: needs.get-env-vars.outputs.IS_LABELED_RELEASE || !needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL
     steps:
-      - uses: actions/checkout@v2
-      - uses: jefflinse/pr-semver-bump@v1
-        name: Validate Pull Request Metadata
+      - name: 'Check if needed'
+        id: if
+        run: echo "NEEDS_CHECK=${{ fromJSON(env.IS_LABELED_RELEASE) || !fromJSON(env.IS_LABELED_NON_LOGICAL) }}" >> "$GITHUB_OUTPUT"
+      - name: 'Checkout'
+        if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
+        uses: actions/checkout@v2
+      - name: 'Validate Pull Request Metadata'
+        if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
+        uses: jefflinse/pr-semver-bump@v1
         with:
           mode: validate
           repo-token: ${{ secrets.GITHUB_TOKEN }}
