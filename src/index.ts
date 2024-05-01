@@ -9,6 +9,7 @@ import useFlexCorners, {
   type UseFlexCorners,
   type UseFlexCornersReturn,
 } from './hooks/UseFlexCorners/useFlexCorners'
+import useForm from './hooks/UseForm/useForm'
 import useMatchMedia, { type UseMatchMedia } from './hooks/UseMatchMedia/useMatchMedia'
 import useMutationObserver, {
   type UseMutationObserver,
@@ -35,6 +36,7 @@ export {
   useDeepCompareEffect,
   useFlag,
   useFlexCorners,
+  useForm,
   useMatchMedia,
   useMutationObserver,
   useResizeObserver,
