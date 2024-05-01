@@ -23,11 +23,14 @@ jobs:
     name: Validate Release Label and Notes
     runs-on: ubuntu-latest
     steps:
+      - name: 'Check if needed'
+        id: if
+        run: echo "NEEDS_CHECK=${{ fromJSON(env.IS_LABELED_RELEASE) || !fromJSON(env.IS_LABELED_NON_LOGICAL) }}" >> "$GITHUB_OUTPUT"
       - name: 'Checkout'
-        if: ${{ fromJSON(env.IS_LABELED_RELEASE) || !fromJSON(env.IS_LABELED_NON_LOGICAL) }}
+        if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
         uses: actions/checkout@v2
       - name: 'Validate Pull Request Metadata'
-        if: ${{ fromJSON(env.IS_LABELED_RELEASE) || !fromJSON(env.IS_LABELED_NON_LOGICAL) }}
+        if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
         uses: jefflinse/pr-semver-bump@v1
         with:
           mode: validate
