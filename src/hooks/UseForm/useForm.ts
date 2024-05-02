@@ -8,7 +8,6 @@ import {
   FormData,
   HandleSubmit,
   HandleSubmitOptions,
-  ObjectKey,
   RefProps,
   RegisterFunction,
   RegisterOptions,
@@ -19,11 +18,7 @@ import {
 import { getElementDefaultValue, getOnChangeValue } from './utils'
 
 const useForm: UseForm = <TData extends FormData>() => {
-  // `FieldElements<TData, FieldElement>, ObjectKey` are broader than the actual types of each element
-  // this allows us to be responsible for narrowing of these types, except where they are needed by the user
-  // and can be inferred via generics e.g. the `register` function
-  // This ultimately allows users to pass in just one generic type: their data type
-  const fields = useRef<Fields<TData, FieldElements<TData, FieldElement>, ObjectKey>>({})
+  const fields = useRef<Fields<TData>>({})
   const [errors, setErrors] = useState<Errors<TData>>({})
   const [touched, setTouched] = useState<Touched<TData>>({})
 
@@ -32,8 +27,9 @@ const useForm: UseForm = <TData extends FormData>() => {
     [],
   )
   const getRegisteredValues = useCallback(
-    // @ts-expect-error undefined is filtered out
-    (): FieldData<TData>[] => Object.values(fields.current).filter(value => value !== undefined),
+    (): FieldData<TData, FieldElements<TData, FieldElement>>[] =>
+      // @ts-expect-error undefined is filtered out, TS cannot tell
+      Object.values(fields.current).filter(value => value !== undefined),
     [],
   )
 
@@ -128,9 +124,9 @@ const useForm: UseForm = <TData extends FormData>() => {
   )
 
   const register: RegisterFunction<TData> = useCallback(
-    <TFieldElement extends FieldElement>(
+    <TFieldElement extends FieldElement, TIsRequired extends boolean = false>(
       name: keyof TData,
-      options?: RegisterOptions<TData, keyof RefProps<TFieldElement>>,
+      options?: RegisterOptions<TData, keyof TData, keyof RefProps<TFieldElement>, TIsRequired>,
     ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
       if (name in fields.current) {
         fields.current[name]!.options = options

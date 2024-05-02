@@ -60,7 +60,13 @@ const Form: React.FC = () => {
         <input
           type="number"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
-          {...register('expectedSalary', { isRequired: true })}
+          {...register('expectedSalary', {
+            isRequired: true,
+            validate: ({ expectedSalary }) =>
+              expectedSalary < 0 || expectedSalary > 1000000
+                ? 'Please enter a number between $0 and $1,000,000'
+                : null,
+          })}
         />
       </label>
       {errors.name && <span className="text-red-800">{errors.name}</span>}
