@@ -13,7 +13,13 @@ import {
   Touched,
   UseForm,
 } from './types'
-import { getElementDefaultValue, getOnChangeValue, getTypedData, getTypedFieldValue } from './utils'
+import {
+  getElementDefaultValue,
+  getOnChangeValue,
+  getTypedData,
+  getTypedFieldValue,
+  isBlank,
+} from './utils'
 
 /**
  * Helps manage form state.
@@ -59,10 +65,7 @@ const useForm: UseForm = <TData extends FormData>() => {
     const typedValue = getTypedFieldValue(field)
     const options = field.options
 
-    if (
-      options?.isRequired &&
-      (typedValue === undefined || typedValue === null || typedValue === '')
-    ) {
+    if (options?.isRequired && isBlank(typedValue)) {
       const error = 'Field is required'
       field.error = error
       return error

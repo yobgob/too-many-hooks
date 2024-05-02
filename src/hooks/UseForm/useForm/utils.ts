@@ -56,21 +56,31 @@ export const getOnChangeValue = <TData extends FormData>(
   }
 }
 
+export const isBlank = (value: unknown): value is undefined | null | '' =>
+  value === null || value === undefined || value === ''
+
+export const isNotBlank = (value: unknown): value is Exclude<unknown, undefined | null | ''> =>
+  !isBlank(value)
+
 export const getTypedFieldValue = <TData extends FormData>(field: FieldData<TData>) => {
   if (field.ref.current && 'type' in field.ref.current) {
-    if (isRadioInput(field.ref.current) || isCheckboxInput(field.ref.current)) {
-      return field.ref.current.checked
+    const currentElement = field.ref.current
+
+    if (isRadioInput(currentElement) || isCheckboxInput(currentElement)) {
+      return currentElement.checked
     }
-    if (isFileInput(field.ref.current)) {
-      return field.ref.current.files
+    if (isFileInput(currentElement)) {
+      return currentElement.files
     }
-    if (isNumberInput(field.ref.current)) {
-      return +field.ref.current.value
+    if (isNumberInput(currentElement)) {
+      return isNotBlank(currentElement.value) ? +currentElement.value : currentElement.value
     }
-    if (isDateInput(field.ref.current)) {
-      return new Date(field.ref.current.value)
+    if (isDateInput(currentElement)) {
+      return isNotBlank(currentElement.value)
+        ? new Date(currentElement.value)
+        : currentElement.value
     }
-    return field.ref.current.value
+    return currentElement.value
   }
   return field.value
 }
