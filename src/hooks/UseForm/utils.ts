@@ -1,5 +1,24 @@
 import { FormData, isCheckboxInput, isFileInput, isRadioInput } from './types'
 
+export const getElementDefaultValue = <TData extends FormData>(
+  // the type does not matter since we check for each property
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  element: any,
+): TData[keyof TData] | undefined => {
+  if (!element) return undefined
+
+  if (isRadioInput(element) || isCheckboxInput(element)) {
+    // @ts-expect-error if it is a radio or checkbox the TData[keyof TData] must be a boolean
+    return element.defaultChecked ?? element.checked
+  }
+  if (isFileInput(element)) {
+    // @ts-expect-error if it is a file input the TData[keyof TData] must be files
+    return element.files
+  }
+
+  return element.defaultValue ?? element.value
+}
+
 export const getOnChangeValue = <TData extends FormData>(
   // the type does not matter since we check for each property
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

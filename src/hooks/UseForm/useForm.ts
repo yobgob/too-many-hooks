@@ -3,10 +3,12 @@ import {
   Errors,
   FieldData,
   FieldElement,
+  FieldElements,
   Fields,
   FormData,
   HandleSubmit,
   HandleSubmitOptions,
+  ObjectKey,
   RefProps,
   RegisterFunction,
   RegisterOptions,
@@ -14,13 +16,14 @@ import {
   Touched,
   UseForm,
 } from './types'
-import { getOnChangeValue } from './utils'
+import { getElementDefaultValue, getOnChangeValue } from './utils'
 
 const useForm: UseForm = <TData extends FormData>() => {
-  // `never, never` because the types of the elements and ref prop names do not matter for our implementation
-  // this makes it so users do not have to pass in the types of their elements for each piece of data
-  // the types are accurately exposed to users via the `register` function's generics where is used
-  const fields = useRef<Fields<TData, never, never>>({})
+  // `FieldElements<TData, FieldElement>, ObjectKey` are broader than the actual types of each element
+  // this allows us to be responsible for narrowing of these types, except where they are needed by the user
+  // and can be inferred via generics e.g. the `register` function
+  // This ultimately allows users to pass in just one generic type: their data type
+  const fields = useRef<Fields<TData, FieldElements<TData, FieldElement>, ObjectKey>>({})
   const [errors, setErrors] = useState<Errors<TData>>({})
   const [touched, setTouched] = useState<Touched<TData>>({})
 
@@ -129,15 +132,17 @@ const useForm: UseForm = <TData extends FormData>() => {
       name: keyof TData,
       options?: RegisterOptions<TData, keyof RefProps<TFieldElement>>,
     ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
-      // We can safely discard the type of the ref and its name because we do not
-      // use it except in the return of this function, which is nicely generically typed
       if (name in fields.current) {
-        fields.current[name]!.options = options as RegisterOptions<TData, never>
+        fields.current[name]!.options = options
       } else {
         fields.current[name] = {
           name,
-          ref: React.createRef<TFieldElement>() as React.Ref<never>,
-          options: options as RegisterOptions<TData, never>,
+          ref: (element: TFieldElement) => {
+            // update internal value upon first setting the ref
+            fields.current[name]!.value = getElementDefaultValue<TData>(element)
+            return React.createRef<TFieldElement>()
+          },
+          options: options,
           value: undefined,
           error: null,
           hasBeenTouched: false,
@@ -145,7 +150,8 @@ const useForm: UseForm = <TData extends FormData>() => {
       }
 
       const res = {
-        [options?.refName ?? 'ref']: fields.current[name]!.ref,
+        // this cast is safe because we only create refs of TFieldElement type per name
+        [options?.refName ?? 'ref']: fields.current[name]!.ref as React.Ref<TFieldElement>,
         onChange: e => {
           if (name in fields.current) {
             const newValue = getOnChangeValue<TData>(e, fields.current[name]!.value)
@@ -162,7 +168,7 @@ const useForm: UseForm = <TData extends FormData>() => {
         },
       }
 
-      console.log('registered', name, res)
+      console.log('registered', name, fields.current[name], 'returned', res)
 
       return res
     },

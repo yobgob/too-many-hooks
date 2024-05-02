@@ -2,21 +2,20 @@ import React from 'react'
 
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
+export type ObjectKey = string | number | symbol
+
 export interface FormData {
-  [Key: string]: string | string[] | number | boolean
+  [Key: ObjectKey]: string | string[] | number | boolean
 }
 
-export interface RegisterOptions<
-  TData extends FormData,
-  TRefPropsKey extends string | number | symbol = 'ref',
-> {
+export interface RegisterOptions<TData extends FormData, TRefPropsKey extends ObjectKey = 'ref'> {
   isRequired: boolean
   validate?: (data: Partial<TData>) => string | null
   refName?: TRefPropsKey
 }
 
 export type RefProps<TFieldElement extends FieldElement> = {
-  [Key: string | number | symbol]: React.Ref<TFieldElement>
+  [Key: ObjectKey]: React.Ref<TFieldElement>
 }
 
 export type RegisterResult<
@@ -79,10 +78,10 @@ export interface UseFormResult<TData extends FormData> {
 export type UseForm = <TData extends FormData>() => UseFormResult<TData>
 
 export const isFileInput = (element: FieldElement): element is HTMLInputElement =>
-  element.type === 'file'
+  element && 'type' in element && element.type === 'file'
 
 export const isRadioInput = (element: FieldElement): element is HTMLInputElement =>
-  element.type === 'radio'
+  element && 'type' in element && element.type === 'radio'
 
 export const isCheckboxInput = (element: FieldElement): element is HTMLInputElement =>
-  element.type === 'checkbox'
+  element && 'type' in element && element.type === 'checkbox'
