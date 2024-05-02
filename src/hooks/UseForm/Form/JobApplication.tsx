@@ -18,7 +18,7 @@ type FormData = {
   terms: boolean
 }
 
-const Form: React.FC = () => {
+const JobApplication: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<FormData>()
 
   return (
@@ -105,4 +105,4 @@ const Form: React.FC = () => {
   )
 }
 
-export default Form
+export default JobApplication
