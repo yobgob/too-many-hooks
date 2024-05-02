@@ -3,16 +3,24 @@ import {
   Errors,
   FieldData,
   FieldElement,
-  FieldOptions,
   Fields,
   FormData,
+  HandleSubmit,
+  HandleSubmitOptions,
+  RefProps,
+  RegisterFunction,
+  RegisterOptions,
   RegisterResult,
   Touched,
+  UseForm,
 } from './types'
 import { getOnChangeValue } from './utils'
 
-const useForm = <TData extends FormData>() => {
-  const fields = useRef<Fields<TData>>({})
+const useForm: UseForm = <TData extends FormData>() => {
+  // `never, never` because the types of the elements and ref prop names do not matter for our implementation
+  // this makes it so users do not have to pass in the types of their elements for each piece of data
+  // the types are accurately exposed to users via the `register` function's generics where is used
+  const fields = useRef<Fields<TData, never, never>>({})
   const [errors, setErrors] = useState<Errors<TData>>({})
   const [touched, setTouched] = useState<Touched<TData>>({})
 
@@ -90,13 +98,13 @@ const useForm = <TData extends FormData>() => {
     setTouched(touched => ({ ...touched, [name]: true }))
   }, [])
 
-  const handleSubmit = useCallback(
-    ({ validate = true, onSubmit }: { validate?: boolean; onSubmit?: (data: TData) => void }) => {
+  const handleSubmit: HandleSubmit<TData> = useCallback(
+    ({ validate = true, onSubmit }: HandleSubmitOptions<TData>) => {
       if (validate && fields.current) {
         const errors = updateErrors()
         const registeredValues = getRegisteredValues()
         const hasErrors = Object.values(errors).some(error => error !== null)
-        console.log(hasErrors, errors)
+
         if (hasErrors) return
         else
           onSubmit?.(
@@ -116,29 +124,28 @@ const useForm = <TData extends FormData>() => {
     [getRegisteredValues, updateErrors],
   )
 
-  const register = useCallback(
+  const register: RegisterFunction<TData> = useCallback(
     <TFieldElement extends FieldElement>(
       name: keyof TData,
-      options?: FieldOptions<TData>,
-    ): RegisterResult<TFieldElement> => {
-      const ref = React.createRef<TFieldElement>()
-
-      const fieldData: FieldData<TData> = {
-        name,
-        ref,
-        options,
-        value: undefined,
-        error: null,
-        hasBeenTouched: false,
-        ...fields.current[name],
+      options?: RegisterOptions<TData, keyof RefProps<TFieldElement>>,
+    ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
+      // We can safely discard the type of the ref and its name because we do not
+      // use it except in the return of this function, which is nicely generically typed
+      if (name in fields.current) {
+        fields.current[name]!.options = options as RegisterOptions<TData, never>
+      } else {
+        fields.current[name] = {
+          name,
+          ref: React.createRef<TFieldElement>() as React.Ref<never>,
+          options: options as RegisterOptions<TData, never>,
+          value: undefined,
+          error: null,
+          hasBeenTouched: false,
+        }
       }
 
-      fields.current[name] = fieldData
-
-      console.log('registered', name, fields.current)
-
-      return {
-        ref,
+      const res = {
+        [options?.refName ?? 'ref']: fields.current[name]!.ref,
         onChange: e => {
           if (name in fields.current) {
             const newValue = getOnChangeValue<TData>(e, fields.current[name]!.value)
@@ -146,7 +153,7 @@ const useForm = <TData extends FormData>() => {
           }
         },
         onFocus: () => {
-          if (!fields.current[name]?.hasBeenTouched) {
+          if (!fields.current[name]!.hasBeenTouched) {
             touch(name)
           }
         },
@@ -154,6 +161,10 @@ const useForm = <TData extends FormData>() => {
           updateError(name)
         },
       }
+
+      console.log('registered', name, res)
+
+      return res
     },
     [touch, updateError],
   )

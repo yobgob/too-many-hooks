@@ -1,25 +1,32 @@
 import React from 'react'
+import { Select } from '../../../common/components'
 import Button from '../../../common/components/Button'
 import useForm from '../useForm'
+
+enum Title {
+  MR,
+  MRS,
+  MISS,
+  MS,
+}
 
 type FormData = {
   email: string
   name: string
+  title: Title
   terms: boolean
 }
 
 const Form: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<FormData>()
 
-  console.log(errors)
-
   return (
     <div className="flex w-96 flex-col gap-4">
-      <label className="block text-sm font-medium text-gray-900 dark:text-white">
+      <label className="block text-sm font-medium text-gray-900">
         Your email
         <input
           type="email"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
           placeholder="name@example.com"
           {...register('email', {
             isRequired: true,
@@ -28,11 +35,22 @@ const Form: React.FC = () => {
         />
       </label>
       {errors.email && <span className="text-red-800">{errors.email}</span>}
-      <label className="block text-sm font-medium text-gray-900 dark:text-white">
+      <Select
+        options={[
+          { label: 'Mr', value: Title.MR },
+          { label: 'Mrs', value: Title.MRS },
+          { label: 'Miss', value: Title.MISS },
+          { label: 'Ms', value: Title.MS },
+        ]}
+        placeholder="Title"
+        {...register('title', { isRequired: true, refName: 'selectRef' })}
+      />
+      {errors.title && <span className="text-red-800">{errors.title}</span>}
+      <label className="block text-sm font-medium text-gray-900">
         Your name
         <input
           type="name"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
           {...register('name', { isRequired: true })}
         />
       </label>
