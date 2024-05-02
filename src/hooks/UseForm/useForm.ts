@@ -17,6 +17,14 @@ import {
 } from './types'
 import { getElementDefaultValue, getOnChangeValue } from './utils'
 
+/**
+ * Helps manage form state.
+ * Provides a `register` function for registering fields with the hook and handles tracking
+ * their values, errors, and submission of the form.
+ *
+ * @template {FormData} TData
+ * @returns {{ register: RegisterFunction<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
+ */
 const useForm: UseForm = <TData extends FormData>() => {
   const fields = useRef<Fields<TData>>({})
   const [errors, setErrors] = useState<Errors<TData>>({})
@@ -98,13 +106,24 @@ const useForm: UseForm = <TData extends FormData>() => {
   }, [])
 
   const handleSubmit: HandleSubmit<TData> = useCallback(
-    ({ validate = true, onSubmit }: HandleSubmitOptions<TData>) => {
-      if (validate && fields.current) {
+    <TShouldSkipValidations extends boolean = false>({
+      shouldSkipValidations,
+      onSubmit,
+      onError,
+    }: HandleSubmitOptions<TData, TShouldSkipValidations>) => {
+      if (shouldSkipValidations) {
+        onSubmit?.(
+          getRegisteredValues().reduce(
+            (acc, fieldData) => ({ ...acc, [fieldData.name]: fieldData.value }),
+            {} as TData,
+          ),
+        )
+      } else if (fields.current) {
         const errors = updateErrors()
         const registeredValues = getRegisteredValues()
         const hasErrors = Object.values(errors).some(error => error !== null)
 
-        if (hasErrors) return
+        if (hasErrors) onError?.(errors)
         else
           onSubmit?.(
             registeredValues.reduce(
@@ -112,13 +131,7 @@ const useForm: UseForm = <TData extends FormData>() => {
               {} as TData,
             ),
           )
-      } else
-        onSubmit?.(
-          getRegisteredValues().reduce(
-            (acc, fieldData) => ({ ...acc, [fieldData.name]: fieldData.value }),
-            {} as TData,
-          ),
-        )
+      }
     },
     [getRegisteredValues, updateErrors],
   )
@@ -145,7 +158,7 @@ const useForm: UseForm = <TData extends FormData>() => {
         }
       }
 
-      const res = {
+      return {
         // this cast is safe because we only create refs of TFieldElement type per name
         [options?.refName ?? 'ref']: fields.current[name]!.ref as React.Ref<TFieldElement>,
         onChange: e => {
@@ -163,10 +176,6 @@ const useForm: UseForm = <TData extends FormData>() => {
           updateError(name)
         },
       }
-
-      console.log('registered', name, fields.current[name], 'returned', res)
-
-      return res
     },
     [touch, updateError],
   )
@@ -179,4 +188,5 @@ const useForm: UseForm = <TData extends FormData>() => {
   }
 }
 
+export * from './types/public'
 export default useForm

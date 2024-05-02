@@ -84,7 +84,14 @@ const Form: React.FC = () => {
       {errors.terms && <span className="text-red-800">{errors.terms}</span>}
 
       <div className="flex items-center gap-2">
-        <Button onClick={() => handleSubmit({ onSubmit: data => console.log('submitted', data) })}>
+        <Button
+          onClick={() =>
+            handleSubmit({
+              onSubmit: data => console.log('Submitted with valid data:', data),
+              onError: errors => console.log('Submitted with errors:', errors),
+            })
+          }
+        >
           Save
         </Button>
         {/* {hasBegun &&
