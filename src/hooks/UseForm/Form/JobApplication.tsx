@@ -10,7 +10,7 @@ enum Title {
   Ms = 'MS',
 }
 
-type FormData = {
+export type ApplicationFormData = {
   email: string
   title: Title
   name: string
@@ -19,8 +19,15 @@ type FormData = {
   terms: boolean
 }
 
-const JobApplication: React.FC = () => {
-  const { register, errors, touched, changed, handleSubmit } = useForm<FormData>()
+export type ApplicationErrors = Partial<{ [Key in keyof ApplicationFormData]: string | null }>
+
+interface Props {
+  onSubmit: (data: ApplicationFormData) => void
+  onError: (data: ApplicationErrors) => void
+}
+
+const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
+  const { register, errors, touched, changed, handleSubmit } = useForm<ApplicationFormData>()
   const hasBegun = Object.values(touched).some(hasBeenTouched => hasBeenTouched)
   const hasChangedAnyValue = Object.values(changed).some(hasBeenChanged => hasBeenChanged)
 
@@ -103,8 +110,8 @@ const JobApplication: React.FC = () => {
         <Button
           onClick={() =>
             handleSubmit({
-              onSubmit: data => console.log('Submitted with valid data:', data),
-              onError: errors => console.log('Submitted with errors:', errors),
+              onSubmit,
+              onError,
             })
           }
         >
