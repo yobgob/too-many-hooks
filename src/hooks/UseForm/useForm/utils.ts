@@ -3,6 +3,7 @@ import {
   Fields,
   FormData,
   isCheckboxInput,
+  isDateInput,
   isFileInput,
   isNumberInput,
   isRadioInput,
@@ -56,7 +57,7 @@ export const getOnChangeValue = <TData extends FormData>(
 }
 
 export const getTypedFieldValue = <TData extends FormData>(field: FieldData<TData>) => {
-  if (field.ref.current && 'type' in field.ref) {
+  if (field.ref.current && 'type' in field.ref.current) {
     if (isRadioInput(field.ref.current) || isCheckboxInput(field.ref.current)) {
       return field.ref.current.checked
     }
@@ -65,6 +66,9 @@ export const getTypedFieldValue = <TData extends FormData>(field: FieldData<TDat
     }
     if (isNumberInput(field.ref.current)) {
       return +field.ref.current.value
+    }
+    if (isDateInput(field.ref.current)) {
+      return new Date(field.ref.current.value)
     }
     return field.ref.current.value
   }

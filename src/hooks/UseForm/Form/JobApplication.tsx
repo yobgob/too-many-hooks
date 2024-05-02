@@ -12,9 +12,10 @@ enum Title {
 
 type FormData = {
   email: string
-  name: string
-  expectedSalary: number
   title: Title
+  name: string
+  startDate: Date
+  expectedSalary: number
   terms: boolean
 }
 
@@ -55,6 +56,19 @@ const JobApplication: React.FC = () => {
         />
       </label>
       {errors.name && <span className="text-red-800">{errors.name}</span>}
+      <label className="block text-sm font-medium text-gray-900">
+        Available start date
+        <input
+          type="date"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+          {...register('startDate', {
+            isRequired: true,
+            validate: ({ startDate }) =>
+              startDate < new Date(Date.now()) ? 'Date must be in the future' : null,
+          })}
+        />
+      </label>
+      {errors.startDate && <span className="text-red-800">{errors.startDate}</span>}
       <label className="block text-sm font-medium text-gray-900">
         Expected salary
         <input

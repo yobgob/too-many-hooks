@@ -18,5 +18,8 @@ export const isRadioInput = (element: FieldElement): element is HTMLInputElement
 export const isCheckboxInput = (element: FieldElement): element is HTMLInputElement =>
   element && 'type' in element && element.type === 'checkbox'
 
+export const isDateInput = (element: FieldElement): element is HTMLInputElement =>
+  element && 'type' in element && element.type === 'date'
+
 export const isNumberInput = (element: FieldElement): element is HTMLInputElement =>
   element && 'type' in element && element.type === 'number'
