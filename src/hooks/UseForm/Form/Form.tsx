@@ -4,10 +4,10 @@ import Button from '../../../common/components/Button'
 import useForm from '../useForm'
 
 enum Title {
-  MR,
-  MRS,
-  MISS,
-  MS,
+  Mr = 'MR',
+  Mrs = 'MRS',
+  Miss = 'MISS',
+  Ms = 'MS',
 }
 
 type FormData = {
@@ -38,10 +38,10 @@ const Form: React.FC = () => {
       {errors.email && <span className="text-red-800">{errors.email}</span>}
       <Select
         options={[
-          { label: 'Mr', value: Title.MR },
-          { label: 'Mrs', value: Title.MRS },
-          { label: 'Miss', value: Title.MISS },
-          { label: 'Ms', value: Title.MS },
+          { label: 'Mr', value: Title.Mr },
+          { label: 'Mrs', value: Title.Mrs },
+          { label: 'Miss', value: Title.Miss },
+          { label: 'Ms', value: Title.Ms },
         ]}
         placeholder="Title"
         {...register('title', { isRequired: true, refName: 'selectRef' })}
@@ -69,7 +69,7 @@ const Form: React.FC = () => {
           })}
         />
       </label>
-      {errors.name && <span className="text-red-800">{errors.name}</span>}
+      {errors.expectedSalary && <span className="text-red-800">{errors.expectedSalary}</span>}
       <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-300">
         <input
           type="checkbox"

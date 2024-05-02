@@ -188,5 +188,4 @@ const useForm: UseForm = <TData extends FormData>() => {
   }
 }
 
-export * from './types/public'
 export default useForm
