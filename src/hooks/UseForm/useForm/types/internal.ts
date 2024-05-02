@@ -1,4 +1,5 @@
 import { FieldElement } from '.'
+import { FormData } from './public'
 
 export type ObjectKey = string | number | symbol
 
@@ -16,3 +17,6 @@ export const isRadioInput = (element: FieldElement): element is HTMLInputElement
 
 export const isCheckboxInput = (element: FieldElement): element is HTMLInputElement =>
   element && 'type' in element && element.type === 'checkbox'
+
+export const isNumberInput = (element: FieldElement): element is HTMLInputElement =>
+  element && 'type' in element && element.type === 'number'

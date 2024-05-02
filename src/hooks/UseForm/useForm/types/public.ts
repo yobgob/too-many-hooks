@@ -171,15 +171,15 @@ export type HandleSubmit<TData extends FormData> = <TShouldSkipValidations exten
  * @interface FieldData
  * @typedef {FieldData}
  * @template {FormData} TData
- * @template {FieldElements<TData>} TFieldElements
+ * @template {FieldElements<TData>} [TFieldElements=FieldElements<TData>]
  * @template {string | number | symbol} [TRefPropsKey='ref']
  * @template {boolean} [TIsRequired=false]
  */
 export interface FieldData<
   TData extends FormData,
-  TFieldElements extends FieldElements<TData>,
-  TRefPropsKey extends string | number | symbol = 'ref',
-  TIsRequired extends boolean = false,
+  TFieldElements extends FieldElements<TData> = FieldElements<TData>,
+  TRefPropsKey extends ObjectKey = ObjectKey,
+  TIsRequired extends boolean = boolean,
 > {
   /**
    * The name of the field
@@ -192,7 +192,7 @@ export interface FieldData<
    *
    * @type {React.Ref<TFieldElements[keyof TData]>}
    */
-  ref: React.Ref<TFieldElements[keyof TData]>
+  ref: React.MutableRefObject<TFieldElements[keyof TData] | null>
   /**
    * Configures the validations of the registered field and what the `register` function for the field returns
    *

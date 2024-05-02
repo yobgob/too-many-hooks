@@ -1,9 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import {
   Errors,
-  FieldData,
   FieldElement,
-  FieldElements,
   Fields,
   FormData,
   HandleSubmit,
@@ -15,7 +13,7 @@ import {
   Touched,
   UseForm,
 } from './types'
-import { getElementDefaultValue, getOnChangeValue } from './utils'
+import { getElementDefaultValue, getOnChangeValue, getTypedData, getTypedFieldValue } from './utils'
 
 /**
  * Helps manage form state.
@@ -34,43 +32,29 @@ const useForm: UseForm = <TData extends FormData>() => {
     (): (keyof TData)[] => Object.keys(fields.current) as (keyof TData)[],
     [],
   )
-  const getRegisteredValues = useCallback(
-    (): FieldData<TData, FieldElements<TData, FieldElement>>[] =>
-      // @ts-expect-error undefined is filtered out, TS cannot tell
-      Object.values(fields.current).filter(value => value !== undefined),
-    [],
-  )
 
-  const updateFieldsFieldError = useCallback(
-    (name: keyof TData) => {
-      if (!(name in fields.current)) return null // If the field has not been registered, it cannot have an error
+  const updateFieldsFieldError = useCallback((name: keyof TData) => {
+    if (!(name in fields.current)) return null // If the field has not been registered, it cannot have an error
 
-      const field = fields.current[name]!
-      const options = field.options
+    const field = fields.current[name]!
+    const typedValue = getTypedFieldValue(field)
+    const options = field.options
 
-      if (
-        options?.isRequired &&
-        (field.value === undefined || field.value === null || field.value === '')
-      ) {
-        const error = 'Field is required'
-        field.error = error
-        return error
-      }
-
-      const error =
-        options?.validate?.(
-          getRegisteredValues().reduce(
-            (acc, fieldData) => ({ ...acc, [fieldData.name]: fieldData.value }),
-            {} as Partial<TData>,
-          ),
-        ) ?? null
-
+    if (
+      options?.isRequired &&
+      (typedValue === undefined || typedValue === null || typedValue === '')
+    ) {
+      const error = 'Field is required'
       field.error = error
-
       return error
-    },
-    [getRegisteredValues],
-  )
+    }
+
+    const error =
+      options?.validate?.({ ...getTypedData(fields.current), [field.name]: typedValue }) ?? null
+    field.error = error
+
+    return error
+  }, [])
 
   const updateFieldsFieldErrors = useCallback((): Errors<TData> => {
     const errors = getRegisteredKeys().reduce(
@@ -112,28 +96,21 @@ const useForm: UseForm = <TData extends FormData>() => {
       onError,
     }: HandleSubmitOptions<TData, TShouldSkipValidations>) => {
       if (shouldSkipValidations) {
-        onSubmit?.(
-          getRegisteredValues().reduce(
-            (acc, fieldData) => ({ ...acc, [fieldData.name]: fieldData.value }),
-            {} as TData,
-          ),
-        )
+        const typedData = getTypedData(fields.current)
+        onSubmit?.(typedData)
       } else if (fields.current) {
         const errors = updateErrors()
-        const registeredValues = getRegisteredValues()
         const hasErrors = Object.values(errors).some(error => error !== null)
 
         if (hasErrors) onError?.(errors)
-        else
-          onSubmit?.(
-            registeredValues.reduce(
-              (acc, fieldData) => ({ ...acc, [fieldData.name]: fieldData.value }),
-              {} as TData,
-            ),
-          )
+        else {
+          const typedData = getTypedData(fields.current)
+
+          onSubmit?.(typedData)
+        }
       }
     },
-    [getRegisteredValues, updateErrors],
+    [updateErrors],
   )
 
   const register: RegisterFunction<TData> = useCallback(
@@ -146,11 +123,7 @@ const useForm: UseForm = <TData extends FormData>() => {
       } else {
         fields.current[name] = {
           name,
-          ref: (element: TFieldElement) => {
-            // update internal value upon first setting the ref
-            fields.current[name]!.value = getElementDefaultValue<TData>(element)
-            return React.createRef<TFieldElement>()
-          },
+          ref: React.createRef<TFieldElement | null>(),
           options: options,
           value: undefined,
           error: null,
@@ -160,10 +133,17 @@ const useForm: UseForm = <TData extends FormData>() => {
 
       return {
         // this cast is safe because we only create refs of TFieldElement type per name
-        [options?.refName ?? 'ref']: fields.current[name]!.ref as React.Ref<TFieldElement>,
-        onChange: e => {
+        [options?.refName ?? 'ref']: (element: TFieldElement) => {
+          // update internal value upon first setting the ref
+          if (fields.current[name]!.value === undefined) {
+            fields.current[name]!.value = getElementDefaultValue<TData>(element)
+          }
+
+          fields.current[name]!.ref.current = element
+        },
+        onChange: event => {
           if (name in fields.current) {
-            const newValue = getOnChangeValue<TData>(e, fields.current[name]!.value)
+            const newValue = getOnChangeValue<TData>(event)
             fields.current[name]!.value = newValue
           }
         },
