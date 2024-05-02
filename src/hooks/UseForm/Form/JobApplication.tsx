@@ -20,7 +20,9 @@ type FormData = {
 }
 
 const JobApplication: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm<FormData>()
+  const { register, errors, touched, changed, handleSubmit } = useForm<FormData>()
+  const hasBegun = Object.values(touched).some(hasBeenTouched => hasBeenTouched)
+  const hasChangedAnyValue = Object.values(changed).some(hasBeenChanged => hasBeenChanged)
 
   return (
     <div className="flex w-96 flex-col gap-4">
@@ -108,12 +110,12 @@ const JobApplication: React.FC = () => {
         >
           Save
         </Button>
-        {/* {hasBegun &&
-          (hasUnsavedChanges ? (
+        {hasBegun &&
+          (hasChangedAnyValue ? (
             <div className="text-orange-500">&#9888; Unsaved changes</div>
           ) : (
             <div className="text-green-500">&#10003; Saved</div>
-          ))} */}
+          ))}
       </div>
     </div>
   )

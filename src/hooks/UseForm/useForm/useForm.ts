@@ -27,11 +27,30 @@ const useForm: UseForm = <TData extends FormData>() => {
   const fields = useRef<Fields<TData>>({})
   const [errors, setErrors] = useState<Errors<TData>>({})
   const [touched, setTouched] = useState<Touched<TData>>({})
+  const [changed, setChanged] = useState<Touched<TData>>({})
 
   const getRegisteredKeys = useCallback(
     (): (keyof TData)[] => Object.keys(fields.current) as (keyof TData)[],
     [],
   )
+
+  const touch = useCallback((name: keyof TData) => {
+    if (name in fields.current) {
+      fields.current[name]!.hasBeenTouched = true
+    }
+    setTouched(touched => ({ ...touched, [name]: true }))
+  }, [])
+
+  const change = useCallback((name: keyof TData) => {
+    if (name in fields.current) {
+      fields.current[name]!.hasBeenChanged = true
+    }
+    setChanged(changed => ({ ...changed, [name]: true }))
+  }, [])
+
+  const resetChanged = useCallback(() => {
+    setChanged(changed => Object.keys(changed).reduce((acc, key) => ({ ...acc, [key]: false }), {}))
+  }, [])
 
   const updateFieldsFieldError = useCallback((name: keyof TData) => {
     if (!(name in fields.current)) return null // If the field has not been registered, it cannot have an error
@@ -82,13 +101,6 @@ const useForm: UseForm = <TData extends FormData>() => {
     return errors
   }, [updateFieldsFieldErrors])
 
-  const touch = useCallback((name: keyof TData) => {
-    if (name in fields.current) {
-      fields.current[name]!.hasBeenTouched = true
-    }
-    setTouched(touched => ({ ...touched, [name]: true }))
-  }, [])
-
   const handleSubmit: HandleSubmit<TData> = useCallback(
     <TShouldSkipValidations extends boolean = false>({
       shouldSkipValidations,
@@ -98,6 +110,7 @@ const useForm: UseForm = <TData extends FormData>() => {
       if (shouldSkipValidations) {
         const typedData = getTypedData(fields.current)
         onSubmit?.(typedData)
+        resetChanged()
       } else if (fields.current) {
         const errors = updateErrors()
         const hasErrors = Object.values(errors).some(error => error !== null)
@@ -106,11 +119,12 @@ const useForm: UseForm = <TData extends FormData>() => {
         else {
           const typedData = getTypedData(fields.current)
 
+          resetChanged()
           onSubmit?.(typedData)
         }
       }
     },
-    [updateErrors],
+    [resetChanged, updateErrors],
   )
 
   const register: RegisterFunction<TData> = useCallback(
@@ -128,6 +142,7 @@ const useForm: UseForm = <TData extends FormData>() => {
           value: undefined,
           error: null,
           hasBeenTouched: false,
+          hasBeenChanged: false,
         }
       }
 
@@ -143,13 +158,19 @@ const useForm: UseForm = <TData extends FormData>() => {
         },
         onChange: event => {
           if (name in fields.current) {
+            if (!fields.current[name]!.hasBeenChanged) {
+              change(name)
+            }
+
             const newValue = getOnChangeValue<TData>(event)
             fields.current[name]!.value = newValue
           }
         },
         onFocus: () => {
-          if (!fields.current[name]!.hasBeenTouched) {
-            touch(name)
+          if (name in fields.current) {
+            if (!fields.current[name]!.hasBeenTouched) {
+              touch(name)
+            }
           }
         },
         onBlur: () => {
@@ -157,13 +178,14 @@ const useForm: UseForm = <TData extends FormData>() => {
         },
       }
     },
-    [touch, updateError],
+    [change, touch, updateError],
   )
 
   return {
     register,
     errors,
     touched,
+    changed,
     handleSubmit,
   }
 }

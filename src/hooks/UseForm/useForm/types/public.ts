@@ -212,11 +212,17 @@ export interface FieldData<
    */
   error: string | null
   /**
-   * Whether or not the user has interacted with the registered field
+   * Whether or not the user has focused the registered field
    *
    * @type {boolean}
    */
   hasBeenTouched: boolean
+  /**
+   * Whether or not the user has changed the value of the registered field
+   *
+   * @type {boolean}
+   */
+  hasBeenChanged: boolean
 }
 
 /**
@@ -237,6 +243,14 @@ export type Errors<TData extends FormData> = PartialDataKeys<TData, string | nul
  * @template {FormData} TData
  */
 export type Touched<TData extends FormData> = PartialDataKeys<TData, boolean>
+/**
+ * Maps registered field names to a boolean indicating if the user has changed the value of the input.
+ *
+ * @export
+ * @typedef {Changed}
+ * @template {FormData} TData
+ */
+export type Changed<TData extends FormData> = PartialDataKeys<TData, boolean>
 /**
  * Maps registered field names to their respective element types in the DOM
  *
@@ -300,6 +314,12 @@ export interface UseFormReturn<TData extends FormData> {
    * @type {Touched<TData>}
    */
   touched: Touched<TData>
+  /**
+   * A map of registered fields to whether or not their value has been changed by the user
+   *
+   * @type {Changed<TData>}
+   */
+  changed: Changed<TData>
   /**
    * Handles submission of the form, conditionally calling an `onSubmit` callback which receives the form's data
    *
