@@ -16,30 +16,31 @@ type _ObjectGraphDataOf<T, N extends number, R extends unknown[]> = R['length'] 
 type ObjectGraphData<T, N extends number = 0> = number extends N ? T : _ObjectGraphDataOf<T, N, []>
 
 type Coordinates = Tuple<number, number>
-type ObjectGraphDataAtCoordinate<
-  T,
-  TMaxDepth extends number,
-  TCoordinate extends Coordinates,
-> = ObjectGraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinate>>>
+type ObjectGraphDataAtCoordinate<T, TMaxDepth extends number, TCoordinate extends Coordinates> =
+  Length<TCoordinate> extends TMaxDepth
+    ? T
+    : ObjectGraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinate>>>
 
 export interface IGraph<TData, TDimensions extends number = 0> {
-  getAtCoordinate<TCoordinate extends Tuple<number, number> = Tuple<number, TDimensions>>(
-    coordinates: TCoordinate,
-  ): ObjectGraphDataAtCoordinate<TData, TDimensions, TCoordinate>
-  setAtCoordinate<TCoordinate extends Coordinates = Tuple<number, TDimensions>>(
-    coordinates: TCoordinate,
+  getAtCoordinate: <TCoordinate extends Tuple<number, number> = Tuple<number, 0>>(
+    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
+  ) => ObjectGraphDataAtCoordinate<TData, TDimensions, TCoordinate>
+  get: () => ObjectGraphData<TData, TDimensions>
+  setAtCoordinate: <TCoordinate extends Coordinates = Tuple<number, 0>>(
     value: ObjectGraphDataAtCoordinate<TData, TDimensions, TCoordinate>,
-  ): void
+    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
+  ) => void
+  set: (value: ObjectGraphData<TData, TDimensions>) => void
 }
 
 export class Graph<TData, TDimensions extends number = 0> implements IGraph<TData, TDimensions> {
   private data: ObjectGraphData<TData, TDimensions>
 
-  getAtCoordinate = <TCoordinate extends Coordinates = Tuple<number, TDimensions>>(
-    coordinates: TCoordinate,
+  getAtCoordinate = <TCoordinate extends Coordinates = Tuple<number, 0>>(
+    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
   ): ObjectGraphDataAtCoordinate<TData, TDimensions, TCoordinate> => {
-    // special case for a 0 dimension graph
-    if (!coordinates.length) {
+    // special case for a 0 dimension graph or no coordinates
+    if (!coordinates?.length) {
       // @ts-expect-error TData is valid as an ObjectGraphData with a TDimensions of 0
       return this.data
     }
@@ -47,12 +48,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     // @ts-expect-error TData is valid as an ObjectGraphData with a TDimensions of 0
     return coordinates.reduce((graph, coordinate) => graph?.[coordinate], this.data)
   }
-  setAtCoordinate = <TCoordinate extends Coordinates = Tuple<number, TDimensions>>(
-    coordinates: TCoordinate,
+
+  setAtCoordinate = <TCoordinate extends Coordinates = Tuple<number, 0>>(
     value: ObjectGraphDataAtCoordinate<TData, TDimensions, TCoordinate>,
+    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
   ): void => {
-    // special case for a 0 dimension graph
-    if (!coordinates.length) {
+    // special case for a 0 dimension graph or no coordinates
+    if (!coordinates?.length) {
       // @ts-expect-error TData is valid as an ObjectGraphData with a TDimensions of 0
       this.data = value
     }
