@@ -60,10 +60,39 @@ type Coordinates = Tuple<number, number>
  * @template {number} TMaxDepth
  * @template {Coordinates} TCoordinate
  */
-type GraphDataAtCoordinate<T, TMaxDepth extends number, TCoordinate extends Coordinates> =
-  Length<TCoordinate> extends TMaxDepth
+type GraphDataAtCoordinate<T, TMaxDepth extends number, TCoordinates extends Coordinates> =
+  Length<TCoordinates> extends TMaxDepth
     ? T
-    : GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinate>>>
+    : GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
+
+/**
+ * Accesses graph data at particular `Coordinates`
+ * `Coordinates` of length `TDimensions` return `TData`,
+ * `Coordinates` with length shorter than `TDimensions` return a `GraphData` of depth `TDimensions` - length of `Coordinates`
+ *
+ * @typedef {GetAtCoordinates}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+type GetAtCoordinates<TData, TDimensions extends number = 0> = <
+  TCoordinate extends Tuple<number, number> = Tuple<number, 0>,
+>(
+  ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinate
+) => GraphDataAtCoordinate<TData, TDimensions, TCoordinate>
+
+/**
+ * A function which sets graph data at certain coordinates
+ *
+ * @typedef {SetAtCoordinates}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+type SetAtCoordinates<TData, TDimensions extends number = 0> = <
+  TCoordinate extends Coordinates = Tuple<number, 0>,
+>(
+  value: GraphDataAtCoordinate<TData, TDimensions, TCoordinate>,
+  ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinate
+) => void
 
 /**
  * The interface for a Graph data type, where the graph has TDimensions dimensions
@@ -76,33 +105,19 @@ type GraphDataAtCoordinate<T, TMaxDepth extends number, TCoordinate extends Coor
  */
 export interface IGraph<TData, TDimensions extends number = 0> {
   /**
-   * Accesses graph data at particular `Coordinates`
-   * `Coordinates` of length `TDimensions` return `TData`,
-   * `Coordinates` with length shorter than `TDimensions` return a `GraphData` of depth `TDimensions` - length of `Coordinates`
+   * The graph's accessor function
    *
-   * @type {<TCoordinate extends Coordinates = Tuple<number, 0>>(
-   *     ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
-   *   ) => GraphDataAtCoordinate<TData, TDimensions, TCoordinate>}
+   * @type {GetAtCoordinates<TData, TDimensions>}
    */
-  getAtCoordinate: <TCoordinate extends Coordinates = Tuple<number, 0>>(
-    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
-  ) => GraphDataAtCoordinate<TData, TDimensions, TCoordinate>
-  /**
+  getAtCoordinates: GetAtCoordinates<TData, TDimensions>
 
   /**
-   * Sets graph data at particular `Coordinates`. 
-   * `Coordinates` of length `TDimensions` set a point to a `TData`,
-   * `Coordinates` with length shorter than `TDimensions` set a `GraphData` of depth `TDimensions` - length of `Coordinates`
+   * The graph's setter function
    *
-   * @type {<TCoordinate extends Coordinates = Tuple<number, 0>>(
-   *     value: GraphDataAtCoordinate<TData, TDimensions, TCoordinate>,
-   *     ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
-   *   ) => void}
+   * @type {SetAtCoordinates<TData, TDimensions>
+}}
    */
-  setAtCoordinate: <TCoordinate extends Coordinates = Tuple<number, 0>>(
-    value: GraphDataAtCoordinate<TData, TDimensions, TCoordinate>,
-    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
-  ) => void
+  setAtCoordinates: SetAtCoordinates<TData, TDimensions>
 }
 
 /**
@@ -130,11 +145,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * `Coordinates` with length shorter than `TDimensions` return a `GraphData` of depth `TDimensions` - length of `Coordinates`
    *
    * @template {Coordinates} [TCoordinate=Tuple<number, 0>]
-   * @param {...TDimensions extends 0 ? [never?] : TCoordinate} coordinates
+   * @param {...TDimensions extends 0 ? [unknown?] : TCoordinate} coordinates
    * @returns {GraphDataAtCoordinate<TData, TDimensions, TCoordinate>}
    */
-  getAtCoordinate = <TCoordinate extends Coordinates = Tuple<number, 0>>(
-    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
+  getAtCoordinates: GetAtCoordinates<TData, TDimensions> = <
+    TCoordinate extends Coordinates = Tuple<number, 0>,
+  >(
+    ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinate
   ): GraphDataAtCoordinate<TData, TDimensions, TCoordinate> => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
@@ -153,11 +170,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @template {Coordinates} [TCoordinate=Tuple<number, 0>]
    * @param {GraphDataAtCoordinate<TData, TDimensions, TCoordinate>} value
-   * @param {...TDimensions extends 0 ? [never?] : TCoordinate} coordinates
+   * @param {...TDimensions extends 0 ? [unknown?] : TCoordinate} coordinates
    */
-  setAtCoordinate = <TCoordinate extends Coordinates = Tuple<number, 0>>(
+  setAtCoordinates: SetAtCoordinates<TData, TDimensions> = <
+    TCoordinate extends Coordinates = Tuple<number, 0>,
+  >(
     value: GraphDataAtCoordinate<TData, TDimensions, TCoordinate>,
-    ...coordinates: TDimensions extends 0 ? [never?] : TCoordinate
+    ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinate
   ): void => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
