@@ -100,7 +100,7 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   /**
    * Transforms the state of the graph at certain coordinates
    *
-   * @type {UpdateAtCoordinates<TData, TDimensions>}
+   * @type {MapAtCoordinates<TData, TDimensions>}
    */
   updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions>
 
@@ -188,7 +188,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     initial ?? new Graph<TData, TDimensions>(dimensions),
   )
 
-  const updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = useCallback(
+  const updateAtCoordinates: MapAtCoordinates<TData, TDimensions> = useCallback(
     <TCoordinates extends Coordinates = Tuple<number, 0>>(
       updater: (
         currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,

@@ -128,7 +128,7 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template TData
  * @template {number} [TDimensions=0]
  */
-export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
+export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = Tuple<number, 0>,
 >(
   updater: (
@@ -250,7 +250,14 @@ export interface IGraph<TData, TDimensions extends number = 0> {
   setAtCoordinates: SetAtCoordinates<TData, TDimensions>
 
   /**
-   * Transforms the graph at certain coordinates
+   * Transforms all edges in the graph
+   *
+   * @type {MapAllEdges<TData>}
+   */
+  mapAllEdges: MapAllEdges<TData>
+
+  /**
+   * Sets all edges in the graph to a new value
    *
    * @type {MapAtCoordinates<TData, TDimensions>}
    */
@@ -457,7 +464,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
    * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
    */
-  updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = <
+  mapAtCoordinates: MapAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = Tuple<number, 0>,
   >(
     updater: (
