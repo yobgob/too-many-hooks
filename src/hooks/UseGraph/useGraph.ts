@@ -9,9 +9,55 @@ import {
   MapAllEdges,
   MapAtCoordinates,
   SetAllEdges,
-  SetAtCoordinates,
   Tuple,
 } from './Graph'
+
+/**
+ * The type of the `updateAtCoordinates` function for `useGraph`
+ *
+ * @export
+ * @typedef {UpdateAtCoordinates}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
+  TCoordinates extends Coordinates = Tuple<number, 0>,
+>(
+  updater: (
+    currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+  ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+) => void
+
+/**
+ * The type of the `setAtCoordinates` function for `useGraph`
+ *
+ * @export
+ * @typedef {SetAtCoordinates}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
+  TCoordinates extends Coordinates = Tuple<number, 0>,
+>(
+  value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+) => void
+
+/**
+ * The type of the `updateAllEdges` function for `useGraph`
+ *
+ * @export
+ * @typedef {UpdateAllEdges}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type UpdateAllEdges<TData, TDimensions extends number = 0> = (
+  updater: (
+    currentValue: TData,
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+  ) => TData,
+) => void
 
 /**
  * Functions returned by the `useGraph` hook for interacting with its state
@@ -37,11 +83,25 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   forEachEdge: ForEachEdge<TData, TDimensions>
 
   /**
-   * Transforms the state of the graph at certain coordinates
+   * Returns a TData transformed into a TResult
    *
    * @type {MapAtCoordinates<TData, TDimensions>}
    */
   mapAtCoordinates: MapAtCoordinates<TData, TDimensions>
+
+  /**
+   * Creates a new graph with TData transformed to TResult
+   *
+   * @type {MapAllEdges<TData, TDimensions>}
+   */
+  mapAllEdges: MapAllEdges<TData, TDimensions>
+
+  /**
+   * Transforms the state of the graph at certain coordinates
+   *
+   * @type {UpdateAtCoordinates<TData, TDimensions>}
+   */
+  updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions>
 
   /**
    * Sets the state of the graph at certain coordinates
@@ -53,9 +113,9 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   /**
    * Transforms all edges of the graph
    *
-   * @type {MapAllEdges<TData, TDimensions>}
+   * @type {UpdateAllEdges<TData, TDimensions>}
    */
-  mapAllEdges: MapAllEdges<TData, TDimensions>
+  updateAllEdges: UpdateAllEdges<TData, TDimensions>
 
   /**
    * Sets all edges of the graph to a new value
@@ -120,7 +180,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     initial ?? new Graph<TData, TDimensions>(dimensions),
   )
 
-  const mapAtCoordinates: MapAtCoordinates<TData, TDimensions> = useCallback(
+  const updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = useCallback(
     <TCoordinates extends Coordinates = Tuple<number, 0>>(
       updater: (
         currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -129,7 +189,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     ): void =>
       setData(oldData => {
         const newGraph = new Graph<TData, TDimensions>(oldData)
-        newGraph.mapAtCoordinates<TCoordinates>(updater, coordinates)
+        newGraph.updateAtCoordinates<TCoordinates>(updater, coordinates)
         return newGraph
       }),
     [],
@@ -139,11 +199,11 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     <TCoordinates extends Coordinates = Tuple<number, 0>>(
       value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
-    ): void => mapAtCoordinates(() => value, coordinates),
-    [mapAtCoordinates],
+    ): void => updateAtCoordinates(() => value, coordinates),
+    [updateAtCoordinates],
   )
 
-  const mapAllEdges: MapAllEdges<TData, TDimensions> = useCallback(
+  const updateAllEdges: UpdateAllEdges<TData, TDimensions> = useCallback(
     (
       updater: (
         currentValue: TData,
@@ -152,15 +212,15 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     ) =>
       setData(oldData => {
         const newGraph = new Graph<TData, TDimensions>(oldData)
-        newGraph.mapAllEdges(updater)
+        newGraph.updateAllEdges(updater)
         return newGraph
       }),
     [],
   )
 
   const setAllEdges: SetAllEdges<TData> = useCallback(
-    (value: TData) => mapAllEdges(() => value),
-    [mapAllEdges],
+    (value: TData) => updateAllEdges(() => value),
+    [updateAllEdges],
   )
 
   return [
@@ -168,9 +228,11 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     {
       getAtCoordinates: data.getAtCoordinates,
       forEachEdge: data.forEachEdge,
+      mapAtCoordinates: data.mapAtCoordinates,
+      mapAllEdges: data.mapAllEdges,
       setAtCoordinates,
-      mapAtCoordinates,
-      mapAllEdges,
+      updateAtCoordinates,
+      updateAllEdges,
       setAllEdges,
     },
   ] satisfies UseGraphReturn<TData, TDimensions>
