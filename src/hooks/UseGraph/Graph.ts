@@ -1,5 +1,5 @@
 import merge from 'lodash.merge'
-import { Length, SafeSubtract } from '../types/arithmetic'
+import { Length, SafeSubtract } from '../../common/types/arithmetic'
 
 /**
  * Recursion utility for building tuples
@@ -157,6 +157,18 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @type {GraphData<TData, TDimensions>}
    */
   private data: GraphData<TData, TDimensions>
+
+  constructor()
+  constructor(data: GraphData<TData, TDimensions>)
+  constructor(graph: Graph<TData, TDimensions>)
+  constructor(data?: GraphData<TData, TDimensions>, graph?: Graph<TData, TDimensions>) {
+    if (data) {
+      this.data = data
+    } else if (graph) {
+      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
+      this.data = graph.getAtCoordinates<[]>()
+    }
+  }
 
   /**
    * Accesses graph data at particular `Coordinates`
