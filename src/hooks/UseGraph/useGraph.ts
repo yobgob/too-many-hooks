@@ -4,9 +4,9 @@ import {
   GetAtCoordinates,
   Graph,
   GraphDataAtCoordinates,
+  MapAtCoordinates,
   SetAtCoordinates,
   Tuple,
-  UpdateAtCoordinates,
 } from './Graph'
 
 /**
@@ -33,9 +33,14 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   /**
    * Transforms the state of the graph at certain coordinates
    *
-   * @type {UpdateAtCoordinates<TData, TDimensions>}
+   * @type {MapAtCoordinates<TData, TDimensions>}
    */
-  update: UpdateAtCoordinates<TData, TDimensions>
+  update: MapAtCoordinates<TData, TDimensions>
+}
+
+export type UseGraphOptions<TData, TDimensions extends number = 0> = {
+  dimensions?: TDimensions
+  initial?: Graph<TData, TDimensions>
 }
 
 /**
@@ -55,20 +60,24 @@ export type UseGraphReturn<TData, TDimensions extends number = 0> = [
  *
  * @typedef {UseGraph}
  */
-export type UseGraph = <TData, TDimensions extends number = 0>() => UseGraphReturn<
-  TData,
-  TDimensions
->
+export type UseGraph = <TData, TDimensions extends number = 0>(
+  options?: UseGraphOptions<TData, TDimensions>,
+) => UseGraphReturn<TData, TDimensions>
 
 /**
  * A hook for managing state with any number of dimensions
  *
  * @template TData
  * @template {number} [TDimensions=0]
- * @returns {[any, { get: any; set: SetAtCoordinates<TData, TDimensions>; update: UpdateAtCoordinates<TData, TDimensions>; }]}
+ * @returns {[any, { get: any; set: SetAtCoordinates<TData, TDimensions>; update: MapAtCoordinates<TData, TDimensions>; }]}
  */
-const useGraph: UseGraph = <TData, TDimensions extends number = 0>() => {
-  const [data, setData] = useState<Graph<TData, TDimensions>>(new Graph<TData, TDimensions>())
+const useGraph: UseGraph = <TData, TDimensions extends number = 0>({
+  dimensions,
+  initial,
+}: UseGraphOptions<TData, TDimensions> = {}): UseGraphReturn<TData, TDimensions> => {
+  const [data, setData] = useState<Graph<TData, TDimensions>>(
+    initial ?? new Graph<TData, TDimensions>(dimensions),
+  )
 
   const setAtCoordinates: SetAtCoordinates<TData, TDimensions> = useCallback(
     <TCoordinates extends Coordinates = Tuple<number, 0>>(
@@ -83,7 +92,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>() => {
     [],
   )
 
-  const updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = useCallback(
+  const updateAtCoordinates: MapAtCoordinates<TData, TDimensions> = useCallback(
     <TCoordinates extends Coordinates = Tuple<number, 0>>(
       updater: (
         currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -92,7 +101,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>() => {
     ): void =>
       setData(oldData => {
         const newGraph = new Graph<TData, TDimensions>(oldData)
-        newGraph.updateAtCoordinates<TCoordinates>(updater, ...coordinates)
+        newGraph.mapAtCoordinates<TCoordinates>(updater, ...coordinates)
         return newGraph
       }),
     [],
