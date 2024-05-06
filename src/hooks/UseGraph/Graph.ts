@@ -51,6 +51,12 @@ export type GraphData<T, N extends number = 0> = number extends N ? T : _GraphDa
  * @typedef {Coordinates}
  */
 export type Coordinates = Tuple<number, number>
+
+export type CoordinatesOrNever<
+  TDimensions extends number = 0,
+  TCoordinates extends Coordinates = Tuple<number, 0>,
+> = TDimensions extends 0 ? never : TCoordinates
+
 /**
  * The type of the data found at a certain depth within GraphData, determined by
  * the GraphData's max depth and the length of the coordinates accessing it
@@ -75,8 +81,22 @@ export type GraphDataAtCoordinates<T, TMaxDepth extends number, TCoordinates ext
 export type GetAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Tuple<number, number> = Tuple<number, 0>,
 >(
-  coordinates?: TDimensions extends 0 ? never : TCoordinates,
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
+
+/**
+ * A function which executes a function on all edges of the graph
+ *
+ * @export
+ * @typedef {ForEachEdge}
+ * @template TData
+ */
+export type ForEachEdge<TData, TDimensions extends number = 0> = (
+  callback: (
+    currentValue: TData,
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+  ) => void,
+) => void
 
 /**
  * A function which sets graph data at certain coordinates
@@ -89,7 +109,7 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = Tuple<number, 0>,
 >(
   value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-  coordinates?: TDimensions extends 0 ? never : TCoordinates,
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
 ) => void
 
 /**
@@ -105,7 +125,21 @@ export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
   updater: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-  coordinates?: TDimensions extends 0 ? never : TCoordinates,
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+) => void
+
+/**
+ * A function which transforms all edges of the graph
+ *
+ * @export
+ * @typedef {MapAllEdges}
+ * @template TData
+ */
+export type MapAllEdges<TData, TDimensions extends number = 0> = (
+  updater: (
+    currentValue: TData,
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+  ) => TData,
 ) => void
 
 /**
@@ -116,15 +150,6 @@ export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template TData
  */
 export type SetAllEdges<TData> = (value: TData) => void
-
-/**
- * A function which transforms all edges of the graph
- *
- * @export
- * @typedef {MapAllEdges}
- * @template TData
- */
-export type MapAllEdges<TData> = (updater: (currentValue: TData) => TData) => void
 
 /**
  * The interface for a Graph data type, where the graph has TDimensions dimensions
@@ -139,9 +164,9 @@ export interface IGraph<TData, TDimensions extends number = 0> {
   /**
    * Retrieves the number of dimensions of the graph
    *
-   * @type {() => number}
+   * @type {() => TDimensions}
    */
-  getDimensions: () => number
+  getDimensions: () => TDimensions
 
   /**
    * Accesses graph data at certain coordinates
@@ -149,6 +174,13 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    * @type {GetAtCoordinates<TData, TDimensions>}
    */
   getAtCoordinates: GetAtCoordinates<TData, TDimensions>
+
+  /**
+   * Executes logic for each edge of the graph
+   *
+   * @type {ForEachEdge<TData, TDimensions>}
+   */
+  forEachEdge: ForEachEdge<TData, TDimensions>
 
   /**
    * Transforms the graph at certain coordinates
@@ -167,9 +199,9 @@ export interface IGraph<TData, TDimensions extends number = 0> {
   /**
    * Transforms all edges in the graph
    *
-   * @type {MapAllEdges<TData>}
+   * @type {MapAllEdges<TData, TDimensions>}
    */
-  mapAllEdges: MapAllEdges<TData>
+  mapAllEdges: MapAllEdges<TData, TDimensions>
 
   /**
    * Sets all edges in the graph to a new value
@@ -272,7 +304,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   getAtCoordinates: GetAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = Tuple<number, 0>,
   >(
-    coordinates?: TDimensions extends 0 ? never : TCoordinates,
+    coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
@@ -282,6 +314,58 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
       return coordinates.reduce((graph, coordinate) => graph?.[coordinate], this.data)
     }
+  }
+
+  /**
+   * Recursively executes a function on all edges of the graph
+   *
+   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @param {(currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData} updater
+   * @param {TCoordinates} previousCoordinates
+   * @returns {TData, previousCoordinates: TCoordinates) => void}
+   */
+  private _forEachEdge = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+    callback: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => void,
+    previousCoordinates: TCoordinates,
+  ) => {
+    // special case for a 0 dimension graph or no coordinates
+    if (this.dimensions === 0) {
+      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
+      this.data = updater(this.data)
+    } else {
+      const depth = previousCoordinates.length + 1
+
+      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
+      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
+
+      // @ts-expect-error this is prevented from running on TData via logical checks
+      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+
+      if (depth === this.dimensions) {
+        coordinatesInGraph.forEach(coordinate => {
+          const coordinates = [...previousCoordinates, coordinate]
+
+          // @ts-expect-error these are the same TDatas
+          callback(this.getAtCoordinates<Tuple<number, TDimensions>>(coordinates), coordinates)
+        })
+      } else {
+        coordinatesInGraph.forEach(coordinate =>
+          this._forEachEdge(callback, [...previousCoordinates, coordinate]),
+        )
+      }
+    }
+  }
+
+  forEachEdge: ForEachEdge<TData, TDimensions> = (
+    callback: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => void,
+  ): void => {
+    this._forEachEdge(callback, [])
   }
 
   /**
@@ -298,9 +382,9 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   >(
     updater: (
       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-      coordinates?: TDimensions extends 0 ? never : TCoordinates,
+      coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
     ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-    coordinates?: TDimensions extends 0 ? never : TCoordinates,
+    coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ): void => {
     const value = updater(this.getAtCoordinates(coordinates), coordinates)
 
@@ -333,7 +417,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     TCoordinates extends Coordinates = Tuple<number, 0>,
   >(
     value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-    coordinates?: TDimensions extends 0 ? never : TCoordinates,
+    coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ): void => {
     this.mapAtCoordinates(() => value, coordinates)
   }
@@ -347,7 +431,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @returns {TData, previousCoordinates: TCoordinates) => void}
    */
   private _mapAllEdges = <TCoordinates extends Coordinates = Tuple<number, 0>>(
-    updater: (currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData,
+    updater: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => TData,
     previousCoordinates: TCoordinates,
   ) => {
     // special case for a 0 dimension graph or no coordinates
@@ -384,8 +471,11 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @param {(currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData} updater
    */
-  mapAllEdges: MapAllEdges<TData> = (
-    updater: (currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData,
+  mapAllEdges: MapAllEdges<TData, TDimensions> = (
+    updater: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => TData,
   ): void => {
     this._mapAllEdges(updater, [])
   }
