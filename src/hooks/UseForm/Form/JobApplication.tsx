@@ -33,33 +33,33 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
   const hasChangedAnyValue = Object.values(changed).some(hasBeenChanged => hasBeenChanged)
 
   const value = new Graph<string, 0>()
-  value.setAtCoordinates('test')
+  value.setAtCoordinates('test', [])
   console.log(value.getAtCoordinates())
 
   const arr = new Graph<string, 1>()
-  const setArr = arr.setAtCoordinates
+  const setArr = arr.setAtCoordinates<[]>
   const setAtIndex = arr.setAtCoordinates<[number]>
   setArr(['test 2', 'test 3'])
-  setAtIndex('test 4', 2)
-  const getArr = arr.getAtCoordinates<[]>
+  setAtIndex('test 4', [2])
+  const getArr = arr.getAtCoordinates
   const getAtIndex = arr.getAtCoordinates<[number]>
   console.log(getArr())
-  console.log(getAtIndex(2))
+  console.log(getAtIndex([2]))
 
   const graph = new Graph<string, 2>()
-  const setGraph = graph.setAtCoordinates
+  const setGraph = graph.setAtCoordinates<[]>
   const setAtX = graph.setAtCoordinates<[number]>
   const setAtXY = graph.setAtCoordinates<[number, number]>
   setGraph({ 0: { 0: 'test 5' } })
-  setAtX({ 0: 'test 6' }, 1)
-  setAtXY('test 7', 2, 0)
+  setAtX({ 0: 'test 6' }, [1])
+  setAtXY('test 7', [2, 0])
 
   const getGraph = graph.getAtCoordinates
   const getAtX = graph.getAtCoordinates<[number]>
   const getAtXY = graph.getAtCoordinates<[number, number]>
   console.log(getGraph())
-  console.log(getAtX(1))
-  console.log(getAtXY(2, 0))
+  console.log(getAtX([1]))
+  console.log(getAtXY([2, 0]))
 
   return (
     <div className="flex w-96 flex-col gap-4">

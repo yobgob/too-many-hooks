@@ -19,7 +19,7 @@ type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N
  * @template T
  * @template {number} N
  */
-type Tuple<T, N extends number> = N extends N
+export type Tuple<T, N extends number> = N extends N
   ? number extends N
     ? T[]
     : _TupleOf<T, N, []>
@@ -43,14 +43,14 @@ type _GraphDataOf<T, N extends number, R extends unknown[]> = R['length'] extend
  * @template T
  * @template {number} [N=0]
  */
-type GraphData<T, N extends number = 0> = number extends N ? T : _GraphDataOf<T, N, []>
+export type GraphData<T, N extends number = 0> = number extends N ? T : _GraphDataOf<T, N, []>
 
 /**
  * The type of coordinates received by Graph functions
  *
  * @typedef {Coordinates}
  */
-type Coordinates = Tuple<number, number>
+export type Coordinates = Tuple<number, number>
 /**
  * The type of the data found at a certain depth within GraphData, determined by
  * the GraphData's max depth and the length of the coordinates accessing it
@@ -60,7 +60,7 @@ type Coordinates = Tuple<number, number>
  * @template {number} TMaxDepth
  * @template {Coordinates} TCoordinate
  */
-type GraphDataAtCoordinates<T, TMaxDepth extends number, TCoordinates extends Coordinates> =
+export type GraphDataAtCoordinates<T, TMaxDepth extends number, TCoordinates extends Coordinates> =
   Length<TCoordinates> extends TMaxDepth
     ? T
     : GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
@@ -72,10 +72,10 @@ type GraphDataAtCoordinates<T, TMaxDepth extends number, TCoordinates extends Co
  * @template TData
  * @template {number} [TDimensions=0]
  */
-type GetAtCoordinates<TData, TDimensions extends number = 0> = <
+export type GetAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Tuple<number, number> = Tuple<number, 0>,
 >(
-  ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinates
+  ...coordinates: TDimensions extends 0 ? [unknown?] : [TCoordinates?]
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
 
 /**
@@ -85,11 +85,11 @@ type GetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template TData
  * @template {number} [TDimensions=0]
  */
-type SetAtCoordinates<TData, TDimensions extends number = 0> = <
+export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = Tuple<number, 0>,
 >(
   value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-  ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinates
+  ...coordinates: TDimensions extends 0 ? [unknown?] : [TCoordinates?]
 ) => void
 
 /**
@@ -99,13 +99,13 @@ type SetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template TData
  * @template {number} [TDimensions=0]
  */
-type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
+export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = Tuple<number, 0>,
 >(
   updater: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-  ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinates
+  ...coordinates: TDimensions extends 0 ? [unknown?] : [TCoordinates?]
 ) => void
 
 /**
@@ -164,13 +164,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * `Coordinates` with length shorter than `TDimensions` return a `GraphData` of depth `TDimensions` - length of `Coordinates`
    *
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
-   * @param {...TDimensions extends 0 ? [unknown?] : TCoordinates} coordinates
+   * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinates
    * @returns {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>}
    */
   getAtCoordinates: GetAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = Tuple<number, 0>,
   >(
-    ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinates
+    ...coordinates: TDimensions extends 0 ? [unknown?] : [TCoordinates?]
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
@@ -189,13 +189,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
    * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
-   * @param {...TDimensions extends 0 ? [unknown?] : TCoordinates} coordinates
+   * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinates
    */
   setAtCoordinates: SetAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = Tuple<number, 0>,
   >(
     value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-    ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinates
+    ...coordinates: TDimensions extends 0 ? [unknown?] : [TCoordinates?]
   ): void => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
@@ -220,7 +220,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
    * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
-   * @param {...TDimensions extends 0 ? [unknown?] : TCoordinates} coordinates
+   * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinates
    */
   updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = Tuple<number, 0>,
@@ -228,7 +228,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     updater: (
       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
     ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-    ...coordinates: TDimensions extends 0 ? [unknown?] : TCoordinates
+    ...coordinates: TDimensions extends 0 ? [unknown?] : [TCoordinates?]
   ): void => {
     const value = updater(this.getAtCoordinates(...coordinates))
 
