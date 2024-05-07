@@ -184,11 +184,25 @@ export type SetAllEdges<TData> = (value: TData) => void
  * @template TData
  */
 export type MapAllEdges<TData, TDimensions extends number = 0> = <TResult>(
-  updater: (
+  transformer: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
   ) => TResult,
-) => GraphData<TResult, TDimensions>
+) => IGraph<TResult, TDimensions>
+
+/**
+ * A function which transforms all edges of the graph into a potentially new shape
+ *
+ * @export
+ * @typedef {SomeEdge}
+ * @template TData
+ */
+export type SomeEdge<TData, TDimensions extends number = 0> = (
+  callback: (
+    currentValue: TData,
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+  ) => boolean,
+) => boolean
 
 /**
  * The interface for a Graph data type, where the graph has TDimensions dimensions
@@ -261,6 +275,13 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    * @type {MapAllEdges<TData, TDimensions>}
    */
   mapAllEdges: MapAllEdges<TData, TDimensions>
+
+  /**
+   * Returns `true` if calling the `callback` on any edge returns `true`
+   *
+   * @type {SomeEdge<TData, TDimensions>}
+   */
+  someEdge: SomeEdge<TData, TDimensions>
 }
 
 /**
@@ -614,8 +635,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         // @ts-expect-error Data is valid when `TDimensions` is 0
         this.data,
       )
-      // @ts-expect-error GraphDataAtCoordinates<TResult, TDimensions, TCoordinates> is TResult when `TDimensions` is 0
-      this.data = newData
       return newData
     } else {
       const depth = previousCoordinates.length + 1
@@ -666,5 +685,72 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     ) => TResult,
     // @ts-expect-error TResult is valid for a graph with TDimensions=0
-  ): GraphData<TResult, TDimensions> => this._mapAllEdges(transformer, [])
+  ): IGraph<TResult, TDimensions> => new Graph(this.dimensions, this._mapAllEdges(transformer, []))
+
+  /**
+   * Recursively maps over all edges and returns true if the `callback` returns true for any edge
+   *
+   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @param {(
+   *       currentValue: TData,
+   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *     ) => boolean} callback
+   * @param {TCoordinates} previousCoordinates
+   * @returns {boolean}
+   */
+  private _someEdge = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+    callback: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => boolean,
+    previousCoordinates: TCoordinates,
+  ): boolean => {
+    // special case for a 0 dimension graph or no coordinates
+    if (this.dimensions === 0) {
+      return callback(
+        // @ts-expect-error Data is valid when `TDimensions` is 0
+        this.data,
+      )
+    } else {
+      const depth = previousCoordinates.length + 1
+
+      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
+      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
+
+      // @ts-expect-error this is prevented from running on TData via logical checks
+      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+
+      if (depth === this.dimensions) {
+        return coordinatesInGraph.some(coordinate =>
+          callback(
+            // @ts-expect-error this will always return TData because it is at the maximum depth of coordinates
+            this.getAtCoordinates<TData, Tuple<number, TDimensions>>([
+              ...previousCoordinates,
+              coordinate,
+            ]),
+          ),
+        )
+      } else {
+        return coordinatesInGraph.some(coordinate =>
+          this._someEdge(callback, [...previousCoordinates, coordinate]),
+        )
+      }
+    }
+  }
+
+  /**
+   * Returns true if any edge returns true for the provided `callback`
+   *
+   * @param {(
+   *       currentValue: TData,
+   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *     ) => boolean} callback
+   * @returns {boolean}
+   */
+  someEdge: SomeEdge<TData, TDimensions> = (
+    callback: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => boolean,
+  ): boolean => this._someEdge(callback, [])
 }

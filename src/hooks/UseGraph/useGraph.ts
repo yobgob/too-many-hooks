@@ -9,6 +9,7 @@ import {
   MapAllEdges,
   MapAtCoordinates,
   SetAllEdges,
+  SomeEdge,
   Tuple,
 } from './Graph'
 
@@ -123,6 +124,13 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
    * @type {SetAllEdges<TData>}
    */
   setAllEdges: SetAllEdges<TData>
+
+  /**
+   * Returns `true` if any edge returns `true` for the `callback`
+   *
+   * @type {SomeEdge<TData, TDimensions>}
+   */
+  someEdge: SomeEdge<TData, TDimensions>
 }
 
 /**
@@ -230,6 +238,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       forEachEdge: data.forEachEdge,
       mapAtCoordinates: data.mapAtCoordinates,
       mapAllEdges: data.mapAllEdges,
+      someEdge: data.someEdge,
       setAtCoordinates,
       updateAtCoordinates,
       updateAllEdges,
