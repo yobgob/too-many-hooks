@@ -1,5 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { CoordinatesOrNever, Graph, IGraph, Tuple } from '../../UseGraph/Graph'
+import useGraph from '../../UseGraph/useGraph'
 import {
+  Changed,
   Errors,
   FieldElement,
   Fields,
@@ -29,100 +32,220 @@ import {
  * @template {FormData} TData
  * @returns {{ register: RegisterFunction<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
  */
-const useForm: UseForm = <TData extends FormData>() => {
-  const fields = useRef<Fields<TData>>({})
-  const [errors, setErrors] = useState<Errors<TData>>({})
-  const [touched, setTouched] = useState<Touched<TData>>({})
-  const [changed, setChanged] = useState<Touched<TData>>({})
+const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0>() => {
+  const fieldsGraph = useRef<IGraph<Fields<TData, TDimensions>, TDimensions>>(
+    new Graph<Fields<TData, TDimensions>, TDimensions>(),
+  )
+  const [errors, { updateAtCoordinates: mapErrorsAtCoordinates, updateAllEdges: updateAllErrors }] =
+    useGraph<Errors<TData>, TDimensions>()
+  const [
+    touched,
+    { someEdge: touchedAtSomeEdge, updateAtCoordinates: updateTouchedAtCoordinates },
+  ] = useGraph<Touched<TData>, TDimensions>()
+  const [
+    changed,
+    {
+      someEdge: changedAtSomeEdge,
+      updateAtCoordinates: mapChangedAtCoordinates,
+      updateAllEdges: updateAllChanged,
+    },
+  ] = useGraph<Changed<TData>, TDimensions>()
+  const hasBegun = useMemo(
+    () =>
+      touched &&
+      touchedAtSomeEdge(fields =>
+        Object.values(fields).some(fieldHasBeenTouched => fieldHasBeenTouched),
+      ),
+    [touched, touchedAtSomeEdge],
+  )
+  const hasChangedWithoutSubmit = useMemo(
+    () =>
+      changed &&
+      changedAtSomeEdge(fields =>
+        Object.values(fields).some(fieldHasBeenChanged => fieldHasBeenChanged),
+      ),
+    [changed, changedAtSomeEdge],
+  )
 
-  const getRegisteredKeys = useCallback(
-    (): (keyof TData)[] => Object.keys(fields.current) as (keyof TData)[],
+  const updateFieldsAtCoordinates = useCallback(
+    (
+      updater: (current: Fields<TData, TDimensions>) => Fields<TData, TDimensions>,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => fieldsGraph.current.updateAtCoordinates<Tuple<number, TDimensions>>(updater, coordinates),
     [],
   )
 
-  const touch = useCallback((name: keyof TData) => {
-    if (name in fields.current) {
-      fields.current[name]!.hasBeenTouched = true
-    }
-    setTouched(touched => ({ ...touched, [name]: true }))
-  }, [])
+  const updateFieldAtCoordinates = useCallback(
+    (
+      fieldName: keyof TData,
+      updater: (
+        current: Fields<TData, TDimensions>[keyof TData],
+      ) => Fields<TData, TDimensions>[keyof TData],
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) =>
+      fieldsGraph.current.updateAtCoordinates<Tuple<number, TDimensions>>(
+        fields => ({ ...fields, [fieldName]: updater(fields[fieldName]) }),
+        coordinates,
+      ),
+    [],
+  )
 
-  const change = useCallback((name: keyof TData) => {
-    if (name in fields.current) {
-      fields.current[name]!.hasBeenChanged = true
-    }
-    setChanged(changed => ({ ...changed, [name]: true }))
-  }, [])
+  const setFieldAtCoordinates = useCallback(
+    (
+      fieldName: keyof TData,
+      newValue: Fields<TData, TDimensions>[keyof TData],
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) =>
+      fieldsGraph.current.updateAtCoordinates<Tuple<number, TDimensions>>(
+        fields => ({ ...fields, [fieldName]: newValue }),
+        coordinates,
+      ),
+    [],
+  )
 
-  const resetChanged = useCallback(() => {
-    setChanged(changed => Object.keys(changed).reduce((acc, key) => ({ ...acc, [key]: false }), {}))
-  }, [])
+  const touch = useCallback(
+    (
+      name: keyof TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => {
+      if (name in fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)) {
+        updateFieldsAtCoordinates(
+          fields => ({ ...fields, [name]: { ...fields[name], hasBeenTouched: true } }),
+          coordinates,
+        )
+      }
+      updateTouchedAtCoordinates<Tuple<number, TDimensions>>(
+        touched => ({ ...touched, [name]: true }),
+        coordinates,
+      )
+    },
+    [updateFieldsAtCoordinates, updateTouchedAtCoordinates],
+  )
 
-  const updateFieldsFieldError = useCallback((name: keyof TData) => {
-    if (!(name in fields.current)) return null // If the field has not been registered, it cannot have an error
+  const change = useCallback(
+    (
+      name: keyof TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => {
+      if (name in fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)) {
+        updateFieldsAtCoordinates(
+          fields => ({ ...fields, [name]: { ...fields[name], hasBeenChanged: true } }),
+          coordinates,
+        )
+      }
+      mapChangedAtCoordinates<Tuple<number, TDimensions>>(
+        changed => ({ ...changed, [name]: true }),
+        coordinates,
+      )
+    },
+    [mapChangedAtCoordinates, updateFieldsAtCoordinates],
+  )
 
-    const field = fields.current[name]!
-    const typedValue = getTypedFieldValue(field)
-    const options = field.options
+  const resetChanged = useCallback(
+    () =>
+      updateAllChanged(fields =>
+        Object.keys(fields).reduce((acc, fieldName) => ({ ...acc, [fieldName]: false }), {}),
+      ),
+    [updateAllChanged],
+  )
 
-    if (options?.isRequired && isBlank(typedValue)) {
-      const error = 'Field is required'
-      field.error = error
-      return error
-    }
+  const updateFieldsAtCoordinateFieldError = useCallback(
+    (
+      name: keyof TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => {
+      // @ts-expect-error This will be Fields<TData> because it always fetches at TDimensions depth
+      const fieldsAtCoordinate: Fields<TData> =
+        fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)
 
-    const error =
-      options?.validate?.({ ...getTypedData(fields.current), [field.name]: typedValue }) ?? null
-    field.error = error
+      if (!(name in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
 
-    return error
-  }, [])
+      const field = fieldsAtCoordinate[name]!
+      const typedValue = getTypedFieldValue<TData>(field)
+      const options = field.options
 
-  const updateFieldsFieldErrors = useCallback((): Errors<TData> => {
-    const errors = getRegisteredKeys().reduce(
-      (acc, fieldName) => ({
-        ...acc,
-        [fieldName]: updateFieldsFieldError(fieldName as keyof TData),
-      }),
-      {} as Errors<TData>,
-    )
-    return errors
-  }, [getRegisteredKeys, updateFieldsFieldError])
+      if (options?.isRequired && isBlank(typedValue)) {
+        const error = 'Field is required'
+        field.error = error
+        return error
+      } else {
+        const typedData = getTypedData<TData, TDimensions>(fieldsGraph.current)
+        const typedFields = { ...typedData.getAtCoordinates(coordinates), [name]: typedValue }
 
-  const updateError = useCallback(
-    (name: keyof TData) => {
-      const error = updateFieldsFieldError(name)
-      setErrors(errors => ({ ...errors, [name]: error }))
+        const error = options?.validate?.(typedValue, typedFields, typedData) ?? null
+        field.error = error
+
+        return error
+      }
+    },
+    [],
+  )
+
+  const updateFieldsFieldErrors = useCallback(
+    (): void =>
+      fieldsGraph.current.forEachEdge((fields, coordinate) =>
+        Object.keys(fields).forEach(fieldName =>
+          updateFieldsAtCoordinateFieldError(fieldName as keyof TData, coordinate),
+        ),
+      ),
+    [updateFieldsAtCoordinateFieldError],
+  )
+
+  const updateErrorAtCoordinates = useCallback(
+    (
+      name: keyof TData,
+      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    ) => {
+      const error = updateFieldsAtCoordinateFieldError(name)
+      mapErrorsAtCoordinates(errors => ({ ...errors, [name]: error }), coordinates)
       return error
     },
-    [updateFieldsFieldError],
+    [mapErrorsAtCoordinates, updateFieldsAtCoordinateFieldError],
   )
 
   const updateErrors = useCallback(() => {
-    const errors = updateFieldsFieldErrors()
-    setErrors(errors)
-    return errors
-  }, [updateFieldsFieldErrors])
+    updateFieldsFieldErrors()
 
-  const handleSubmit: HandleSubmit<TData> = useCallback(
+    updateAllErrors((fields, coordinates) =>
+      Object.keys(fields).reduce(
+        (acc, fieldName) => ({
+          ...acc,
+          [fieldName]: fieldsGraph.current.getAtCoordinates(coordinates)[fieldName],
+        }),
+        {} as Errors<TData>,
+      ),
+    )
+  }, [updateAllErrors, updateFieldsFieldErrors])
+
+  const handleSubmit: HandleSubmit<TData, TDimensions> = useCallback(
     <TShouldSkipValidations extends boolean = false>({
       shouldSkipValidations,
       onSubmit,
       onError,
-    }: HandleSubmitOptions<TData, TShouldSkipValidations>) => {
+    }: HandleSubmitOptions<TData, TDimensions, TShouldSkipValidations>) => {
       if (shouldSkipValidations) {
-        const typedData = getTypedData(fields.current)
+        const typedData = getTypedData(fieldsGraph.current)
+        // @ts-expect-error a graph of data is assignable to a graph of partial data
         onSubmit?.(typedData)
         resetChanged()
-      } else if (fields.current) {
-        const errors = updateErrors()
-        const hasErrors = Object.values(errors).some(error => error !== null)
+      } else if (fieldsGraph.current) {
+        updateErrors()
+        const errors = fieldsGraph.current.mapAllEdges(fields =>
+          Object.keys(fields).reduce(
+            (acc, fieldName) => ({ ...acc, [fieldName]: fields[fieldName]!.error }),
+            {} as Errors<TData>,
+          ),
+        )
+        const hasErrors = errors.someEdge(fields =>
+          Object.keys(fields).some(fieldName => fields[fieldName] !== null),
+        )
 
-        if (hasErrors) onError?.(errors)
-        else {
-          const typedData = getTypedData(fields.current)
-
+        if (hasErrors) {
+          onError?.(errors)
+        } else {
+          const typedData = getTypedData(fieldsGraph.current)
           resetChanged()
+          // @ts-expect-error a graph of data is assignable to a graph of data
           onSubmit?.(typedData)
         }
       }
@@ -130,58 +253,99 @@ const useForm: UseForm = <TData extends FormData>() => {
     [resetChanged, updateErrors],
   )
 
-  const register: RegisterFunction<TData> = useCallback(
-    <TFieldElement extends FieldElement, TIsRequired extends boolean = false>(
-      name: keyof TData,
-      options?: RegisterOptions<TData, keyof TData, keyof RefProps<TFieldElement>, TIsRequired>,
+  const register: RegisterFunction<TData, TDimensions> = useCallback(
+    <
+      TFieldName extends keyof TData,
+      TFieldElement extends FieldElement,
+      TIsRequired extends boolean = false,
+    >(
+      name: TFieldName,
+      options?: RegisterOptions<
+        TData,
+        TDimensions,
+        TFieldName,
+        keyof RefProps<TFieldElement>,
+        TIsRequired
+      >,
     ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
-      if (name in fields.current) {
-        fields.current[name]!.options = options
+      options ??= {}
+      if (name in fieldsGraph.current) {
+        updateFieldAtCoordinates(name, field => ({ ...field, options }), options.coordinates)
       } else {
-        fields.current[name] = {
+        setFieldAtCoordinates(
           name,
-          ref: React.createRef<TFieldElement | null>(),
-          options: options,
-          value: undefined,
-          error: null,
-          hasBeenTouched: false,
-          hasBeenChanged: false,
-        }
+          // @ts-expect-error options are valid because the validate type depends upon is required
+          {
+            name,
+            ref: React.createRef<TFieldElement | null>(),
+            options,
+            value: undefined,
+            error: null,
+            hasBeenTouched: false,
+            hasBeenChanged: false,
+          },
+          options?.coordinates,
+        )
       }
 
       return {
         // this cast is safe because we only create refs of TFieldElement type per name
-        [options?.refName ?? 'ref']: (element: TFieldElement) => {
+        [options.refName ?? 'ref']: (element: TFieldElement) => {
+          const fieldsAtCoordinate = fieldsGraph.current.getAtCoordinates<
+            Tuple<number, TDimensions>
+          >(options.coordinates)
+
           // update internal value upon first setting the ref
-          if (fields.current[name]!.value === undefined) {
-            fields.current[name]!.value = getElementDefaultValue<TData>(element)
+          if (fieldsAtCoordinate[name]!.value === undefined) {
+            const defaultValue = getElementDefaultValue<TData>(element)
+            updateFieldAtCoordinates(
+              name,
+              field => ({ ...field, value: defaultValue }),
+              options.coordinates,
+            )
           }
 
-          fields.current[name]!.ref.current = element
+          updateFieldAtCoordinates(
+            name,
+            field => ({ ...field, ref: { ...field?.ref, current: element } }),
+            options.coordinates,
+          )
         },
         onChange: event => {
-          if (name in fields.current) {
-            if (!fields.current[name]!.hasBeenChanged) {
-              change(name)
+          const fieldsAtCoordinate = fieldsGraph.current.getAtCoordinates<
+            Tuple<number, TDimensions>
+          >(options.coordinates)
+
+          if (name in fieldsAtCoordinate) {
+            if (!fieldsAtCoordinate[name]!.hasBeenChanged) {
+              change(name, options.coordinates)
             }
 
             const newValue = getOnChangeValue<TData>(event)
-            fields.current[name]!.value = newValue
+            updateFieldAtCoordinates(
+              name,
+              field => ({ ...field, value: newValue }),
+              options?.coordinates,
+            )
           }
         },
         onFocus: () => {
-          if (name in fields.current) {
-            if (!fields.current[name]!.hasBeenTouched) {
-              touch(name)
+          const fieldsAtCoordinate = fieldsGraph.current.getAtCoordinates<
+            Tuple<number, TDimensions>
+          >(options?.coordinates)
+
+          if (name in fieldsAtCoordinate) {
+            if (!fieldsAtCoordinate[name]!.hasBeenTouched) {
+              touch(name, options?.coordinates)
             }
           }
         },
         onBlur: () => {
-          updateError(name)
+          updateErrorAtCoordinates(name)
         },
       }
     },
-    [change, touch, updateError],
+    [change, setFieldAtCoordinates, touch, updateErrorAtCoordinates, updateFieldAtCoordinates],
   )
 
   return {
@@ -189,6 +353,8 @@ const useForm: UseForm = <TData extends FormData>() => {
     errors,
     touched,
     changed,
+    hasBegun,
+    hasChangedWithoutSubmit,
     handleSubmit,
   }
 }

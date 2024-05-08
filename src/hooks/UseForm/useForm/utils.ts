@@ -1,3 +1,4 @@
+import { IGraph } from '../../UseGraph/Graph'
 import {
   FieldData,
   Fields,
@@ -62,32 +63,46 @@ export const isBlank = (value: unknown): value is undefined | null | '' =>
 export const isNotBlank = (value: unknown): value is Exclude<unknown, undefined | null | ''> =>
   !isBlank(value)
 
-export const getTypedFieldValue = <TData extends FormData>(field: FieldData<TData>) => {
+export const getTypedFieldValue = <TData extends FormData, TDimensions extends number = 0>(
+  field: FieldData<TData, TDimensions>,
+): TData[keyof TData] => {
   if (field.ref.current && 'type' in field.ref.current) {
     const currentElement = field.ref.current
 
     if (isRadioInput(currentElement) || isCheckboxInput(currentElement)) {
+      // @ts-expect-error if it is a radio or checkbox TData[keyof TData] must be a boolean
       return currentElement.checked
     }
     if (isFileInput(currentElement)) {
+      // @ts-expect-error if it is a file input TData[keyof TData] must be files
       return currentElement.files
     }
     if (isNumberInput(currentElement)) {
+      // @ts-expect-error if it is a number input TData[keyof TData] must be a number
       return isNotBlank(currentElement.value) ? +currentElement.value : currentElement.value
     }
     if (isDateInput(currentElement)) {
+      // @ts-expect-error if it is a date input TData[keyof TData] must be a Date
       return isNotBlank(currentElement.value)
         ? new Date(currentElement.value)
         : currentElement.value
     }
+
+    // @ts-expect-error the only remaining type is string
     return currentElement.value
   }
-  return field.value
+  return field.value!
 }
 
-export const getTypedData = <TData extends FormData>(fields: Fields<TData>) => {
-  return Object.values(fields).reduce(
-    (acc, field) => (field ? { ...acc, [field.name]: getTypedFieldValue(field) } : acc),
-    {} as TData,
+export const getTypedData = <TData extends FormData, TDimensions extends number = 0>(
+  fieldsGraph: IGraph<Fields<TData, TDimensions>, TDimensions>,
+): IGraph<TData, TDimensions> =>
+  fieldsGraph.mapAllEdges(fields =>
+    Object.keys(fields).reduce(
+      (acc, fieldName) =>
+        fieldName
+          ? { ...acc, [fieldName]: getTypedFieldValue<TData, TDimensions>(fields[fieldName]!) }
+          : acc,
+      {} as TData,
+    ),
   )
-}

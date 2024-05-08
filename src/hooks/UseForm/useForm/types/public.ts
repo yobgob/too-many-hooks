@@ -1,4 +1,5 @@
 import React from 'react'
+import { CoordinatesOrNever, GraphData, IGraph, Tuple } from '../../../UseGraph/Graph'
 import { ObjectKey, PartialDataKeys, RefProps } from './internal'
 
 /**
@@ -33,6 +34,7 @@ export interface FormData {
  */
 export interface RegisterOptions<
   TData extends FormData,
+  TDimensions extends number = 0,
   TFieldName extends keyof TData = keyof TData,
   TRefPropsKey extends ObjectKey = 'ref',
   TIsRequired extends boolean = false,
@@ -49,17 +51,29 @@ export interface RegisterOptions<
    * @type {?TIsRequired}
    */
   isRequired?: TIsRequired
+
   /**
    * Adds a custom validation to the field.
    * If `isRequired` is `true`, the field is guaranteed to have a value.
    *
    * @type {?(
-   *     data: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
+   *     field: TIsRequired extends true ? TData[TFieldName] : TData[TFieldName] | undefined | null,
+   *     fields: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
+   *     graph: IGraph<Partial<TData>>,
    *   ) => string | null}
    */
   validate?: (
-    data: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
+    field: TIsRequired extends true ? TData[TFieldName] : TData[TFieldName] | undefined | null,
+    fields: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
+    graph: IGraph<Partial<TData>>,
   ) => string | null
+
+  /**
+   * The coordinates of the registered field, if in a form with TDimensions > 0
+   *
+   * @type {?CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>}
+   */
+  coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>
 }
 
 /**
@@ -97,12 +111,18 @@ export type RegisterResult<
  * @typedef {RegisterFunction}
  * @template {FormData} TData
  */
-export type RegisterFunction<TData extends FormData> = <
+export type RegisterFunction<TData extends FormData, TDimensions extends number = 0> = <
   TFieldElement extends FieldElement,
   TIsRequired extends boolean = false,
 >(
   name: keyof TData,
-  options: RegisterOptions<TData, keyof TData, keyof RefProps<TFieldElement>, TIsRequired>,
+  options: RegisterOptions<
+    TData,
+    TDimensions,
+    keyof TData,
+    keyof RefProps<TFieldElement>,
+    TIsRequired
+  >,
 ) => RegisterResult<TFieldElement, RefProps<TFieldElement>>
 
 /**
@@ -114,8 +134,14 @@ export type RegisterFunction<TData extends FormData> = <
  * @template {FormData} TData
  * @template {boolean} TShouldSkipValidations
  */
-export type OnSubmit<TData extends FormData, TShouldSkipValidations extends boolean = false> = (
-  data: TShouldSkipValidations extends true ? Partial<TData> : TData,
+export type OnSubmit<
+  TData extends FormData,
+  TDimensions extends number = 0,
+  TShouldSkipValidations extends boolean = false,
+> = (
+  data: TShouldSkipValidations extends true
+    ? IGraph<Partial<TData>, TDimensions>
+    : IGraph<TData, TDimensions>,
 ) => void
 
 /**
@@ -129,6 +155,7 @@ export type OnSubmit<TData extends FormData, TShouldSkipValidations extends bool
  */
 export interface HandleSubmitOptions<
   TData extends FormData,
+  TDimensions extends number = 0,
   TShouldSkipValidations extends boolean = false,
 > {
   /**
@@ -143,13 +170,13 @@ export interface HandleSubmitOptions<
    *
    * @type {?OnSubmit<TData, TShouldSkipValidations>}
    */
-  onSubmit?: OnSubmit<TData, TShouldSkipValidations>
+  onSubmit?: OnSubmit<TData, TDimensions, TShouldSkipValidations>
   /**
    * A callback used upon submission of the form if errors prevented completion
    *
-   * @type {?(errors: Errors<TData>) => void}
+   * @type {?(errors: IGraph<Errors<TData>, TDimensions>) => void}
    */
-  onError?: (errors: Errors<TData>) => void
+  onError?: (errors: IGraph<Errors<TData>, TDimensions>) => void
 }
 
 /**
@@ -160,8 +187,10 @@ export interface HandleSubmitOptions<
  * @template {FormData} TData
  * @template {boolean} TShouldSkipValidations
  */
-export type HandleSubmit<TData extends FormData> = <TShouldSkipValidations extends boolean = false>(
-  options: HandleSubmitOptions<TData, TShouldSkipValidations>,
+export type HandleSubmit<TData extends FormData, TDimensions extends number = 0> = <
+  TShouldSkipValidations extends boolean = false,
+>(
+  options: HandleSubmitOptions<TData, TDimensions, TShouldSkipValidations>,
 ) => void
 
 /**
@@ -177,6 +206,7 @@ export type HandleSubmit<TData extends FormData> = <TShouldSkipValidations exten
  */
 export interface FieldData<
   TData extends FormData,
+  TDimensions extends number = 0,
   TFieldElements extends FieldElements<TData> = FieldElements<TData>,
   TRefPropsKey extends ObjectKey = ObjectKey,
   TIsRequired extends boolean = boolean,
@@ -198,7 +228,7 @@ export interface FieldData<
    *
    * @type {?RegisterOptions<TData, keyof TData, TRefPropsKey, TIsRequired>}
    */
-  options?: RegisterOptions<TData, keyof TData, TRefPropsKey, TIsRequired>
+  options?: RegisterOptions<TData, TDimensions, keyof TData, TRefPropsKey, TIsRequired>
   /**
    * The current value of the field
    *
@@ -282,10 +312,11 @@ export type FieldElements<
  */
 export type Fields<
   TData extends FormData,
+  TDimensions extends number = 0,
   TFieldElements extends FieldElements<TData, FieldElement> = FieldElements<TData, FieldElement>,
   TRefPropsKey extends ObjectKey = ObjectKey,
   TIsRequired extends boolean = boolean,
-> = PartialDataKeys<TData, FieldData<TData, TFieldElements, TRefPropsKey, TIsRequired>>
+> = PartialDataKeys<TData, FieldData<TData, TDimensions, TFieldElements, TRefPropsKey, TIsRequired>>
 
 /**
  * The return type of `useForm`
@@ -295,7 +326,7 @@ export type Fields<
  * @typedef {UseFormReturn}
  * @template {FormData} TData
  */
-export interface UseFormReturn<TData extends FormData> {
+export interface UseFormReturn<TData extends FormData, TDimensions extends number = 0> {
   /**
    * The `register` function is used to register inputs as fields within the form
    *
@@ -303,29 +334,41 @@ export interface UseFormReturn<TData extends FormData> {
    */
   register: RegisterFunction<TData>
   /**
-   * A map of registered fields to their validation information
+   * A graph of maps of registered fields to their validation information
    *
-   * @type {Errors<TData>}
+   * @type {GraphData<Errors<TData>, TDimensions>}
    */
-  errors: Errors<TData>
+  errors: GraphData<Errors<TData>, TDimensions>
   /**
-   * A map of registered fields to whether or not they have been focused by the user
+   * A graph of maps of registered fields to whether or not they have been focused by the user
    *
-   * @type {Touched<TData>}
+   * @type {GraphData<Touched<TData>, TDimensions>}
    */
-  touched: Touched<TData>
+  touched: GraphData<Touched<TData>, TDimensions>
   /**
-   * A map of registered fields to whether or not their value has been changed by the user
+   * A graph of maps of registered fields to whether or not their value has been changed by the user
    *
-   * @type {Changed<TData>}
+   * @type {GraphData<Changed<TData>, TDimensions>}
    */
-  changed: Changed<TData>
+  changed: GraphData<Changed<TData>, TDimensions>
+  /**
+   * `true` if the user has focused any form field
+   *
+   * @type {boolean}
+   */
+  hasBegun: boolean
+  /**
+   * `true` if the form has not been submitted since the last form field was changed
+   *
+   * @type {boolean}
+   */
+  hasChangedWithoutSubmit: boolean
   /**
    * Handles submission of the form, conditionally calling an `onSubmit` callback which receives the form's data
    *
-   * @type {HandleSubmit<TData>}
+   * @type {HandleSubmit<TData, TDimensions>}
    */
-  handleSubmit: HandleSubmit<TData>
+  handleSubmit: HandleSubmit<TData, TDimensions>
 }
 
 /**

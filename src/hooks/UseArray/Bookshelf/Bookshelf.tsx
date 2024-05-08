@@ -15,7 +15,7 @@ const Bookshelf: React.FC = () => {
   const arr = new Graph<string, 1>(1)
   const setArr = arr.setAtCoordinates<[]>
   const setAtIndex = arr.setAtCoordinates<[number]>
-  setArr(['test 2', 'test 3'])
+  setArr({ 0: 'test 2', 1: 'test 3' })
   setAtIndex('test 4', [2])
   const getArr = arr.getAtCoordinates
   const getAtIndex = arr.getAtCoordinates<[number]>
@@ -36,7 +36,8 @@ const Bookshelf: React.FC = () => {
   console.log(getGraph())
   console.log(getAtX([1]))
   console.log(getAtXY([2, 0]))
-  graph.mapAllEdges(str => str.split(' ').join('---'))
+  console.log(graph.mapAllEdges(str => str.split(' ')).getAtCoordinates())
+  graph.updateAllEdges(str => str.split(' ').join('---'))
   console.log(getGraph())
 
   return (

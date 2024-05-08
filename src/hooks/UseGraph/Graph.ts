@@ -35,7 +35,7 @@ export type Tuple<T, N extends number> = N extends N
  */
 type _GraphDataOf<T, N extends number, R extends unknown[]> = R['length'] extends N
   ? T
-  : _GraphDataOf<Record<number, T>, N, [T, ...R]>
+  : _GraphDataOf<{ [key: number]: T }, N, [T, ...R]>
 /**
  * The type of the data stored internally inside a Graph, with a depth of `N` and data of type `T`
  *
@@ -74,10 +74,11 @@ export type CoordinatesOrNever<
  * @template {number} TMaxDepth
  * @template {Coordinates} TCoordinate
  */
-export type GraphDataAtCoordinates<T, TMaxDepth extends number, TCoordinates extends Coordinates> =
-  Length<TCoordinates> extends TMaxDepth
-    ? T
-    : GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
+export type GraphDataAtCoordinates<
+  T,
+  TMaxDepth extends number,
+  TCoordinates extends Coordinates,
+> = GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
 
 /**
  * A function which returns graph data at certain coordinates
@@ -363,7 +364,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @returns {TDimensions}
    */
-  getDimensions = () => this.dimensions
+  getDimensions = (): TDimensions => this.dimensions
 
   /**
    * Accesses graph data at particular `Coordinates`

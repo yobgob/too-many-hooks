@@ -1,5 +1,4 @@
 import React from 'react'
-import { Graph } from '../../../common/classes/Graph'
 import { Select } from '../../../common/components'
 import Button from '../../../common/components/Button'
 import useForm from '../useForm'
@@ -28,38 +27,8 @@ interface Props {
 }
 
 const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
-  const { register, errors, touched, changed, handleSubmit } = useForm<ApplicationFormData>()
-  const hasBegun = Object.values(touched).some(hasBeenTouched => hasBeenTouched)
-  const hasChangedAnyValue = Object.values(changed).some(hasBeenChanged => hasBeenChanged)
-
-  const value = new Graph<string, 0>()
-  value.setAtCoordinates('test', [])
-  console.log(value.getAtCoordinates())
-
-  const arr = new Graph<string, 1>()
-  const setArr = arr.setAtCoordinates<[]>
-  const setAtIndex = arr.setAtCoordinates<[number]>
-  setArr(['test 2', 'test 3'])
-  setAtIndex('test 4', [2])
-  const getArr = arr.getAtCoordinates
-  const getAtIndex = arr.getAtCoordinates<[number]>
-  console.log(getArr())
-  console.log(getAtIndex([2]))
-
-  const graph = new Graph<string, 2>()
-  const setGraph = graph.setAtCoordinates<[]>
-  const setAtX = graph.setAtCoordinates<[number]>
-  const setAtXY = graph.setAtCoordinates<[number, number]>
-  setGraph({ 0: { 0: 'test 5' } })
-  setAtX({ 0: 'test 6' }, [1])
-  setAtXY('test 7', [2, 0])
-
-  const getGraph = graph.getAtCoordinates
-  const getAtX = graph.getAtCoordinates<[number]>
-  const getAtXY = graph.getAtCoordinates<[number, number]>
-  console.log(getGraph())
-  console.log(getAtX([1]))
-  console.log(getAtXY([2, 0]))
+  const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } =
+    useForm<ApplicationFormData>()
 
   return (
     <div className="flex w-96 flex-col gap-4">
@@ -71,7 +40,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           placeholder="name@example.com"
           {...register('email', {
             isRequired: true,
-            validate: ({ email }) => (email?.includes('@') ? null : 'Email must include an @'),
+            validate: email => (email.includes('@') ? null : 'Email must include an @'),
           })}
         />
       </label>
@@ -102,7 +71,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
           {...register('startDate', {
             isRequired: true,
-            validate: ({ startDate }) =>
+            validate: startDate =>
               startDate < new Date(Date.now()) ? 'Date must be in the future' : null,
           })}
         />
@@ -115,7 +84,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
           {...register('expectedSalary', {
             isRequired: true,
-            validate: ({ expectedSalary }) =>
+            validate: expectedSalary =>
               expectedSalary < 0 || expectedSalary > 1000000
                 ? 'Please enter a number between $0 and $1,000,000'
                 : null,
@@ -128,7 +97,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           type="checkbox"
           {...register('terms', {
             isRequired: true,
-            validate: ({ terms }) => (terms === false ? 'You must agree to the terms' : null),
+            validate: terms => (terms === false ? 'You must agree to the terms' : null),
           })}
           className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
         />
@@ -148,7 +117,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           Save
         </Button>
         {hasBegun &&
-          (hasChangedAnyValue ? (
+          (hasChangedWithoutSubmit ? (
             <div className="text-orange-500">&#9888; Unsaved changes</div>
           ) : (
             <div className="text-green-500">&#10003; Saved</div>
