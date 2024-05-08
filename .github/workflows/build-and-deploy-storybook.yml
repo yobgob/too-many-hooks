@@ -18,10 +18,7 @@ jobs:
       - name: Install package dependencies
         run: bun install
 
-      - name: Build package
-        run: bun run build
-
-      - name: Build storybook
+      - name: Build package and storybook
         run: bun build-storybook && touch storybook-static/.nojekyll
 
       - name: Deploy to GitHub Pages

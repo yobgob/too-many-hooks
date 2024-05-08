@@ -27,8 +27,8 @@
   },
   "scripts": {
     "build": "tsc && vite build",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "storybook": "bun run build && storybook dev -p 6006",
+    "build-storybook": "bun run build && storybook build",
     "test": "test-storybook --stories-json",
     "lint:format:base": "prettier --check",
     "lint:code:base": "eslint --max-warnings=0",
