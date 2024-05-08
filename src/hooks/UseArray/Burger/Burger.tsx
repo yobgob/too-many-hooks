@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Select } from '../../../common/components'
 import '../../../index.css'
+import { Button, Select } from '../../../storybook-common/components'
 import useArray from '../useArray'
 import {
   DEFAULT_BURGER,

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Modal as Modal_ } from '../../../common/components'
 import '../../../index.css'
+import { Button, Modal as Modal_ } from '../../../storybook-common/components'
 import useFlag from '../useFlag'
 
 const Modal: React.FC = () => {
