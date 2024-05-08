@@ -128,7 +128,7 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template TData
  * @template {number} [TDimensions=0]
  */
-export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
+export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = Tuple<number, 0>,
 >(
   updater: (
@@ -148,7 +148,7 @@ export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
   TResult = TData,
   TCoordinates extends Coordinates = Tuple<number, 0>,
 >(
-  updater: (
+  transformer: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   ) => GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
@@ -248,13 +248,6 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    * @type {SetAtCoordinates<TData, TDimensions>}
    */
   setAtCoordinates: SetAtCoordinates<TData, TDimensions>
-
-  /**
-   * Transforms all edges in the graph
-   *
-   * @type {MapAllEdges<TData>}
-   */
-  mapAllEdges: MapAllEdges<TData>
 
   /**
    * Sets all edges in the graph to a new value
@@ -415,7 +408,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     // special case for a 0 dimension graph or no coordinates
     if (this.dimensions === 0) {
       // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
-      this.data = updater(this.data)
+      callback(this.data)
     } else {
       const depth = previousCoordinates.length + 1
 
@@ -464,7 +457,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
    * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
    */
-  mapAtCoordinates: MapAtCoordinates<TData, TDimensions> = <
+  updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = Tuple<number, 0>,
   >(
     updater: (

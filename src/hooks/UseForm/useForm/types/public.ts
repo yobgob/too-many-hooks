@@ -59,13 +59,13 @@ export interface RegisterOptions<
    * @type {?(
    *     field: TIsRequired extends true ? TData[TFieldName] : TData[TFieldName] | undefined | null,
    *     fields: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
-   *     graph: IGraph<Partial<TData>>,
+   *     graph: IGraph<Partial<TData>, TDimensions>,
    *   ) => string | null}
    */
   validate?: (
     field: TIsRequired extends true ? TData[TFieldName] : TData[TFieldName] | undefined | null,
     fields: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
-    graph: IGraph<Partial<TData>>,
+    graph: IGraph<Partial<TData>, TDimensions>,
   ) => string | null
 
   /**
