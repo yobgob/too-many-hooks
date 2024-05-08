@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '../../../common/components'
+import { Button } from '../../../storybook-common/components'
 import useFlag from '../useFlag'
 
 const Form: React.FC = () => {

@@ -109,7 +109,7 @@ The built package will output to `/dist`.
 
 #### Running Storybook
 
-After building the library the storybook can be run at [http://localhost:6006/](http://localhost:6006/) with:
+The storybook depends upon the library build, so storybook scripts also build the library. The storybook can be run with or without building the library at [http://localhost:6006/](http://localhost:6006/) with:
 
 `bun storybook`
 

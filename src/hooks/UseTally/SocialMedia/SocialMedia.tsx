@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '../../../common/components'
+import { Button } from '../../../storybook-common/components'
 import useTally from '../useTally'
 import PFP from './assets/pfp.jpeg'
 

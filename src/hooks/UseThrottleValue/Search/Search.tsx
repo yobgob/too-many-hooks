@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import BOOK_NAMES from '../../../common/assets/book-names.json'
+import BOOK_NAMES from '../../../storybook-common/assets/book-names.json'
 import useThrottleValue from '../useThrottleValue'
 
 interface Props {

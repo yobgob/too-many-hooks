@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Button } from '../../../common/components'
+import { Button } from '../../../storybook-common/components'
 import { Graph } from '../../UseGraph/Graph'
 import useArray from '../useArray'
 import { BOOKS, UNUSED_BOOKS } from './constants'
