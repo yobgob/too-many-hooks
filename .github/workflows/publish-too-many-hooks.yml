@@ -3,20 +3,20 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag"
+        description: 'Release tag'
         required: false
-        default: "latest"
+        default: 'latest'
       dry-run:
-        description: "Run with the dry run flag to prevent publication"
+        description: 'Run with the dry run flag to prevent publication'
         required: false
         default: false
         type: boolean
       strategy:
-        description: "Publish only if the semantic version is an upgrade (upgrade) or is not in the registry yet (all)"
+        description: 'Publish only if the semantic version is an upgrade (upgrade) or is not in the registry yet (all)'
         required: false
         default: all
         type: choice
-        options: 
+        options:
           - upgrade
           - all
 
@@ -33,26 +33,18 @@ jobs:
 
       - name: Install dependencies
         run: bun install
-        working-directory: packages/too-many-hooks
 
       - name: Lint
         run: bun lint:all
-        working-directory: packages/too-many-hooks
 
       - name: Build
         run: bun run build
-        working-directory: packages/too-many-hooks
-
-      - name: Swap READMEs
-        run: |
-          mv ./README.md ./packages/too-many-hooks/README.md
 
       - name: Publish
         id: publish
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/too-many-hooks/package.json
           tag: ${{ inputs.tag }}
           dry-run: ${{ inputs.dry-run }}
           strategy: ${{ inputs.strategy }}

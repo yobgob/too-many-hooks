@@ -4,7 +4,8 @@ on:
     branches:
       - main
     paths:
-      - "packages/too-many-hooks/**.ts"
+      - 'src/hooks/**/use*.ts'
+      - 'src/index.ts'
 
 jobs:
   bump-tag-version:
@@ -26,11 +27,9 @@ jobs:
 
       - name: Install dependencies
         run: bun install
-        working-directory: packages/too-many-hooks
 
       - name: Set package version
         run: npm version ${{ steps.semver-bump.outputs.version }}
-        working-directory: packages/too-many-hooks
 
       - name: Create version update PR
         id: open-pr
@@ -51,7 +50,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ steps.open-pr.outputs.pull-request-number }}
-          comment-author: "github-actions[bot]"
+          comment-author: 'github-actions[bot]'
           body-includes: Release notes
 
       - name: Create or update comment

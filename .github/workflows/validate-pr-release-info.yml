@@ -1,18 +1,10 @@
 name: Validate Release Info
 on:
   pull_request:
-    types:
-      [
-        labeled,
-        unlabeled,
-        opened,
-        edited,
-        reopened,
-        synchronize,
-        ready_for_review,
-      ]
+    types: [labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review]
     paths:
-      - "packages/too-many-hooks/**.ts"
+      - 'src/hooks/**/use*.ts'
+      - 'src/index.ts'
 
 env: 
   IS_LABELED_RELEASE: ${{ contains(github.event.pull_request.labels.*.name, 'patch release') || contains(github.event.pull_request.labels.*.name, 'minor release') || contains(github.event.pull_request.labels.*.name, 'major release') }}
