@@ -519,15 +519,12 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     data?: GraphData<TData, TDimensions>
   }) {
     if (data && dimensions !== undefined) {
-      console.log('set data from data', data, dimensions, graph)
       this.data = data
       this.dimensions = dimensions
     } else if (graph) {
-      console.log('set data from graph', data, dimensions, graph)
       this.data = graph.get()
       this.dimensions = graph.getDimensions()
     } else if (dimensions !== undefined) {
-      console.log('set dimensions and thats it', data, dimensions, graph)
       this.dimensions = dimensions
     } else {
       // @ts-expect-error TDimensions defaults to 0 if dimensions is not defined, so this is okay
@@ -667,8 +664,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
 
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
-      console.log('pre set', this.data, value)
-
       // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
       this.data = value
       // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
@@ -680,8 +675,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         (acc, coordinate) => ({ [coordinate]: acc }),
         value,
       )
-
-      console.log('pre merge', this.data, newValue)
 
       this.data = merge(this.data, newValue)
 

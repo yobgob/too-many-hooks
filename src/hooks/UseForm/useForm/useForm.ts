@@ -144,7 +144,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       fieldName: TFieldName,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      console.log('update field vertex field error', fieldName, coordinates)
       const fieldsAtCoordinate = fieldsGraph.current.getVertex(coordinates)
 
       if (!(fieldsAtCoordinate && fieldName in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
@@ -194,36 +193,33 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     [isRequiredErrorMessageOverride, updateFieldsVertex],
   )
 
-  const updateFieldsVertexFieldErrors = useCallback((): void => {
-    console.log('update all fields errors at')
-
-    fieldsGraph.current.forEachVertex((fields, coordinates) =>
-      Object.keys(fields).forEach(fieldName =>
-        updateFieldsVertexFieldError(fieldName as keyof TData, coordinates),
+  const updateFieldsVertexFieldErrors = useCallback(
+    (): void =>
+      fieldsGraph.current.forEachVertex((fields, coordinates) =>
+        Object.keys(fields).forEach(fieldName =>
+          updateFieldsVertexFieldError(fieldName as keyof TData, coordinates),
+        ),
       ),
-    )
-  }, [updateFieldsVertexFieldError])
+    [updateFieldsVertexFieldError],
+  )
 
   const updateErrorsVertexFieldError = useCallback(
     <TFieldName extends keyof TData>(
       fieldName: TFieldName,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      console.log('update errors at', fieldName, coordinates)
-
-      updateErrorsVertex(errors => {
-        console.log('updating errors vertex', errors)
-        return {
+      updateErrorsVertex(
+        errors => ({
           ...errors!,
           [fieldName]: updateFieldsVertexFieldError(fieldName, coordinates),
-        }
-      }, coordinates)
+        }),
+        coordinates,
+      )
     },
     [updateErrorsVertex, updateFieldsVertexFieldError],
   )
 
   const updateErrors = useCallback(() => {
-    console.log('update all errors')
     updateFieldsVertexFieldErrors()
 
     const errors = fieldsGraph.current
@@ -322,7 +318,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
           // update internal value upon first setting the ref
           if (fields[name]!.value === undefined) {
             const defaultValue = getElementDefaultValue<TData>(element)
-            console.log('update default')
             updateFieldsVertex(
               name,
               field => ({
@@ -333,8 +328,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
               options.coordinates,
             )
           } else {
-            console.log('update ref')
-
             updateFieldsVertex(
               name,
               field => ({ ...field!, ref: { ...field?.ref, current: element } }),
