@@ -162,7 +162,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       name: keyof TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     ) => {
-      // @ts-expect-error This will be Fields<TData> because it always fetches at TDimensions depth
       const fieldsAtCoordinate: Fields<TData, TDimensions> =
         fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)
 
@@ -304,7 +303,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       return {
         // this cast is safe because we only create refs of TFieldElement type per name
         [options.refName ?? 'ref']: (element: TFieldElement) => {
-          // @ts-expect-error this type is correct since the coordinates are TDimensions long
           const fieldsAtCoordinate: Fields<TData, TDimensions> =
             fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(options.coordinates)
 
@@ -325,7 +323,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
           )
         },
         onChange: event => {
-          // @ts-expect-error this type is correct since the coordinates are TDimensions long
           const fieldsAtCoordinate: Fields<TData, TDimensions> =
             fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(options.coordinates)
 
@@ -343,7 +340,6 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
           }
         },
         onFocus: () => {
-          // @ts-expect-error this type is correct since the coordinates are TDimensions long
           const fieldsAtCoordinate: Fields<TData, TDimensions> =
             fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(options?.coordinates)
 

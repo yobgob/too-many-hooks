@@ -1,8 +1,7 @@
 import merge from 'lodash.merge'
 import { Length, SafeSubtract } from '../../common/types/arithmetic'
 
-// #region Tuples
-
+// #region tuples
 /**
  * Recursion utility for building tuples
  *
@@ -11,9 +10,8 @@ import { Length, SafeSubtract } from '../../common/types/arithmetic'
  * @template {number} N
  * @template {unknown[]} R
  */
-type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N
-  ? R
-  : _TupleOf<T, N, [T, ...R]>
+type _TupleOf<T, N extends number, R extends T[]> =
+  Length<R> extends N ? R : _TupleOf<T, N, [T, ...R]>
 /**
  * Utility for building tuples of length `N` containing data of type `T`
  *
@@ -24,32 +22,35 @@ type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N
 export type Tuple<T, N extends number> = N extends N
   ? number extends N
     ? T[]
-    : _TupleOf<T, N, []>
+    : N extends 0
+      ? []
+      : _TupleOf<T, N, []>
   : never
-
 // #endregion
 
 // #region graph data and coordinates
-
 /**
  * Recursion utility for building graph types
  *
  * @typedef {_GraphDataOf}
- * @template T
- * @template {number} N
+ * @template TData
+ * @template {number} TDimensions
  * @template {unknown[]} R
  */
-type _GraphDataOf<T, N extends number, R extends unknown[]> = R['length'] extends N
-  ? T
-  : _GraphDataOf<{ [key: number]: T }, N, [T, ...R]>
+type _GraphDataOf<TData, TDimensions extends number, R extends never[]> =
+  Length<R> extends TDimensions
+    ? TData
+    : _GraphDataOf<{ [key: number]: TData }, TDimensions, [never, ...R]>
 /**
  * The type of the data stored internally inside a Graph, with a depth of `N` and data of type `T`
  *
  * @typedef {GraphData}
- * @template T
- * @template {number} [N=0]
+ * @template TData
+ * @template {number} [TDimensions=0]
  */
-export type GraphData<T, N extends number = 0> = number extends N ? T : _GraphDataOf<T, N, []>
+export type GraphData<TData, TDimensions extends number = 0> = TDimensions extends 0
+  ? TData
+  : _GraphDataOf<TData, TDimensions, []>
 
 /**
  * The type of coordinates received by Graph functions
@@ -314,7 +315,7 @@ export interface IGraph<TData, TDimensions extends number = 0> {
 }
 
 /**
- * A simple Graph data structure
+ * A data structure capable of containing a graph of any depth
  *
  * @export
  * @class Graph
@@ -324,6 +325,7 @@ export interface IGraph<TData, TDimensions extends number = 0> {
  * @implements {IGraph<TData, TDimensions>}
  */
 export class Graph<TData, TDimensions extends number = 0> implements IGraph<TData, TDimensions> {
+  // #region attributes
   /**
    * The internal data of the Graph
    *
@@ -339,7 +341,9 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @type {TDimensions}
    */
   private dimensions: TDimensions
+  // #endregion
 
+  // #region constructors
   /**
    * Creates an instance of Graph with set dimensions
    *
@@ -386,6 +390,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       this.dimensions = 0
     }
   }
+  // #endregion
 
   /**
    * Returns the number of dimensions in the graph
@@ -442,7 +447,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ) => {
     // special case for a 0 dimension graph or no coordinates
     if (this.dimensions === 0) {
-      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
       callback(this.data)
     } else {
       const depth = previousCoordinates.length + 1
@@ -668,7 +672,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     if (this.dimensions === 0) {
       // @ts-expect-error TResult is valid when `TDimensions` is 0
       const newData: GraphDataAtCoordinates<TResult, TDimensions, TCoordinates> = transformer(
-        // @ts-expect-error Data is valid when `TDimensions` is 0
         this.data,
       )
       return newData
@@ -744,10 +747,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): boolean => {
     // special case for a 0 dimension graph or no coordinates
     if (this.dimensions === 0) {
-      return callback(
-        // @ts-expect-error Data is valid when `TDimensions` is 0
-        this.data,
-      )
+      return callback(this.data)
     } else {
       const depth = previousCoordinates.length + 1
 
