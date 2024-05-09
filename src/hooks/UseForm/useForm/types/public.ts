@@ -141,8 +141,12 @@ export type OnSubmit<
   TShouldSkipValidations extends boolean = false,
 > = (
   data: TShouldSkipValidations extends true
-    ? IGraph<Partial<TData>, TDimensions>
-    : IGraph<TData, TDimensions>,
+    ? TDimensions extends 0
+      ? Partial<TData>
+      : IGraph<Partial<TData>, TDimensions>
+    : TDimensions extends 0
+      ? TData
+      : IGraph<TData, TDimensions>,
 ) => void
 
 /**
@@ -175,9 +179,11 @@ export interface HandleSubmitOptions<
   /**
    * A callback used upon submission of the form if errors prevented completion
    *
-   * @type {?(errors: IGraph<Errors<TData>, TDimensions>) => void}
+   * @type {?(errors: TDimensions extends 0 ? Errors<TData> : IGraph<Errors<TData>, TDimensions>) => void}
    */
-  onError?: (errors: IGraph<Errors<TData>, TDimensions>) => void
+  onError?: (
+    errors: TDimensions extends 0 ? Errors<TData> : IGraph<Errors<TData>, TDimensions>,
+  ) => void
 }
 
 /**
@@ -337,21 +343,21 @@ export interface UseFormReturn<TData extends FormData, TDimensions extends numbe
   /**
    * A graph of maps of registered fields to their validation information
    *
-   * @type {GraphData<Errors<TData>, TDimensions>}
+   * @type {GraphData<Errors<TData>, TDimensions> | undefined}
    */
-  errors: GraphData<Errors<TData>, TDimensions>
+  errors: GraphData<Errors<TData>, TDimensions> | undefined
   /**
    * A graph of maps of registered fields to whether or not they have been focused by the user
    *
-   * @type {GraphData<Touched<TData>, TDimensions>}
+   * @type {GraphData<Touched<TData>, TDimensions> | undefined}
    */
-  touched: GraphData<Touched<TData>, TDimensions>
+  touched: GraphData<Touched<TData>, TDimensions> | undefined
   /**
    * A graph of maps of registered fields to whether or not their value has been changed by the user
    *
-   * @type {GraphData<Changed<TData>, TDimensions>}
+   * @type {GraphData<Changed<TData>, TDimensions> | undefined}
    */
-  changed: GraphData<Changed<TData>, TDimensions>
+  changed: GraphData<Changed<TData>, TDimensions> | undefined
   /**
    * `true` if the user has focused any form field
    *

@@ -40,25 +40,21 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const fieldsGraph = useRef<IGraph<Fields<TData, TDimensions>, TDimensions>>(
     new Graph<Fields<TData, TDimensions>, TDimensions>(),
   )
-  const [
-    errors,
-    { updateAtCoordinates: mapErrorsAtCoordinates, updateAllVertices: updateAllErrors },
-  ] = useGraph<Errors<TData>, TDimensions>()
-  const [
-    touched,
-    { someVertex: touchedAtSomeVertex, updateAtCoordinates: updateTouchedAtCoordinates },
-  ] = useGraph<Touched<TData>, TDimensions>()
+  const [errors, { updateVertex: updateErrorsVertex, updateAllVertices: updateAllErrors }] =
+    useGraph<Errors<TData>, TDimensions>()
+  const [touched, { someVertex: touchedAtSomeVertex, updateVertex: updateTouchedVertex }] =
+    useGraph<Touched<TData>, TDimensions>()
   const [
     changed,
     {
       someVertex: changedAtSomeVertex,
-      updateAtCoordinates: mapChangedAtCoordinates,
-      updateAllVertices: updateAllChanged,
+      updateVertex: updateChangedVertex,
+      updateAllVertices: updateAllChangedVertices,
     },
   ] = useGraph<Changed<TData>, TDimensions>()
   const hasBegun = useMemo(
     () =>
-      touched &&
+      !!touched &&
       touchedAtSomeVertex(fields =>
         Object.values(fields).some(fieldHasBeenTouched => fieldHasBeenTouched),
       ),
@@ -66,50 +62,40 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   )
   const hasChangedWithoutSubmit = useMemo(
     () =>
-      changed &&
+      !!changed &&
       changedAtSomeVertex(fields =>
         Object.values(fields).some(fieldHasBeenChanged => fieldHasBeenChanged),
       ),
     [changed, changedAtSomeVertex],
   )
 
-  const updateFieldsAtCoordinates = useCallback(
-    (
-      updater: (current: Fields<TData, TDimensions>) => Fields<TData, TDimensions>,
-      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) =>
-      fieldsGraph.current.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(
-        // @ts-expect-error Fields<TData, TDimensions> is the same thing as graph data at coordinates with length TDimensions
-        updater,
-        coordinates,
-      ),
-    [],
-  )
-
-  const updateFieldAtCoordinates = useCallback(
+  const updateFieldsVertex = useCallback(
     (
       fieldName: keyof TData,
       updater: (
-        current: Fields<TData, TDimensions>[keyof TData],
+        current?: Fields<TData, TDimensions>[keyof TData],
       ) => Fields<TData, TDimensions>[keyof TData],
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) =>
-      // @ts-expect-error Fields<TData, TDimensions> is the same thing as graph data at coordinates with length TDimensions
-      fieldsGraph.current.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(fields => {
-        const typedFields = fields as Fields<TData, TDimensions>
-        return { ...typedFields, [fieldName]: updater(typedFields[fieldName]) }
+      fieldsGraph.current.updateVertex(fields => {
+        return fields
+          ? { ...fields, [fieldName]: updater(fields?.[fieldName]) }
+          : ({ [fieldName]: updater() } as Fields<TData, TDimensions>)
       }, coordinates),
     [],
   )
 
-  const setFieldAtCoordinates = useCallback(
-    (
-      fieldName: keyof TData,
-      newValue: Fields<TData, TDimensions>[keyof TData],
+  const setFieldsVertex = useCallback(
+    <TFieldName extends keyof TData>(
+      fieldName: TFieldName,
+      newValue: Fields<TData, TDimensions>[TFieldName],
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) =>
-      fieldsGraph.current.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(
-        fields => ({ ...fields, [fieldName]: newValue }),
+      fieldsGraph.current.updateVertex(
+        fields =>
+          fields
+            ? { ...fields, [fieldName]: newValue }
+            : ({ [fieldName]: newValue } as Fields<TData, TDimensions>),
         coordinates,
       ),
     [],
@@ -117,65 +103,44 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
 
   const touch = useCallback(
     (
-      name: keyof TData,
+      fieldName: keyof TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      if (
-        name in fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
-      ) {
-        updateFieldsAtCoordinates(
-          fields => ({ ...fields, [name]: { ...fields[name], hasBeenTouched: true } }),
-          coordinates,
-        )
-      }
-      updateTouchedAtCoordinates<CoordinatesOfLength<TDimensions>>(
-        touched => ({ ...touched, [name]: true }),
-        coordinates,
-      )
+      updateFieldsVertex(fieldName, fields => ({ ...fields!, hasBeenTouched: true }), coordinates)
+      updateTouchedVertex(fields => ({ ...fields!, [fieldName]: true }), coordinates)
     },
-    [updateFieldsAtCoordinates, updateTouchedAtCoordinates],
+    [updateTouchedVertex, updateFieldsVertex],
   )
 
   const change = useCallback(
     (
-      name: keyof TData,
+      fieldName: keyof TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      if (
-        name in fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
-      ) {
-        updateFieldsAtCoordinates(
-          fields => ({ ...fields, [name]: { ...fields[name], hasBeenChanged: true } }),
-          coordinates,
-        )
-      }
-      mapChangedAtCoordinates<CoordinatesOfLength<TDimensions>>(
-        changed => ({ ...changed, [name]: true }),
-        coordinates,
-      )
+      updateFieldsVertex(fieldName, fields => ({ ...fields!, hasBeenChanged: true }), coordinates)
+      updateChangedVertex(fields => ({ ...fields!, [fieldName]: true }), coordinates)
     },
-    [mapChangedAtCoordinates, updateFieldsAtCoordinates],
+    [updateChangedVertex, updateFieldsVertex],
   )
 
   const resetChanged = useCallback(
     () =>
-      updateAllChanged(fields =>
+      updateAllChangedVertices(fields =>
         Object.keys(fields).reduce((acc, fieldName) => ({ ...acc, [fieldName]: false }), {}),
       ),
-    [updateAllChanged],
+    [updateAllChangedVertices],
   )
 
-  const updateFieldsAtCoordinateFieldError = useCallback(
-    (
-      name: keyof TData,
+  const updateFieldsVertexFieldError = useCallback(
+    <TFieldName extends keyof TData>(
+      fieldName: TFieldName,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      const fieldsAtCoordinate: Fields<TData, TDimensions> =
-        fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
+      const fieldsAtCoordinate = fieldsGraph.current.getVertex(coordinates)
 
-      if (!(name in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
+      if (!(fieldsAtCoordinate && fieldName in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
 
-      const field = fieldsAtCoordinate[name]!
+      const field = fieldsAtCoordinate[fieldName]!
       const typedValue = getTypedFieldValue<TData, TDimensions>(field)
       const options = field.options
 
@@ -185,13 +150,12 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         return error
       } else {
         const typedData = getTypedData<TData, TDimensions>(fieldsGraph.current)
-        // @ts-expect-error this type is correct since the coordinates are TDimensions long
-        const typedFields: Fields<TData, TDimensions> & Pick<TData, name> = {
-          ...typedData.getAtCoordinates(coordinates),
-          [name]: typedValue,
+        const typedFields = {
+          ...typedData.getVertex(coordinates)!,
+          [fieldName]: typedValue,
         }
 
-        // @ts-expect-error these TDatas are the same
+        // @ts-expect-error these `TData`s will be the same
         const error = options?.validate?.(typedValue, typedFields, typedData) ?? null
         field.error = error
 
@@ -201,41 +165,40 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     [],
   )
 
-  const updateFieldsFieldErrors = useCallback(
+  const updateFieldsVertexFieldErrors = useCallback(
     (): void =>
       fieldsGraph.current.forEachVertex((fields, coordinate) =>
         Object.keys(fields).forEach(fieldName =>
-          updateFieldsAtCoordinateFieldError(fieldName as keyof TData, coordinate),
+          updateFieldsVertexFieldError(fieldName as keyof TData, coordinate),
         ),
       ),
-    [updateFieldsAtCoordinateFieldError],
+    [updateFieldsVertexFieldError],
   )
 
-  const updateErrorAtCoordinates = useCallback(
-    (
-      name: keyof TData,
+  const updateErrorsVertexFieldError = useCallback(
+    <TFieldName extends keyof TData>(
+      fieldName: TFieldName,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      const error = updateFieldsAtCoordinateFieldError(name)
-      mapErrorsAtCoordinates(errors => ({ ...errors, [name]: error }), coordinates)
-      return error
+      const error = updateFieldsVertexFieldError(fieldName)
+      updateErrorsVertex(errors => ({ ...errors!, [fieldName]: error }), coordinates)
     },
-    [mapErrorsAtCoordinates, updateFieldsAtCoordinateFieldError],
+    [updateErrorsVertex, updateFieldsVertexFieldError],
   )
 
   const updateErrors = useCallback(() => {
-    updateFieldsFieldErrors()
+    updateFieldsVertexFieldErrors()
 
     updateAllErrors((fields, coordinates) =>
       Object.keys(fields).reduce(
         (acc, fieldName) => ({
           ...acc,
-          [fieldName]: fieldsGraph.current.getAtCoordinates(coordinates)[fieldName],
+          [fieldName]: fieldsGraph.current.getVertex(coordinates)![fieldName],
         }),
         {} as Errors<TData>,
       ),
     )
-  }, [updateAllErrors, updateFieldsFieldErrors])
+  }, [updateAllErrors, updateFieldsVertexFieldErrors])
 
   const handleSubmit: HandleSubmit<TData, TDimensions> = useCallback(
     <TShouldSkipValidations extends boolean = false>({
@@ -261,6 +224,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         )
 
         if (hasErrors) {
+          // @ts-expect-error Errors<TData> is assignable to a graph with TDimensions of 0
           onError?.(errors)
         } else {
           const typedData = getTypedData(fieldsGraph.current)
@@ -289,12 +253,13 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       >,
     ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
       options ??= {}
-      if (name in fieldsGraph.current) {
-        updateFieldAtCoordinates(name, field => ({ ...field, options }), options.coordinates)
+      const fields = fieldsGraph.current.getVertex(options.coordinates) ?? {}
+      if (name in fields) {
+        updateFieldsVertex(name, field => ({ ...field!, options }), options.coordinates)
       } else {
-        setFieldAtCoordinates(
+        setFieldsVertex(
           name,
-          // @ts-expect-error options are valid because the validate type depends upon is required
+          // @ts-expect-error options are valid because the `validate` type depends upon `isRequired`
           {
             name,
             ref: React.createRef<TFieldElement | null>(),
@@ -311,64 +276,55 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       return {
         // this cast is safe because we only create refs of TFieldElement type per name
         [options.refName ?? 'ref']: (element: TFieldElement) => {
-          const fieldsAtCoordinate: Fields<TData, TDimensions> =
-            fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(
-              options.coordinates,
-            )
+          const fields = fieldsGraph.current.getVertex(options.coordinates)!
 
           // update internal value upon first setting the ref
-          if (fieldsAtCoordinate[name]!.value === undefined) {
+          if (fields[name]!.value === undefined) {
             const defaultValue = getElementDefaultValue<TData>(element)
-            updateFieldAtCoordinates(
+            updateFieldsVertex(
               name,
-              field => ({ ...field, value: defaultValue }),
+              field => ({ ...field!, value: defaultValue }),
               options.coordinates,
             )
           }
 
-          updateFieldAtCoordinates(
+          updateFieldsVertex(
             name,
-            field => ({ ...field, ref: { ...field?.ref, current: element } }),
+            field => ({ ...field!, ref: { ...field?.ref, current: element } }),
             options.coordinates,
           )
         },
         onChange: event => {
-          const fieldsAtCoordinate: Fields<TData, TDimensions> =
-            fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(
-              options.coordinates,
-            )
+          const fields = fieldsGraph.current.getVertex(options.coordinates)!
 
-          if (name in fieldsAtCoordinate) {
-            if (!fieldsAtCoordinate[name]!.hasBeenChanged) {
+          if (name in fields) {
+            if (!fields[name]!.hasBeenChanged) {
               change(name, options.coordinates)
             }
 
             const newValue = getOnChangeValue<TData>(event)
-            updateFieldAtCoordinates(
+            updateFieldsVertex(
               name,
-              field => ({ ...field, value: newValue }),
+              field => ({ ...field!, value: newValue }),
               options?.coordinates,
             )
           }
         },
         onFocus: () => {
-          const fieldsAtCoordinate: Fields<TData, TDimensions> =
-            fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(
-              options?.coordinates,
-            )
+          const fields = fieldsGraph.current.getVertex(options.coordinates)!
 
-          if (name in fieldsAtCoordinate) {
-            if (!fieldsAtCoordinate[name]!.hasBeenTouched) {
+          if (name in fields) {
+            if (!fields[name]!.hasBeenTouched) {
               touch(name, options?.coordinates)
             }
           }
         },
         onBlur: () => {
-          updateErrorAtCoordinates(name)
+          updateErrorsVertexFieldError(name)
         },
       }
     },
-    [change, setFieldAtCoordinates, touch, updateErrorAtCoordinates, updateFieldAtCoordinates],
+    [change, setFieldsVertex, touch, updateErrorsVertexFieldError, updateFieldsVertex],
   )
 
   return {

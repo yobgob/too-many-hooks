@@ -261,7 +261,7 @@ export type MapVertex<TData, TDimensions extends number = 0> = <TResult = TData>
  */
 export type ForEachVertex<TData, TDimensions extends number = 0> = (
   callback: (
-    currentValue?: TData,
+    currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => void,
 ) => void
@@ -775,8 +775,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      // @ts-expect-error this is prevented from running on TData via logical checks
-      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.reduce(
@@ -826,8 +825,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      // @ts-expect-error this is prevented from running on TData via logical checks
-      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
 
       if (depth === this.dimensions) {
         coordinatesInGraph.forEach(coordinate => {
@@ -853,13 +851,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * Executes a callback for each vertex in the graph
    *
    * @param {(
-   *       currentValue?: TData,
+   *       currentValue: TData,
    *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => void} callback
    */
   forEachVertex: ForEachVertex<TData, TDimensions> = (
     callback: (
-      currentValue?: TData,
+      currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => void,
   ): void => this._forEachVertex(callback, [])
@@ -891,8 +889,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      // @ts-expect-error this is prevented from running on TData via logical checks
-      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.some(coordinate =>
@@ -984,8 +981,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      // @ts-expect-error this is prevented from running on TData via logical checks
-      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.reduce(

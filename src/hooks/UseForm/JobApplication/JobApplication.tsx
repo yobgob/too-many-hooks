@@ -44,7 +44,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           })}
         />
       </label>
-      {errors.email && <span className="text-red-800">{errors.email}</span>}
+      {errors?.email && <span className="text-red-800">{errors.email}</span>}
       <Select
         options={[
           { label: 'Mr', value: Title.Mr },
@@ -55,7 +55,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
         placeholder="Title"
         {...register('title', { isRequired: true, refName: 'selectRef' })}
       />
-      {errors.title && <span className="text-red-800">{errors.title}</span>}
+      {errors?.title && <span className="text-red-800">{errors.title}</span>}
       <label className="block text-sm font-medium text-gray-900">
         Your name
         <input
@@ -63,7 +63,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           {...register('name', { isRequired: true })}
         />
       </label>
-      {errors.name && <span className="text-red-800">{errors.name}</span>}
+      {errors?.name && <span className="text-red-800">{errors.name}</span>}
       <label className="block text-sm font-medium text-gray-900">
         Available start date
         <input
@@ -76,7 +76,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           })}
         />
       </label>
-      {errors.startDate && <span className="text-red-800">{errors.startDate}</span>}
+      {errors?.startDate && <span className="text-red-800">{errors.startDate}</span>}
       <label className="block text-sm font-medium text-gray-900">
         Expected salary
         <input
@@ -91,7 +91,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           })}
         />
       </label>
-      {errors.expectedSalary && <span className="text-red-800">{errors.expectedSalary}</span>}
+      {errors?.expectedSalary && <span className="text-red-800">{errors.expectedSalary}</span>}
       <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-300">
         <input
           type="checkbox"
@@ -103,7 +103,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
         />
         <span>I agree to the Terms of Service and Privacy Policy</span>
       </label>
-      {errors.terms && <span className="text-red-800">{errors.terms}</span>}
+      {errors?.terms && <span className="text-red-800">{errors.terms}</span>}
 
       <div className="flex items-center gap-2">
         <Button
