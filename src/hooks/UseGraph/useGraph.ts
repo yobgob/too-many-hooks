@@ -244,7 +244,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   }: UseGraphOptions<TData, TDimensions> = { dimensions: 0 },
 ): UseGraphReturn<TData, TDimensions> => {
   const [data, setData] = useState<Graph<TData, TDimensions>>(
-    initial ?? new Graph<TData, TDimensions>(dimensions),
+    initial ?? new Graph<TData, TDimensions>({ dimensions }),
   )
 
   const update: Update<TData, TDimensions> = useCallback(
@@ -254,7 +254,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       ) => GraphData<TData, TDimensions> | null,
     ): void =>
       setData(oldData => {
-        const newGraph = new Graph<TData, TDimensions>(oldData)
+        const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
         newGraph.update(updater)
         return newGraph
       }),
@@ -268,7 +268,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
     ): void =>
       setData(oldData => {
-        const newGraph = new Graph<TData, TDimensions>(oldData)
+        const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
         newGraph.updateAtCoordinates<TCoordinates>(updater, coordinates)
         return newGraph
       }),
@@ -280,7 +280,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ): void =>
       setData(oldData => {
-        const newGraph = new Graph<TData, TDimensions>(oldData)
+        const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
         newGraph.updateVertex(updater, coordinates)
         return newGraph
       }),
@@ -314,7 +314,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       ) => TData | null,
     ) =>
       setData(oldData => {
-        const newGraph = new Graph<TData, TDimensions>(oldData)
+        const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
         newGraph.updateAllVertices(updater)
         return newGraph
       }),

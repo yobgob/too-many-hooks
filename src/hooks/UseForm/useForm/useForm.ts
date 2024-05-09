@@ -15,6 +15,7 @@ import {
   RegisterResult,
   Touched,
   UseForm,
+  UseFormOptions,
   UseFormReturn,
 } from './types'
 import {
@@ -33,15 +34,20 @@ import {
  * @template {FormData} TData
  * @returns {{ register: RegisterFunction<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
  */
-const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0>(): UseFormReturn<
-  TData,
-  TDimensions
-> => {
+const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0>(
+  {
+    dimensions,
+    isRequiredErrorMessageOverride,
+    // @ts-expect-error TDimensions defaults to 0 if dimensions is not defined, so this is okay
+  }: UseFormOptions<TDimensions> = { dimensions: 0 },
+): UseFormReturn<TData, TDimensions> => {
   const fieldsGraph = useRef<IGraph<Fields<TData, TDimensions>, TDimensions>>(
-    new Graph<Fields<TData, TDimensions>, TDimensions>(),
+    new Graph<Fields<TData, TDimensions>, TDimensions>({ dimensions }),
   )
-  const [errors, { updateVertex: updateErrorsVertex, updateAllVertices: updateAllErrors }] =
-    useGraph<Errors<TData>, TDimensions>()
+  const [errors, { updateVertex: updateErrorsVertex, set: setErrors }] = useGraph<
+    Errors<TData>,
+    TDimensions
+  >()
   const [touched, { someVertex: touchedAtSomeVertex, updateVertex: updateTouchedVertex }] =
     useGraph<Touched<TData>, TDimensions>()
   const [
@@ -77,11 +83,13 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       ) => Fields<TData, TDimensions>[keyof TData],
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) =>
-      fieldsGraph.current.updateVertex(fields => {
-        return fields
-          ? { ...fields, [fieldName]: updater(fields?.[fieldName]) }
-          : ({ [fieldName]: updater() } as Fields<TData, TDimensions>)
-      }, coordinates),
+      fieldsGraph.current.updateVertex(
+        fields =>
+          fields
+            ? { ...fields, [fieldName]: updater(fields?.[fieldName]) }
+            : ({ [fieldName]: updater() } as Fields<TData, TDimensions>),
+        coordinates,
+      ),
     [],
   )
 
@@ -136,6 +144,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       fieldName: TFieldName,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
+      console.log('update field vertex field error', fieldName, coordinates)
       const fieldsAtCoordinate = fieldsGraph.current.getVertex(coordinates)
 
       if (!(fieldsAtCoordinate && fieldName in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
@@ -145,8 +154,20 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       const options = field.options
 
       if (options?.isRequired && isBlank(typedValue)) {
-        const error = 'Field is required'
-        field.error = error
+        const error =
+          field.options?.isRequiredErrorMessageOverride ??
+          isRequiredErrorMessageOverride ??
+          'Field is required'
+
+        updateFieldsVertex(
+          fieldName,
+          field => ({
+            ...field!,
+            error,
+          }),
+          coordinates,
+        )
+
         return error
       } else {
         const typedData = getTypedData<TData, TDimensions>(fieldsGraph.current)
@@ -157,48 +178,68 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
 
         // @ts-expect-error these `TData`s will be the same
         const error = options?.validate?.(typedValue, typedFields, typedData) ?? null
-        field.error = error
+
+        updateFieldsVertex(
+          fieldName,
+          field => ({
+            ...field!,
+            error,
+          }),
+          coordinates,
+        )
 
         return error
       }
     },
-    [],
+    [isRequiredErrorMessageOverride, updateFieldsVertex],
   )
 
-  const updateFieldsVertexFieldErrors = useCallback(
-    (): void =>
-      fieldsGraph.current.forEachVertex((fields, coordinate) =>
-        Object.keys(fields).forEach(fieldName =>
-          updateFieldsVertexFieldError(fieldName as keyof TData, coordinate),
-        ),
+  const updateFieldsVertexFieldErrors = useCallback((): void => {
+    console.log('update all fields errors at')
+
+    fieldsGraph.current.forEachVertex((fields, coordinates) =>
+      Object.keys(fields).forEach(fieldName =>
+        updateFieldsVertexFieldError(fieldName as keyof TData, coordinates),
       ),
-    [updateFieldsVertexFieldError],
-  )
+    )
+  }, [updateFieldsVertexFieldError])
 
   const updateErrorsVertexFieldError = useCallback(
     <TFieldName extends keyof TData>(
       fieldName: TFieldName,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      const error = updateFieldsVertexFieldError(fieldName)
-      updateErrorsVertex(errors => ({ ...errors!, [fieldName]: error }), coordinates)
+      console.log('update errors at', fieldName, coordinates)
+
+      updateErrorsVertex(errors => {
+        console.log('updating errors vertex', errors)
+        return {
+          ...errors!,
+          [fieldName]: updateFieldsVertexFieldError(fieldName, coordinates),
+        }
+      }, coordinates)
     },
     [updateErrorsVertex, updateFieldsVertexFieldError],
   )
 
   const updateErrors = useCallback(() => {
+    console.log('update all errors')
     updateFieldsVertexFieldErrors()
 
-    updateAllErrors((fields, coordinates) =>
-      Object.keys(fields).reduce(
-        (acc, fieldName) => ({
-          ...acc,
-          [fieldName]: fieldsGraph.current.getVertex(coordinates)![fieldName],
-        }),
-        {} as Errors<TData>,
-      ),
-    )
-  }, [updateAllErrors, updateFieldsVertexFieldErrors])
+    const errors = fieldsGraph.current
+      .mapAllVertices(fields =>
+        Object.keys(fields).reduce(
+          (acc, fieldName) => ({
+            ...acc,
+            [fieldName]: fields[fieldName]?.error,
+          }),
+          {} as Errors<TData>,
+        ),
+      )
+      .get()
+
+    setErrors(errors)
+  }, [setErrors, updateFieldsVertexFieldErrors])
 
   const handleSubmit: HandleSubmit<TData, TDimensions> = useCallback(
     <TShouldSkipValidations extends boolean = false>({
@@ -281,18 +322,25 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
           // update internal value upon first setting the ref
           if (fields[name]!.value === undefined) {
             const defaultValue = getElementDefaultValue<TData>(element)
+            console.log('update default')
             updateFieldsVertex(
               name,
-              field => ({ ...field!, value: defaultValue }),
+              field => ({
+                ...field!,
+                value: defaultValue,
+                ref: { ...field?.ref, current: element },
+              }),
+              options.coordinates,
+            )
+          } else {
+            console.log('update ref')
+
+            updateFieldsVertex(
+              name,
+              field => ({ ...field!, ref: { ...field?.ref, current: element } }),
               options.coordinates,
             )
           }
-
-          updateFieldsVertex(
-            name,
-            field => ({ ...field!, ref: { ...field?.ref, current: element } }),
-            options.coordinates,
-          )
         },
         onChange: event => {
           const fields = fieldsGraph.current.getVertex(options.coordinates)!
@@ -320,7 +368,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
           }
         },
         onBlur: () => {
-          updateErrorsVertexFieldError(name)
+          updateErrorsVertexFieldError(name, options?.coordinates)
         },
       }
     },

@@ -1,5 +1,5 @@
 import React from 'react'
-import { CoordinatesOrNever, GraphData, IGraph } from '../../../UseGraph/Graph'
+import { CoordinatesOfLength, CoordinatesOrNever, GraphData, IGraph } from '../../../UseGraph/Graph'
 import { ObjectKey, PartialDataKeys, RefProps } from './internal'
 
 /**
@@ -51,6 +51,7 @@ export interface RegisterOptions<
    * @type {?TIsRequired}
    */
   isRequired?: TIsRequired
+  isRequiredErrorMessageOverride?: string
 
   /**
    * Adds a custom validation to the field.
@@ -117,7 +118,7 @@ export type RegisterFunction<TData extends FormData, TDimensions extends number 
   TIsRequired extends boolean = false,
 >(
   name: TFieldName,
-  options: RegisterOptions<
+  options?: RegisterOptions<
     TData,
     TDimensions,
     TFieldName,
@@ -325,6 +326,11 @@ export type Fields<
   TIsRequired extends boolean = boolean,
 > = PartialDataKeys<TData, FieldData<TData, TDimensions, TFieldElements, TRefPropsKey, TIsRequired>>
 
+export interface UseFormOptions<TDimensions extends number = 0> {
+  dimensions?: TDimensions
+  isRequiredErrorMessageOverride?: string
+}
+
 /**
  * The return type of `useForm`
  *
@@ -384,7 +390,6 @@ export interface UseFormReturn<TData extends FormData, TDimensions extends numbe
  * @export
  * @typedef {UseForm}
  */
-export type UseForm = <TData extends FormData, TDimensions extends number = 0>() => UseFormReturn<
-  TData,
-  TDimensions
->
+export type UseForm = <TData extends FormData, TDimensions extends number = 0>(
+  options?: UseFormOptions<TDimensions>,
+) => UseFormReturn<TData, TDimensions>
