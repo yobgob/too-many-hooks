@@ -26,7 +26,7 @@ import {
  * @template {number} [TDimensions=0]
  */
 export type Set<TData, TDimensions extends number = 0> = (
-  value: GraphData<TData, TDimensions>,
+  value: GraphData<TData, TDimensions> | null,
 ) => void
 
 /**
@@ -53,7 +53,7 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template {number} [TDimensions=0]
  */
 export type SetVertex<TData, TDimensions extends number = 0> = (
-  value: TData,
+  value: TData | null,
   coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
 ) => void
 
@@ -66,7 +66,9 @@ export type SetVertex<TData, TDimensions extends number = 0> = (
  * @template {number} [TDimensions=0]
  */
 export type Update<TData, TDimensions extends number = 0> = (
-  updater: (currentValue: GraphData<TData, TDimensions> | null) => GraphData<TData, TDimensions>,
+  updater: (
+    currentValue: GraphData<TData, TDimensions> | null,
+  ) => GraphData<TData, TDimensions> | null,
 ) => void
 
 /**
@@ -95,7 +97,7 @@ export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template {number} [TDimensions=0]
  */
 export type UpdateVertex<TData, TDimensions extends number = 0> = (
-  updater: (currentValue: TData | null) => TData,
+  updater: (currentValue: TData | null) => TData | null,
   coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
 ) => void
 
@@ -111,7 +113,7 @@ export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-  ) => TData,
+  ) => TData | null,
 ) => void
 
 /**
@@ -198,7 +200,7 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
  * @template TData
  * @template {number} [TDimensions=0]
  */
-export type UseGraphOptions<TData, TDimensions extends number = 0> = {
+export interface UseGraphOptions<TData, TDimensions extends number = 0> {
   dimensions?: TDimensions
   initial?: Graph<TData, TDimensions>
 }
@@ -249,7 +251,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     (
       updater: (
         currentValue: GraphData<TData, TDimensions> | null,
-      ) => GraphData<TData, TDimensions>,
+      ) => GraphData<TData, TDimensions> | null,
     ): void =>
       setData(oldData => {
         const newGraph = new Graph<TData, TDimensions>(oldData)
@@ -274,7 +276,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   )
   const updateVertex: UpdateVertex<TData, TDimensions> = useCallback(
     (
-      updater: (currentValue: TData | null) => TData,
+      updater: (currentValue: TData | null) => TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ): void =>
       setData(oldData => {
@@ -286,7 +288,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   )
 
   const set: Set<TData, TDimensions> = useCallback(
-    (value: GraphData<TData, TDimensions>): void => update(() => value),
+    (value: GraphData<TData, TDimensions> | null): void => update(() => value),
     [update],
   )
   const setAtCoordinates: SetAtCoordinates<TData, TDimensions> = useCallback(
@@ -298,7 +300,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   )
   const setVertex: SetVertex<TData, TDimensions> = useCallback(
     (
-      value: TData,
+      value: TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ): void => updateVertex(() => value, coordinates),
     [updateVertex],
@@ -309,7 +311,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       updater: (
         currentValue: TData,
         coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-      ) => TData,
+      ) => TData | null,
     ) =>
       setData(oldData => {
         const newGraph = new Graph<TData, TDimensions>(oldData)

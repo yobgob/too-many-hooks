@@ -142,8 +142,8 @@ export type GetVertex<TData, TDimensions extends number = 0> = (
  * @template {number} [TDimensions=0]
  */
 export type Set<TData, TDimensions extends number = 0> = (
-  newValue: GraphData<TData, TDimensions>,
-) => GraphData<TData, TDimensions>
+  newValue: GraphData<TData, TDimensions> | null,
+) => GraphData<TData, TDimensions> | null
 
 /**
  * A function which sets graph data at certain coordinates
@@ -155,9 +155,9 @@ export type Set<TData, TDimensions extends number = 0> = (
 export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
-  value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+  value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates> | null,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
-) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
+) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates> | null
 
 /**
  * A function which sets graph data at a vertex
@@ -167,9 +167,9 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template {number} [TDimensions=0]
  */
 export type SetVertex<TData, TDimensions extends number = 0> = (
-  value: TData,
+  value: TData | null,
   coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-) => TData
+) => TData | null
 
 /**
  * A function which transforms the entire graph
@@ -179,8 +179,10 @@ export type SetVertex<TData, TDimensions extends number = 0> = (
  * @template {number} [TDimensions=0]
  */
 export type Update<TData, TDimensions extends number = 0> = (
-  updater: (currentValue: GraphData<TData, TDimensions> | null) => GraphData<TData, TDimensions>,
-) => GraphData<TData, TDimensions>
+  updater: (
+    currentValue: GraphData<TData, TDimensions> | null,
+  ) => GraphData<TData, TDimensions> | null,
+) => GraphData<TData, TDimensions> | null
 
 /**
  * A function which transforms graph data at certain coordinates
@@ -194,7 +196,7 @@ export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
 >(
   updater: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-  ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+  ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates> | null,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
 
@@ -206,9 +208,9 @@ export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template {number} [TDimensions=0]
  */
 export type UpdateVertex<TData, TDimensions extends number = 0> = (
-  updater: (currentValue: TData | null) => TData,
+  updater: (currentValue: TData | null) => TData | null,
   coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-) => TData
+) => TData | null
 
 /**
  * A function which returns a transformed graph
@@ -277,7 +279,7 @@ export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-  ) => TData,
+  ) => TData | null,
 ) => GraphData<TData, TDimensions> | null
 
 /**
@@ -585,8 +587,8 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @returns {GraphData<TData, TDimensions>}
    */
   set: Set<TData, TDimensions> = (
-    newValue: GraphData<TData, TDimensions>,
-  ): GraphData<TData, TDimensions> => {
+    newValue: GraphData<TData, TDimensions> | null,
+  ): GraphData<TData, TDimensions> | null => {
     this.data = newValue
     return newValue
   }
@@ -603,7 +605,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   setAtCoordinates: SetAtCoordinates<TData, TDimensions> = <
     TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
-    value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+    value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates> | null,
     coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ) => this.updateAtCoordinates(() => value, coordinates)
 
@@ -615,10 +617,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @returns {TData}
    */
   setVertex: SetVertex<TData, TDimensions> = (
-    value: TData,
+    value: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     // @ts-expect-error TData is assignable to TData
-  ): TData => this.setAtCoordinates<CoordinatesOfLength<TDimensions>>(value, coordinates)
+  ): TData | null => this.setAtCoordinates<CoordinatesOfLength<TDimensions>>(value, coordinates)
 
   /**
    * Transforms the entire graph
@@ -629,8 +631,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @returns {GraphData<TData, TDimensions>}
    */
   update: Update<TData, TDimensions> = (
-    updater: (currentValue: GraphData<TData, TDimensions> | null) => GraphData<TData, TDimensions>,
-  ): GraphData<TData, TDimensions> => {
+    updater: (
+      currentValue: GraphData<TData, TDimensions> | null,
+    ) => GraphData<TData, TDimensions> | null,
+  ): GraphData<TData, TDimensions> | null => {
     const newValue = updater(this.data)
     this.data = newValue
     return newValue
@@ -650,7 +654,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     updater: (
       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
-    ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+    ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates> | null,
     coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     const value = updater(this.getAtCoordinates(coordinates), coordinates)
@@ -683,7 +687,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @returns {TData, coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>) => TData}
    */
   updateVertex: UpdateVertex<TData, TDimensions> = (
-    updater: (currentValue: TData | null) => TData,
+    updater: (currentValue: TData | null) => TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     // @ts-expect-error TData is the same as GraphData with depth 0
   ) => this.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(updater, coordinates) as TData
@@ -757,7 +761,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     updater: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => TData,
+    ) => TData | null,
     previousCoordinates: TCoordinates,
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     // special case for a 0 dimension graph or no coordinates
@@ -934,7 +938,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     updater: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => TData,
+    ) => TData | null,
   ): GraphData<TData, TDimensions> | null => {
     this._updateAllVertices(updater, [])
     return this.data
