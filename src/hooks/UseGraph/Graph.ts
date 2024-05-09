@@ -702,8 +702,8 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         return coordinatesInGraph.reduce(
           (acc, coordinate) => ({
             ...acc,
-            // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
             [coordinate]: this.mapAtCoordinates<TResult, CoordinatesOfLength<TDimensions>>(
+              // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
               transformer,
               [...previousCoordinates, coordinate],
             ),
