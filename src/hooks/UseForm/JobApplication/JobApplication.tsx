@@ -16,7 +16,7 @@ export type ApplicationFormData = {
   name: string
   startDate: Date
   expectedSalary: number
-  terms: boolean
+  hasAgreedToTerms: boolean
 }
 
 export type ApplicationErrors = Partial<{ [Key in keyof ApplicationFormData]: string | null }>
@@ -95,15 +95,16 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
       <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-300">
         <input
           type="checkbox"
-          {...register('terms', {
+          {...register('hasAgreedToTerms', {
             isRequired: true,
-            validate: terms => (terms === false ? 'You must agree to the terms' : null),
+            validate: hasAgreedToTerms =>
+              hasAgreedToTerms === false ? 'You must agree to the terms' : null,
           })}
           className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
         />
         <span>I agree to the Terms of Service and Privacy Policy</span>
       </label>
-      {errors?.terms && <span className="text-red-800">{errors.terms}</span>}
+      {errors?.hasAgreedToTerms && <span className="text-red-800">{errors.hasAgreedToTerms}</span>}
 
       <div className="flex items-center gap-2">
         <Button

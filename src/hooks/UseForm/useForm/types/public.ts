@@ -343,21 +343,21 @@ export interface UseFormReturn<TData extends FormData, TDimensions extends numbe
   /**
    * A graph of maps of registered fields to their validation information
    *
-   * @type {GraphData<Errors<TData>, TDimensions> | undefined}
+   * @type {GraphData<Errors<TData>, TDimensions> | null}
    */
-  errors: GraphData<Errors<TData>, TDimensions> | undefined
+  errors: GraphData<Errors<TData>, TDimensions> | null
   /**
    * A graph of maps of registered fields to whether or not they have been focused by the user
    *
-   * @type {GraphData<Touched<TData>, TDimensions> | undefined}
+   * @type {GraphData<Touched<TData>, TDimensions> | null}
    */
-  touched: GraphData<Touched<TData>, TDimensions> | undefined
+  touched: GraphData<Touched<TData>, TDimensions> | null
   /**
    * A graph of maps of registered fields to whether or not their value has been changed by the user
    *
-   * @type {GraphData<Changed<TData>, TDimensions> | undefined}
+   * @type {GraphData<Changed<TData>, TDimensions> | null}
    */
-  changed: GraphData<Changed<TData>, TDimensions> | undefined
+  changed: GraphData<Changed<TData>, TDimensions> | null
   /**
    * `true` if the user has focused any form field
    *
