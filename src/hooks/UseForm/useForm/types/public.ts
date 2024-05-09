@@ -112,14 +112,15 @@ export type RegisterResult<
  * @template {FormData} TData
  */
 export type RegisterFunction<TData extends FormData, TDimensions extends number = 0> = <
+  TFieldName extends keyof TData,
   TFieldElement extends FieldElement,
   TIsRequired extends boolean = false,
 >(
-  name: keyof TData,
+  name: TFieldName,
   options: RegisterOptions<
     TData,
     TDimensions,
-    keyof TData,
+    TFieldName,
     keyof RefProps<TFieldElement>,
     TIsRequired
   >,
