@@ -1,7 +1,7 @@
 import merge from 'lodash.merge'
 import { Length, SafeSubtract } from '../../common/types/arithmetic'
 
-// #region tuples
+// #region tuple types
 /**
  * Recursion utility for building tuples
  *
@@ -28,7 +28,7 @@ export type Tuple<T, N extends number> = N extends N
   : never
 // #endregion
 
-// #region graph data and coordinates
+// #region graph data and coordinate types
 /**
  * Recursion utility for building graph types
  *
@@ -98,7 +98,7 @@ export type GraphDataAtCoordinates<
 
 // #endregion
 
-// #region Graph functions
+// #region Graph function types
 
 /**
  * A function which returns all of the graph data
@@ -334,7 +334,7 @@ export interface IGraph<TData, TDimensions extends number = 0> {
  * @implements {IGraph<TData, TDimensions>}
  */
 export class Graph<TData, TDimensions extends number = 0> implements IGraph<TData, TDimensions> {
-  // #region attributes
+  // #region Graph attributes
   /**
    * The internal data of the Graph
    *
@@ -352,7 +352,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   private dimensions: TDimensions
   // #endregion
 
-  // #region constructors
+  // #region Graph constructors
   /**
    * Creates an instance of Graph with set dimensions
    *
@@ -400,6 +400,8 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     }
   }
   // #endregion
+
+  // #region Graph functions
 
   /**
    * Returns the number of dimensions in the graph
@@ -804,4 +806,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => boolean,
   ): boolean => this._someVertex(callback, [])
+
+  // #endregion
 }
