@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import {
   Coordinates,
+  CoordinatesOfLength,
   CoordinatesOrNever,
   ForEachVertex,
   GetAtCoordinates,
@@ -11,7 +12,6 @@ import {
   MapAtCoordinates,
   SetAllVertices,
   SomeVertex,
-  Tuple,
 } from './Graph'
 
 /**
@@ -23,7 +23,7 @@ import {
  * @template {number} [TDimensions=0]
  */
 export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
-  TCoordinates extends Coordinates = Tuple<number, 0>,
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   updater: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -40,7 +40,7 @@ export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template {number} [TDimensions=0]
  */
 export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
-  TCoordinates extends Coordinates = Tuple<number, 0>,
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
@@ -57,7 +57,7 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
 export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
     currentValue: TData,
-    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => TData,
 ) => void
 
@@ -190,7 +190,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   )
 
   const updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = useCallback(
-    <TCoordinates extends Coordinates = Tuple<number, 0>>(
+    <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
       updater: (
         currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
       ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -205,7 +205,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   )
 
   const setAtCoordinates: SetAtCoordinates<TData, TDimensions> = useCallback(
-    <TCoordinates extends Coordinates = Tuple<number, 0>>(
+    <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
       value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
     ): void => updateAtCoordinates(() => value, coordinates),
@@ -216,7 +216,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     (
       updater: (
         currentValue: TData,
-        coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+        coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
       ) => TData,
     ) =>
       setData(oldData => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react'
-import { CoordinatesOrNever, Graph, IGraph, Tuple } from '../../UseGraph/Graph'
+import { CoordinatesOfLength, CoordinatesOrNever, Graph, IGraph } from '../../UseGraph/Graph'
 import useGraph from '../../UseGraph/useGraph'
 import {
   Changed,
@@ -76,9 +76,13 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const updateFieldsAtCoordinates = useCallback(
     (
       updater: (current: Fields<TData, TDimensions>) => Fields<TData, TDimensions>,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
-      // @ts-expect-error Fields<TData, TDimensions> is the same thing as graph data at coordinates with length TDimensions
-    ) => fieldsGraph.current.updateAtCoordinates<Tuple<number, TDimensions>>(updater, coordinates),
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) =>
+      fieldsGraph.current.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(
+        // @ts-expect-error Fields<TData, TDimensions> is the same thing as graph data at coordinates with length TDimensions
+        updater,
+        coordinates,
+      ),
     [],
   )
 
@@ -88,10 +92,10 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       updater: (
         current: Fields<TData, TDimensions>[keyof TData],
       ) => Fields<TData, TDimensions>[keyof TData],
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) =>
       // @ts-expect-error Fields<TData, TDimensions> is the same thing as graph data at coordinates with length TDimensions
-      fieldsGraph.current.updateAtCoordinates<Tuple<number, TDimensions>>(fields => {
+      fieldsGraph.current.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(fields => {
         const typedFields = fields as Fields<TData, TDimensions>
         return { ...typedFields, [fieldName]: updater(typedFields[fieldName]) }
       }, coordinates),
@@ -102,9 +106,9 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     (
       fieldName: keyof TData,
       newValue: Fields<TData, TDimensions>[keyof TData],
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) =>
-      fieldsGraph.current.updateAtCoordinates<Tuple<number, TDimensions>>(
+      fieldsGraph.current.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(
         fields => ({ ...fields, [fieldName]: newValue }),
         coordinates,
       ),
@@ -114,15 +118,17 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const touch = useCallback(
     (
       name: keyof TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      if (name in fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)) {
+      if (
+        name in fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
+      ) {
         updateFieldsAtCoordinates(
           fields => ({ ...fields, [name]: { ...fields[name], hasBeenTouched: true } }),
           coordinates,
         )
       }
-      updateTouchedAtCoordinates<Tuple<number, TDimensions>>(
+      updateTouchedAtCoordinates<CoordinatesOfLength<TDimensions>>(
         touched => ({ ...touched, [name]: true }),
         coordinates,
       )
@@ -133,15 +139,17 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const change = useCallback(
     (
       name: keyof TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      if (name in fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)) {
+      if (
+        name in fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
+      ) {
         updateFieldsAtCoordinates(
           fields => ({ ...fields, [name]: { ...fields[name], hasBeenChanged: true } }),
           coordinates,
         )
       }
-      mapChangedAtCoordinates<Tuple<number, TDimensions>>(
+      mapChangedAtCoordinates<CoordinatesOfLength<TDimensions>>(
         changed => ({ ...changed, [name]: true }),
         coordinates,
       )
@@ -160,10 +168,10 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const updateFieldsAtCoordinateFieldError = useCallback(
     (
       name: keyof TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
       const fieldsAtCoordinate: Fields<TData, TDimensions> =
-        fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(coordinates)
+        fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
 
       if (!(name in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
 
@@ -206,7 +214,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const updateErrorAtCoordinates = useCallback(
     (
       name: keyof TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
       const error = updateFieldsAtCoordinateFieldError(name)
       mapErrorsAtCoordinates(errors => ({ ...errors, [name]: error }), coordinates)
@@ -304,7 +312,9 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         // this cast is safe because we only create refs of TFieldElement type per name
         [options.refName ?? 'ref']: (element: TFieldElement) => {
           const fieldsAtCoordinate: Fields<TData, TDimensions> =
-            fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(options.coordinates)
+            fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(
+              options.coordinates,
+            )
 
           // update internal value upon first setting the ref
           if (fieldsAtCoordinate[name]!.value === undefined) {
@@ -324,7 +334,9 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         },
         onChange: event => {
           const fieldsAtCoordinate: Fields<TData, TDimensions> =
-            fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(options.coordinates)
+            fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(
+              options.coordinates,
+            )
 
           if (name in fieldsAtCoordinate) {
             if (!fieldsAtCoordinate[name]!.hasBeenChanged) {
@@ -341,7 +353,9 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         },
         onFocus: () => {
           const fieldsAtCoordinate: Fields<TData, TDimensions> =
-            fieldsGraph.current.getAtCoordinates<Tuple<number, TDimensions>>(options?.coordinates)
+            fieldsGraph.current.getAtCoordinates<CoordinatesOfLength<TDimensions>>(
+              options?.coordinates,
+            )
 
           if (name in fieldsAtCoordinate) {
             if (!fieldsAtCoordinate[name]!.hasBeenTouched) {

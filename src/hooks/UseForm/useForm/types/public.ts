@@ -1,5 +1,5 @@
 import React from 'react'
-import { CoordinatesOrNever, GraphData, IGraph, Tuple } from '../../../UseGraph/Graph'
+import { CoordinatesOrNever, GraphData, IGraph } from '../../../UseGraph/Graph'
 import { ObjectKey, PartialDataKeys, RefProps } from './internal'
 
 /**
@@ -71,9 +71,9 @@ export interface RegisterOptions<
   /**
    * The coordinates of the registered field, if in a form with TDimensions > 0
    *
-   * @type {?CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>}
+   * @type {?CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>}
    */
-  coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>
 }
 
 /**

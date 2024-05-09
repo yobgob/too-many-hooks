@@ -53,11 +53,20 @@ export type GraphData<TData, TDimensions extends number = 0> = TDimensions exten
   : _GraphDataOf<TData, TDimensions, []>
 
 /**
- * The type of coordinates received by Graph functions
+ * The type of coordinates of a certain length
+ *
+ * @export
+ * @typedef {CoordinatesOfLength}
+ * @template {number} TDimensions
+ */
+export type CoordinatesOfLength<TDimensions extends number> = Tuple<number, TDimensions>
+
+/**
+ * The type of coordinates received by Graph functions, where length is any number
  *
  * @typedef {Coordinates}
  */
-export type Coordinates = Tuple<number, number>
+export type Coordinates = CoordinatesOfLength<number>
 
 /**
  * Coordinates if TDimensions > 0 otherwise never
@@ -65,11 +74,11 @@ export type Coordinates = Tuple<number, number>
  * @export
  * @typedef {CoordinatesOrNever}
  * @template {number} [TDimensions=0]
- * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+ * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
  */
 export type CoordinatesOrNever<
   TDimensions extends number = 0,
-  TCoordinates extends Coordinates = Tuple<number, 0>,
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 > = TDimensions extends 0 ? never : TCoordinates
 
 /**
@@ -108,7 +117,7 @@ export type Get<TData, TDimensions extends number = 0> = () => GraphData<TData, 
  * @template {number} [TDimensions=0]
  */
 export type GetAtCoordinates<TData, TDimensions extends number = 0> = <
-  TCoordinates extends Tuple<number, number> = Tuple<number, 0>,
+  TCoordinates extends CoordinatesOfLength<number> = Tuple<number, 0>,
 >(
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
@@ -123,7 +132,7 @@ export type GetAtCoordinates<TData, TDimensions extends number = 0> = <
 export type ForEachVertex<TData, TDimensions extends number = 0> = (
   callback: (
     currentValue: TData,
-    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => void,
 ) => void
 
@@ -135,7 +144,7 @@ export type ForEachVertex<TData, TDimensions extends number = 0> = (
  * @template {number} [TDimensions=0]
  */
 export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
-  TCoordinates extends Coordinates = Tuple<number, 0>,
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
@@ -149,7 +158,7 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
  * @template {number} [TDimensions=0]
  */
 export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
-  TCoordinates extends Coordinates = Tuple<number, 0>,
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   updater: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -166,7 +175,7 @@ export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
  */
 export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
   TResult = TData,
-  TCoordinates extends Coordinates = Tuple<number, 0>,
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   transformer: (
     currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -184,7 +193,7 @@ export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
 export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
     currentValue: TData,
-    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => TData,
 ) => GraphData<TData, TDimensions>
 
@@ -207,7 +216,7 @@ export type SetAllVertices<TData> = (value: TData) => void
 export type MapAllVertices<TData, TDimensions extends number = 0> = <TResult>(
   transformer: (
     currentValue: TData,
-    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => TResult,
 ) => IGraph<TResult, TDimensions>
 
@@ -221,7 +230,7 @@ export type MapAllVertices<TData, TDimensions extends number = 0> = <TResult>(
 export type SomeVertex<TData, TDimensions extends number = 0> = (
   callback: (
     currentValue: TData,
-    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => boolean,
 ) => boolean
 
@@ -411,12 +420,12 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * `Coordinates` of length `TDimensions` return `TData`,
    * `Coordinates` with length shorter than `TDimensions` return a `GraphData` of depth `TDimensions` - length of `Coordinates`
    *
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
    * @returns {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>}
    */
   getAtCoordinates: GetAtCoordinates<TData, TDimensions> = <
-    TCoordinates extends Coordinates = Tuple<number, 0>,
+    TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
     coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
@@ -433,15 +442,15 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   /**
    * Recursively executes a function on all vertices of the graph
    *
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
-   * @param {(currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData} updater
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
+   * @param {(currentValue: TData, coordinates: CoordinatesOfLength<TDimensions>) => TData} updater
    * @param {TCoordinates} previousCoordinates
    * @returns {TData, previousCoordinates: TCoordinates) => void}
    */
-  private _forEachVertex = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _forEachVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
     callback: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => void,
     previousCoordinates: TCoordinates,
   ) => {
@@ -459,10 +468,15 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
 
       if (depth === this.dimensions) {
         coordinatesInGraph.forEach(coordinate => {
-          const coordinates = [...previousCoordinates, coordinate]
+          const coordinates = [...previousCoordinates, coordinate] as CoordinatesOrNever<
+            TDimensions,
+            Tuple<number, TDimensions>
+          >
 
-          // @ts-expect-error these are the same TDatas
-          callback(this.getAtCoordinates<Tuple<number, TDimensions>>(coordinates), coordinates)
+          callback(
+            this.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates),
+            coordinates,
+          )
         })
       } else {
         coordinatesInGraph.forEach(coordinate =>
@@ -477,13 +491,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @param {(
    *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => void} callback
    */
   forEachVertex: ForEachVertex<TData, TDimensions> = (
     callback: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => void,
   ): void => this._forEachVertex(callback, [])
 
@@ -492,12 +506,12 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * `Coordinates` of length `TDimensions` transforms a `TData`,
    * `Coordinates` with length shorter than `TDimensions` transforms a `GraphData` of depth `TDimensions` - length of `Coordinates`
    *
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
    * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
    */
   updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = <
-    TCoordinates extends Coordinates = Tuple<number, 0>,
+    TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
     updater: (
       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -532,12 +546,12 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * `Coordinates` of length `TDimensions` set a point to a `TData`,
    * `Coordinates` with length shorter than `TDimensions` set a `GraphData` of depth `TDimensions` - length of `Coordinates`
    *
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
    * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
    */
   setAtCoordinates: SetAtCoordinates<TData, TDimensions> = <
-    TCoordinates extends Coordinates = Tuple<number, 0>,
+    TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
     value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
     coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
@@ -547,7 +561,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * Returns the `TData` at the coordinates mapped to a `TResult`
    *
    * @template TResult
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {(
    *       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
    *       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
@@ -557,7 +571,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    */
   mapAtCoordinates: MapAtCoordinates<TData, TDimensions> = <
     TResult,
-    TCoordinates extends Coordinates = Tuple<number, 0>,
+    TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
     transformer: (
       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -570,18 +584,18 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   /**
    * Recursively maps over all vertices of the graph and transforms them
    *
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {(
    *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => TData} updater
    * @param {TCoordinates} previousCoordinates
    * @returns {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>}
    */
-  private _updateAllVertices = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _updateAllVertices = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
     updater: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TData,
     previousCoordinates: TCoordinates,
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
@@ -606,7 +620,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
           (acc, coordinate) => ({
             ...acc,
             // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
-            [coordinate]: this.updateAtCoordinates<Tuple<number, TDimensions>>(updater, [
+            [coordinate]: this.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(updater, [
               ...previousCoordinates,
               coordinate,
             ]),
@@ -628,12 +642,12 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   /**
    * Transforms all vertices of the graph with an updater function
    *
-   * @param {(currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData} updater
+   * @param {(currentValue: TData, coordinates: CoordinatesOfLength<TDimensions>) => TData} updater
    */
   updateAllVertices: UpdateAllVertices<TData, TDimensions> = (
     updater: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TData,
   ): GraphData<TData, TDimensions> => {
     this._updateAllVertices(updater, [])
@@ -653,18 +667,18 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * Recursively maps over all vertices of the graph and returns a graph of transformed vertices
    *
    * @template TResult
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {(
    *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => TResult} transformer
    * @param {TCoordinates} previousCoordinates
    * @returns {GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>}
    */
-  private _mapAllVertices = <TResult, TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _mapAllVertices = <TResult, TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
     transformer: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TResult,
     previousCoordinates: TCoordinates,
   ): GraphDataAtCoordinates<TResult, TDimensions, TCoordinates> => {
@@ -689,10 +703,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
           (acc, coordinate) => ({
             ...acc,
             // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
-            [coordinate]: this.mapAtCoordinates<TResult, Tuple<number, TDimensions>>(transformer, [
-              ...previousCoordinates,
-              coordinate,
-            ]),
+            [coordinate]: this.mapAtCoordinates<TResult, CoordinatesOfLength<TDimensions>>(
+              transformer,
+              [...previousCoordinates, coordinate],
+            ),
           }),
           {} as GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>,
         )
@@ -714,14 +728,14 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @template TResult
    * @param {(
    *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => TResult} transformer
    * @returns {GraphData<TResult, TDimensions>}
    */
   mapAllVertices: MapAllVertices<TData, TDimensions> = <TResult>(
     transformer: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TResult,
   ): IGraph<TResult, TDimensions> =>
     // @ts-expect-error TResult is valid for a graph with TDimensions=0
@@ -730,18 +744,18 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   /**
    * Recursively maps over all vertices and returns true if the `callback` returns true for any vertex
    *
-   * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {(
    *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => boolean} callback
    * @param {TCoordinates} previousCoordinates
    * @returns {boolean}
    */
-  private _someVertex = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _someVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
     callback: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => boolean,
     previousCoordinates: TCoordinates,
   ): boolean => {
@@ -761,7 +775,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         return coordinatesInGraph.some(coordinate =>
           callback(
             // @ts-expect-error this will always return TData because it is at the maximum depth of coordinates
-            this.getAtCoordinates<TData, Tuple<number, TDimensions>>([
+            this.getAtCoordinates<TData, CoordinatesOfLength<TDimensions>>([
               ...previousCoordinates,
               coordinate,
             ]),
@@ -780,14 +794,14 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @param {(
    *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
    *     ) => boolean} callback
    * @returns {boolean}
    */
   someVertex: SomeVertex<TData, TDimensions> = (
     callback: (
       currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => boolean,
   ): boolean => this._someVertex(callback, [])
 }
