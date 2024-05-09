@@ -94,13 +94,13 @@ export type GetAtCoordinates<TData, TDimensions extends number = 0> = <
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
 
 /**
- * A function which executes a function on all edges of the graph
+ * A function which executes a function on all vertices of the graph
  *
  * @export
- * @typedef {ForEachEdge}
+ * @typedef {ForEachVertex}
  * @template TData
  */
-export type ForEachEdge<TData, TDimensions extends number = 0> = (
+export type ForEachVertex<TData, TDimensions extends number = 0> = (
   callback: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -155,13 +155,13 @@ export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
 ) => GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>
 
 /**
- * A function which transforms all edges of the graph
+ * A function which transforms all vertices of the graph
  *
  * @export
- * @typedef {UpdateAllEdges}
+ * @typedef {UpdateAllVertices}
  * @template TData
  */
-export type UpdateAllEdges<TData, TDimensions extends number = 0> = (
+export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -169,22 +169,22 @@ export type UpdateAllEdges<TData, TDimensions extends number = 0> = (
 ) => GraphData<TData, TDimensions>
 
 /**
- * Sets all edges of the graph to the same value
+ * Sets all vertices of the graph to the same value
  *
  * @export
- * @typedef {SetAllEdges}
+ * @typedef {SetAllVertices}
  * @template TData
  */
-export type SetAllEdges<TData> = (value: TData) => void
+export type SetAllVertices<TData> = (value: TData) => void
 
 /**
- * A function which transforms all edges of the graph into a potentially new shape
+ * A function which transforms all vertices of the graph into a potentially new shape
  *
  * @export
- * @typedef {MapAllEdges}
+ * @typedef {MapAllVertices}
  * @template TData
  */
-export type MapAllEdges<TData, TDimensions extends number = 0> = <TResult>(
+export type MapAllVertices<TData, TDimensions extends number = 0> = <TResult>(
   transformer: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -192,13 +192,13 @@ export type MapAllEdges<TData, TDimensions extends number = 0> = <TResult>(
 ) => IGraph<TResult, TDimensions>
 
 /**
- * A function which transforms all edges of the graph into a potentially new shape
+ * A function which transforms all vertices of the graph into a potentially new shape
  *
  * @export
- * @typedef {SomeEdge}
+ * @typedef {SomeVertex}
  * @template TData
  */
-export type SomeEdge<TData, TDimensions extends number = 0> = (
+export type SomeVertex<TData, TDimensions extends number = 0> = (
   callback: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -230,11 +230,11 @@ export interface IGraph<TData, TDimensions extends number = 0> {
   getAtCoordinates: GetAtCoordinates<TData, TDimensions>
 
   /**
-   * Executes logic for each edge of the graph
+   * Executes logic for each vertex of the graph
    *
-   * @type {ForEachEdge<TData, TDimensions>}
+   * @type {ForEachVertex<TData, TDimensions>}
    */
-  forEachEdge: ForEachEdge<TData, TDimensions>
+  forEachVertex: ForEachVertex<TData, TDimensions>
 
   /**
    * Transforms the graph at certain coordinates
@@ -250,39 +250,39 @@ export interface IGraph<TData, TDimensions extends number = 0> {
   setAtCoordinates: SetAtCoordinates<TData, TDimensions>
 
   /**
-   * Sets all edges in the graph to a new value
+   * Sets all vertices in the graph to a new value
    *
    * @type {MapAtCoordinates<TData, TDimensions>}
    */
   mapAtCoordinates: MapAtCoordinates<TData, TDimensions>
 
   /**
-   * Transforms all edges in the graph
+   * Transforms all vertices in the graph
    *
-   * @type {UpdateAllEdges<TData, TDimensions>}
+   * @type {UpdateAllVertices<TData, TDimensions>}
    */
-  updateAllEdges: UpdateAllEdges<TData, TDimensions>
+  updateAllVertices: UpdateAllVertices<TData, TDimensions>
 
   /**
-   * Sets all edges in the graph to a new value
+   * Sets all vertices in the graph to a new value
    *
-   * @type {SetAllEdges<TData>}
+   * @type {SetAllVertices<TData>}
    */
-  setAllEdges: SetAllEdges<TData>
+  setAllVertices: SetAllVertices<TData>
 
   /**
-   * Returns a graph where all `TData` edges have been transformed to `TResult`s
+   * Returns a graph where all `TData` vertices have been transformed to `TResult`s
    *
-   * @type {MapAllEdges<TData, TDimensions>}
+   * @type {MapAllVertices<TData, TDimensions>}
    */
-  mapAllEdges: MapAllEdges<TData, TDimensions>
+  mapAllVertices: MapAllVertices<TData, TDimensions>
 
   /**
-   * Returns `true` if calling the `callback` on any edge returns `true`
+   * Returns `true` if calling the `callback` on any vertex returns `true`
    *
-   * @type {SomeEdge<TData, TDimensions>}
+   * @type {SomeVertex<TData, TDimensions>}
    */
-  someEdge: SomeEdge<TData, TDimensions>
+  someVertex: SomeVertex<TData, TDimensions>
 }
 
 /**
@@ -391,14 +391,14 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   }
 
   /**
-   * Recursively executes a function on all edges of the graph
+   * Recursively executes a function on all vertices of the graph
    *
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
    * @param {(currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData} updater
    * @param {TCoordinates} previousCoordinates
    * @returns {TData, previousCoordinates: TCoordinates) => void}
    */
-  private _forEachEdge = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _forEachVertex = <TCoordinates extends Coordinates = Tuple<number, 0>>(
     callback: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -427,26 +427,26 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         })
       } else {
         coordinatesInGraph.forEach(coordinate =>
-          this._forEachEdge(callback, [...previousCoordinates, coordinate]),
+          this._forEachVertex(callback, [...previousCoordinates, coordinate]),
         )
       }
     }
   }
 
   /**
-   * Executes a callback for each edge in the graph
+   * Executes a callback for each vertex in the graph
    *
    * @param {(
    *       currentValue: TData,
    *       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
    *     ) => void} callback
    */
-  forEachEdge: ForEachEdge<TData, TDimensions> = (
+  forEachVertex: ForEachVertex<TData, TDimensions> = (
     callback: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     ) => void,
-  ): void => this._forEachEdge(callback, [])
+  ): void => this._forEachVertex(callback, [])
 
   /**
    * Transforms graph data at particular `Coordinates`.
@@ -529,7 +529,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     transformer(this.getAtCoordinates(coordinates), coordinates)
 
   /**
-   * Recursively maps over all edges of the graph and transforms them
+   * Recursively maps over all vertices of the graph and transforms them
    *
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
    * @param {(
@@ -539,7 +539,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @param {TCoordinates} previousCoordinates
    * @returns {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>}
    */
-  private _updateAllEdges = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _updateAllVertices = <TCoordinates extends Coordinates = Tuple<number, 0>>(
     updater: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -578,7 +578,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         return coordinatesInGraph.reduce(
           (acc, coordinate) => ({
             ...acc,
-            [coordinate]: this._updateAllEdges(updater, [...previousCoordinates, coordinate]),
+            [coordinate]: this._updateAllVertices(updater, [...previousCoordinates, coordinate]),
           }),
           {} as GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
         )
@@ -587,31 +587,31 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   }
 
   /**
-   * Transforms all edges of the graph with an updater function
+   * Transforms all vertices of the graph with an updater function
    *
    * @param {(currentValue: TData, coordinates: Tuple<number, TDimensions>) => TData} updater
    */
-  updateAllEdges: UpdateAllEdges<TData, TDimensions> = (
+  updateAllVertices: UpdateAllVertices<TData, TDimensions> = (
     updater: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     ) => TData,
   ): GraphData<TData, TDimensions> => {
-    this._updateAllEdges(updater, [])
+    this._updateAllVertices(updater, [])
     return this.data
   }
 
   /**
-   * Sets all edges of the graph to have a value of `value`
+   * Sets all vertices of the graph to have a value of `value`
    *
    * @param {TData} value
    */
-  setAllEdges: SetAllEdges<TData> = (value: TData): void => {
-    this._updateAllEdges(() => value, [])
+  setAllVertices: SetAllVertices<TData> = (value: TData): void => {
+    this._updateAllVertices(() => value, [])
   }
 
   /**
-   * Recursively maps over all edges of the graph and returns a graph of transformed edges
+   * Recursively maps over all vertices of the graph and returns a graph of transformed vertices
    *
    * @template TResult
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
@@ -622,7 +622,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @param {TCoordinates} previousCoordinates
    * @returns {GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>}
    */
-  private _mapAllEdges = <TResult, TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _mapAllVertices = <TResult, TCoordinates extends Coordinates = Tuple<number, 0>>(
     transformer: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -662,7 +662,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         return coordinatesInGraph.reduce(
           (acc, coordinate) => ({
             ...acc,
-            [coordinate]: this._mapAllEdges(transformer, [...previousCoordinates, coordinate]),
+            [coordinate]: this._mapAllVertices(transformer, [...previousCoordinates, coordinate]),
           }),
           {} as GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>,
         )
@@ -671,7 +671,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   }
 
   /**
-   * Returns a `Graph` of `TResult`s, mapped from the edges of the `TData` `Graph`
+   * Returns a `Graph` of `TResult`s, mapped from the vertices of the `TData` `Graph`
    *
    * @template TResult
    * @param {(
@@ -680,16 +680,17 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *     ) => TResult} transformer
    * @returns {GraphData<TResult, TDimensions>}
    */
-  mapAllEdges: MapAllEdges<TData, TDimensions> = <TResult>(
+  mapAllVertices: MapAllVertices<TData, TDimensions> = <TResult>(
     transformer: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     ) => TResult,
+  ): IGraph<TResult, TDimensions> =>
     // @ts-expect-error TResult is valid for a graph with TDimensions=0
-  ): IGraph<TResult, TDimensions> => new Graph(this.dimensions, this._mapAllEdges(transformer, []))
+    new Graph(this.dimensions, this._mapAllVertices(transformer, []))
 
   /**
-   * Recursively maps over all edges and returns true if the `callback` returns true for any edge
+   * Recursively maps over all vertices and returns true if the `callback` returns true for any vertex
    *
    * @template {Coordinates} [TCoordinates=Tuple<number, 0>]
    * @param {(
@@ -699,7 +700,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @param {TCoordinates} previousCoordinates
    * @returns {boolean}
    */
-  private _someEdge = <TCoordinates extends Coordinates = Tuple<number, 0>>(
+  private _someVertex = <TCoordinates extends Coordinates = Tuple<number, 0>>(
     callback: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -733,14 +734,14 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         )
       } else {
         return coordinatesInGraph.some(coordinate =>
-          this._someEdge(callback, [...previousCoordinates, coordinate]),
+          this._someVertex(callback, [...previousCoordinates, coordinate]),
         )
       }
     }
   }
 
   /**
-   * Returns true if any edge returns true for the provided `callback`
+   * Returns true if any vertex returns true for the provided `callback`
    *
    * @param {(
    *       currentValue: TData,
@@ -748,10 +749,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *     ) => boolean} callback
    * @returns {boolean}
    */
-  someEdge: SomeEdge<TData, TDimensions> = (
+  someVertex: SomeVertex<TData, TDimensions> = (
     callback: (
       currentValue: TData,
       coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
     ) => boolean,
-  ): boolean => this._someEdge(callback, [])
+  ): boolean => this._someVertex(callback, [])
 }

@@ -36,8 +36,8 @@ const Bookshelf: React.FC = () => {
   console.log(getGraph())
   console.log(getAtX([1]))
   console.log(getAtXY([2, 0]))
-  console.log(graph.mapAllEdges(str => str.split(' ')).getAtCoordinates())
-  graph.updateAllEdges(str => str.split(' ').join('---'))
+  console.log(graph.mapAllVertices(str => str.split(' ')).getAtCoordinates())
+  graph.updateAllVertices(str => str.split(' ').join('---'))
   console.log(getGraph())
 
   return (

@@ -97,7 +97,7 @@ export const getTypedFieldValue = <TData extends FormData, TDimensions extends n
 export const getTypedData = <TData extends FormData, TDimensions extends number = 0>(
   fieldsGraph: IGraph<Fields<TData, TDimensions>, TDimensions>,
 ): IGraph<TData, TDimensions> =>
-  fieldsGraph.mapAllEdges(fields =>
+  fieldsGraph.mapAllVertices(fields =>
     Object.keys(fields).reduce(
       (acc, fieldName) =>
         fieldName

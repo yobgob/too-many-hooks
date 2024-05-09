@@ -2,14 +2,14 @@ import { useCallback, useState } from 'react'
 import {
   Coordinates,
   CoordinatesOrNever,
-  ForEachEdge,
+  ForEachVertex,
   GetAtCoordinates,
   Graph,
   GraphDataAtCoordinates,
-  MapAllEdges,
+  MapAllVertices,
   MapAtCoordinates,
-  SetAllEdges,
-  SomeEdge,
+  SetAllVertices,
+  SomeVertex,
   Tuple,
 } from './Graph'
 
@@ -46,14 +46,14 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
 ) => void
 
 /**
- * The type of the `updateAllEdges` function for `useGraph`
+ * The type of the `updateAllVertices` function for `useGraph`
  *
  * @export
- * @typedef {UpdateAllEdges}
+ * @typedef {UpdateAllVertices}
  * @template TData
  * @template {number} [TDimensions=0]
  */
-export type UpdateAllEdges<TData, TDimensions extends number = 0> = (
+export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
     currentValue: TData,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
@@ -77,11 +77,11 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   getAtCoordinates: GetAtCoordinates<TData, TDimensions>
 
   /**
-   * Executes a callback on all edges of the graph
+   * Executes a callback on all vertices of the graph
    *
-   * @type {ForEachEdge<TData, TDimensions>}
+   * @type {ForEachVertex<TData, TDimensions>}
    */
-  forEachEdge: ForEachEdge<TData, TDimensions>
+  forEachVertex: ForEachVertex<TData, TDimensions>
 
   /**
    * Returns a TData transformed into a TResult
@@ -93,9 +93,9 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   /**
    * Creates a new graph with TData transformed to TResult
    *
-   * @type {MapAllEdges<TData, TDimensions>}
+   * @type {MapAllVertices<TData, TDimensions>}
    */
-  mapAllEdges: MapAllEdges<TData, TDimensions>
+  mapAllVertices: MapAllVertices<TData, TDimensions>
 
   /**
    * Transforms the state of the graph at certain coordinates
@@ -112,25 +112,25 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
   setAtCoordinates: SetAtCoordinates<TData, TDimensions>
 
   /**
-   * Transforms all edges of the graph
+   * Transforms all vertices of the graph
    *
-   * @type {UpdateAllEdges<TData, TDimensions>}
+   * @type {UpdateAllVertices<TData, TDimensions>}
    */
-  updateAllEdges: UpdateAllEdges<TData, TDimensions>
+  updateAllVertices: UpdateAllVertices<TData, TDimensions>
 
   /**
-   * Sets all edges of the graph to a new value
+   * Sets all vertices of the graph to a new value
    *
-   * @type {SetAllEdges<TData>}
+   * @type {SetAllVertices<TData>}
    */
-  setAllEdges: SetAllEdges<TData>
+  setAllVertices: SetAllVertices<TData>
 
   /**
-   * Returns `true` if any edge returns `true` for the `callback`
+   * Returns `true` if any vertex returns `true` for the `callback`
    *
-   * @type {SomeEdge<TData, TDimensions>}
+   * @type {SomeVertex<TData, TDimensions>}
    */
-  someEdge: SomeEdge<TData, TDimensions>
+  someVertex: SomeVertex<TData, TDimensions>
 }
 
 /**
@@ -188,7 +188,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     initial ?? new Graph<TData, TDimensions>(dimensions),
   )
 
-  const updateAtCoordinates: MapAtCoordinates<TData, TDimensions> = useCallback(
+  const updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions> = useCallback(
     <TCoordinates extends Coordinates = Tuple<number, 0>>(
       updater: (
         currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
@@ -211,7 +211,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     [updateAtCoordinates],
   )
 
-  const updateAllEdges: UpdateAllEdges<TData, TDimensions> = useCallback(
+  const updateAllVertices: UpdateAllVertices<TData, TDimensions> = useCallback(
     (
       updater: (
         currentValue: TData,
@@ -220,29 +220,29 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
     ) =>
       setData(oldData => {
         const newGraph = new Graph<TData, TDimensions>(oldData)
-        newGraph.updateAllEdges(updater)
+        newGraph.updateAllVertices(updater)
         return newGraph
       }),
     [],
   )
 
-  const setAllEdges: SetAllEdges<TData> = useCallback(
-    (value: TData) => updateAllEdges(() => value),
-    [updateAllEdges],
+  const setAllVertices: SetAllVertices<TData> = useCallback(
+    (value: TData) => updateAllVertices(() => value),
+    [updateAllVertices],
   )
 
   return [
     data.getAtCoordinates<[]>(),
     {
       getAtCoordinates: data.getAtCoordinates,
-      forEachEdge: data.forEachEdge,
+      forEachVertex: data.forEachVertex,
       mapAtCoordinates: data.mapAtCoordinates,
-      mapAllEdges: data.mapAllEdges,
-      someEdge: data.someEdge,
+      mapAllVertices: data.mapAllVertices,
+      someVertex: data.someVertex,
       setAtCoordinates,
       updateAtCoordinates,
-      updateAllEdges,
-      setAllEdges,
+      updateAllVertices,
+      setAllVertices,
     },
   ] satisfies UseGraphReturn<TData, TDimensions>
 }
