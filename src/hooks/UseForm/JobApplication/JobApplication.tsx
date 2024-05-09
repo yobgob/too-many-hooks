@@ -1,6 +1,6 @@
 import React from 'react'
-import { Select } from '../../../common/components'
-import Button from '../../../common/components/Button'
+import { Select } from '../../../storybook-common/components'
+import Button from '../../../storybook-common/components/Button'
 import useForm from '../useForm'
 
 enum Title {

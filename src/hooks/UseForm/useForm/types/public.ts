@@ -330,9 +330,9 @@ export interface UseFormReturn<TData extends FormData, TDimensions extends numbe
   /**
    * The `register` function is used to register inputs as fields within the form
    *
-   * @type {RegisterFunction<TData>}
+   * @type {RegisterFunction<TData, TDimensions>}
    */
-  register: RegisterFunction<TData>
+  register: RegisterFunction<TData, TDimensions>
   /**
    * A graph of maps of registered fields to their validation information
    *
@@ -377,4 +377,7 @@ export interface UseFormReturn<TData extends FormData, TDimensions extends numbe
  * @export
  * @typedef {UseForm}
  */
-export type UseForm = <TData extends FormData>() => UseFormReturn<TData>
+export type UseForm = <TData extends FormData, TDimensions extends number = 0>() => UseFormReturn<
+  TData,
+  TDimensions
+>

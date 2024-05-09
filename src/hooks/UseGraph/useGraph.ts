@@ -5,6 +5,7 @@ import {
   ForEachVertex,
   GetAtCoordinates,
   Graph,
+  GraphData,
   GraphDataAtCoordinates,
   MapAllVertices,
   MapAtCoordinates,
@@ -154,7 +155,7 @@ export type UseGraphOptions<TData, TDimensions extends number = 0> = {
  * @template {number} [TDimensions=0]
  */
 export type UseGraphReturn<TData, TDimensions extends number = 0> = [
-  data: GraphDataAtCoordinates<TData, TDimensions, []>,
+  data: GraphData<TData, TDimensions>,
   UseGraphReturnFunctions<TData, TDimensions>,
 ]
 
@@ -232,7 +233,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   )
 
   return [
-    data.getAtCoordinates<[]>(),
+    data.get(),
     {
       getAtCoordinates: data.getAtCoordinates,
       forEachVertex: data.forEachVertex,
@@ -244,7 +245,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       updateAllVertices,
       setAllVertices,
     },
-  ] satisfies UseGraphReturn<TData, TDimensions>
+  ]
 }
 
 export default useGraph

@@ -1,6 +1,8 @@
 import merge from 'lodash.merge'
 import { Length, SafeSubtract } from '../../common/types/arithmetic'
 
+// #region Tuples
+
 /**
  * Recursion utility for building tuples
  *
@@ -24,6 +26,10 @@ export type Tuple<T, N extends number> = N extends N
     ? T[]
     : _TupleOf<T, N, []>
   : never
+
+// #endregion
+
+// #region graph data and coordinates
 
 /**
  * Recursion utility for building graph types
@@ -79,6 +85,19 @@ export type GraphDataAtCoordinates<
   TMaxDepth extends number,
   TCoordinates extends Coordinates,
 > = GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
+
+// #endregion
+
+// #region Graph functions
+
+/**
+ * A function which returns all of the graph data
+ *
+ * @typedef {Get}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type Get<TData, TDimensions extends number = 0> = () => GraphData<TData, TDimensions>
 
 /**
  * A function which returns graph data at certain coordinates
@@ -205,6 +224,8 @@ export type SomeVertex<TData, TDimensions extends number = 0> = (
   ) => boolean,
 ) => boolean
 
+// #endregion
+
 /**
  * The interface for a Graph data type, where the graph has TDimensions dimensions
  *
@@ -221,6 +242,13 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    * @type {() => TDimensions}
    */
   getDimensions: () => TDimensions
+
+  /**
+   * Returns the entire graph as a GraphData
+   *
+   * @type {Get<TData, TDimensions>}
+   */
+  get: Get<TData, TDimensions>
 
   /**
    * Accesses graph data at certain coordinates
@@ -365,6 +393,13 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @returns {TDimensions}
    */
   getDimensions = (): TDimensions => this.dimensions
+
+  /**
+   * Returns the entire graph as a GraphData
+   *
+   * @returns {GraphData<TData, TDimensions>}
+   */
+  get: Get<TData, TDimensions> = (): GraphData<TData, TDimensions> => this.data
 
   /**
    * Accesses graph data at particular `Coordinates`

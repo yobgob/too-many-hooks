@@ -15,6 +15,7 @@ import {
   RegisterResult,
   Touched,
   UseForm,
+  UseFormReturn,
 } from './types'
 import {
   getElementDefaultValue,
@@ -32,7 +33,10 @@ import {
  * @template {FormData} TData
  * @returns {{ register: RegisterFunction<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
  */
-const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0>() => {
+const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0>(): UseFormReturn<
+  TData,
+  TDimensions
+> => {
   const fieldsGraph = useRef<IGraph<Fields<TData, TDimensions>, TDimensions>>(
     new Graph<Fields<TData, TDimensions>, TDimensions>(),
   )
