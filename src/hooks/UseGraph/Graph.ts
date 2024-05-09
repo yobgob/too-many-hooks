@@ -94,7 +94,7 @@ export type GraphDataAtCoordinates<
   T,
   TMaxDepth extends number,
   TCoordinates extends Coordinates,
-> = GraphData<T, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
+> = GraphData<T | undefined, SafeSubtract<TMaxDepth, Length<TCoordinates>>>
 
 // #endregion
 
@@ -107,7 +107,9 @@ export type GraphDataAtCoordinates<
  * @template TData
  * @template {number} [TDimensions=0]
  */
-export type Get<TData, TDimensions extends number = 0> = () => GraphData<TData, TDimensions>
+export type Get<TData, TDimensions extends number = 0> = () =>
+  | GraphData<TData, TDimensions>
+  | undefined
 
 /**
  * A function which returns graph data at certain coordinates
@@ -123,18 +125,27 @@ export type GetAtCoordinates<TData, TDimensions extends number = 0> = <
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
 
 /**
- * A function which executes a function on all vertices of the graph
+ * A function which returns the data of a vertex
  *
  * @export
- * @typedef {ForEachVertex}
+ * @typedef {GetVertex}
  * @template TData
+ * @template {number} [TDimensions=0]
  */
-export type ForEachVertex<TData, TDimensions extends number = 0> = (
-  callback: (
-    currentValue: TData,
-    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-  ) => void,
-) => void
+export type GetVertex<TData, TDimensions extends number = 0> = (
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+) => TData | undefined
+
+/**
+ * A function which sets the entire graph data
+ *
+ * @typedef {Set}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type Set<TData, TDimensions extends number = 0> = (
+  newValue: GraphData<TData, TDimensions>,
+) => GraphData<TData, TDimensions>
 
 /**
  * A function which sets graph data at certain coordinates
@@ -151,6 +162,29 @@ export type SetAtCoordinates<TData, TDimensions extends number = 0> = <
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
 
 /**
+ * A function which sets graph data at a vertex
+ *
+ * @typedef {SetVertex}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type SetVertex<TData, TDimensions extends number = 0> = (
+  value: TData,
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+) => TData
+
+/**
+ * A function which transforms the entire graph
+ *
+ * @typedef {Update}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type Update<TData, TDimensions extends number = 0> = (
+  updater: (currentValue?: GraphData<TData, TDimensions>) => GraphData<TData, TDimensions>,
+) => GraphData<TData, TDimensions>
+
+/**
  * A function which transforms graph data at certain coordinates
  *
  * @typedef {UpdateAtCoordinates}
@@ -161,10 +195,33 @@ export type UpdateAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   updater: (
-    currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+    currentValue?: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
 ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>
+
+/**
+ * A function which transforms graph data at certain coordinates
+ *
+ * @typedef {UpdateVertex}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type UpdateVertex<TData, TDimensions extends number = 0> = (
+  updater: (currentValue?: TData) => TData,
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+) => TData
+
+/**
+ * A function which returns a transformed graph
+ *
+ * @typedef {Map}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type Map<TData, TDimensions extends number = 0> = <TResult>(
+  transformer: (currentValue?: GraphData<TData, TDimensions>) => GraphData<TResult, TDimensions>,
+) => GraphData<TResult, TDimensions>
 
 /**
  * A function which returns transformed data at certain coordinates
@@ -178,10 +235,36 @@ export type MapAtCoordinates<TData, TDimensions extends number = 0> = <
   TCoordinates extends Coordinates = CoordinatesOfLength<0>,
 >(
   transformer: (
-    currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+    currentValue?: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
   ) => GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>,
   coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
 ) => GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>
+
+/**
+ * A function which returns transformed data of a vertex
+ *
+ * @typedef {MapVertex}
+ * @template TData
+ * @template {number} [TDimensions=0]
+ */
+export type MapVertex<TData, TDimensions extends number = 0> = <TResult = TData>(
+  transformer: (currentValue?: TData) => TResult,
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+) => TResult
+
+/**
+ * A function which executes a function on all vertices of the graph
+ *
+ * @export
+ * @typedef {ForEachVertex}
+ * @template TData
+ */
+export type ForEachVertex<TData, TDimensions extends number = 0> = (
+  callback: (
+    currentValue?: TData,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+  ) => void,
+) => void
 
 /**
  * A function which transforms all vertices of the graph
@@ -268,12 +351,37 @@ export interface IGraph<TData, TDimensions extends number = 0> {
   getAtCoordinates: GetAtCoordinates<TData, TDimensions>
 
   /**
-   * Executes logic for each vertex of the graph
+   * Gets the data at a vertex
    *
-   * @type {ForEachVertex<TData, TDimensions>}
+   * @type {GetVertex<TData, TDimensions>}
    */
-  forEachVertex: ForEachVertex<TData, TDimensions>
+  getVertex: GetVertex<TData, TDimensions>
 
+  /**
+   * Sets the graph
+   *
+   * @type {Set<TData, TDimensions>}
+   */
+  set: Set<TData, TDimensions>
+  /**
+   * Sets the graph at certain coordinates
+   *
+   * @type {SetAtCoordinates<TData, TDimensions>}
+   */
+  setAtCoordinates: SetAtCoordinates<TData, TDimensions>
+  /**
+   * Sets the graph at a vertex
+   *
+   * @type {SetVertex<TData, TDimensions>}
+   */
+  setVertex: SetVertex<TData, TDimensions>
+
+  /**
+   * Transforms the graph
+   *
+   * @type {Update<TData, TDimensions>}
+   */
+  update: Update<TData, TDimensions>
   /**
    * Transforms the graph at certain coordinates
    *
@@ -281,18 +389,44 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    */
   updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions>
   /**
-   * Sets the graph at certain coordinates
+   * Sets the graph at a vertex
    *
-   * @type {SetAtCoordinates<TData, TDimensions>}
+   * @type {UpdateVertex<TData, TDimensions>}
    */
-  setAtCoordinates: SetAtCoordinates<TData, TDimensions>
+  updateVertex: UpdateVertex<TData, TDimensions>
 
   /**
-   * Sets all vertices in the graph to a new value
+   * Returns a transformed graph
+   *
+   * @type {Map<TData, TDimensions>}
+   */
+  map: Map<TData, TDimensions>
+  /**
+   * Returns transformed data at certain coordinates
    *
    * @type {MapAtCoordinates<TData, TDimensions>}
    */
   mapAtCoordinates: MapAtCoordinates<TData, TDimensions>
+  /**
+   * Returns transformed data at a vertex
+   *
+   * @type {MapVertex<TData, TDimensions>}
+   */
+  mapVertex: MapVertex<TData, TDimensions>
+
+  /**
+   * Executes logic for each vertex of the graph
+   *
+   * @type {ForEachVertex<TData, TDimensions>}
+   */
+  forEachVertex: ForEachVertex<TData, TDimensions>
+
+  /**
+   * Returns `true` if calling the `callback` on any vertex returns `true`
+   *
+   * @type {SomeVertex<TData, TDimensions>}
+   */
+  someVertex: SomeVertex<TData, TDimensions>
 
   /**
    * Transforms all vertices in the graph
@@ -314,13 +448,6 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    * @type {MapAllVertices<TData, TDimensions>}
    */
   mapAllVertices: MapAllVertices<TData, TDimensions>
-
-  /**
-   * Returns `true` if calling the `callback` on any vertex returns `true`
-   *
-   * @type {SomeVertex<TData, TDimensions>}
-   */
-  someVertex: SomeVertex<TData, TDimensions>
 }
 
 /**
@@ -415,7 +542,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    *
    * @returns {GraphData<TData, TDimensions>}
    */
-  get: Get<TData, TDimensions> = (): GraphData<TData, TDimensions> => this.data
+  get: Get<TData, TDimensions> = (): GraphData<TData, TDimensions> | undefined => this.data
 
   /**
    * Accesses graph data at particular `Coordinates`
@@ -442,67 +569,74 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   }
 
   /**
-   * Recursively executes a function on all vertices of the graph
+   * Gets graph data at a vertex
    *
-   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
-   * @param {(currentValue: TData, coordinates: CoordinatesOfLength<TDimensions>) => TData} updater
-   * @param {TCoordinates} previousCoordinates
-   * @returns {TData, previousCoordinates: TCoordinates) => void}
+   * @param {?CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>} [coordinates]
+   * @returns {(TData | undefined)}
    */
-  private _forEachVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
-    callback: (
-      currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => void,
-    previousCoordinates: TCoordinates,
-  ) => {
-    // special case for a 0 dimension graph or no coordinates
-    if (this.dimensions === 0) {
-      callback(this.data)
-    } else {
-      const depth = previousCoordinates.length + 1
+  getVertex: GetVertex<TData, TDimensions> = (
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+  ): TData | undefined => this.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates)
 
-      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
-      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
-
-      // @ts-expect-error this is prevented from running on TData via logical checks
-      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
-
-      if (depth === this.dimensions) {
-        coordinatesInGraph.forEach(coordinate => {
-          const coordinates = [...previousCoordinates, coordinate] as CoordinatesOrNever<
-            TDimensions,
-            Tuple<number, TDimensions>
-          >
-
-          callback(
-            this.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates),
-            coordinates,
-          )
-        })
-      } else {
-        coordinatesInGraph.forEach(coordinate =>
-          this._forEachVertex(callback, [...previousCoordinates, coordinate]),
-        )
-      }
-    }
+  /**
+   * Sets the entire graph
+   *
+   * @param {GraphData<TData, TDimensions>} newValue
+   * @returns {GraphData<TData, TDimensions>}
+   */
+  set: Set<TData, TDimensions> = (
+    newValue: GraphData<TData, TDimensions>,
+  ): GraphData<TData, TDimensions> => {
+    this.data = newValue
+    return newValue
   }
 
   /**
-   * Executes a callback for each vertex in the graph
+   * Sets graph data at particular `Coordinates`.
+   * `Coordinates` of length `TDimensions` set a point to a `TData`,
+   * `Coordinates` with length shorter than `TDimensions` set a `GraphData` of depth `TDimensions` - length of `Coordinates`
+   *
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
+   * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
+   * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
+   */
+  setAtCoordinates: SetAtCoordinates<TData, TDimensions> = <
+    TCoordinates extends Coordinates = CoordinatesOfLength<0>,
+  >(
+    value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+    coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+  ) => this.updateAtCoordinates(() => value, coordinates)
+
+  /**
+   * Sets the value of a vertex
+   *
+   * @param {TData} value
+   * @param {?CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>} [coordinates]
+   * @returns {TData}
+   */
+  setVertex: SetVertex<TData, TDimensions> = (
+    value: TData,
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+    // @ts-expect-error TData is assignable to TData
+  ): TData => this.setAtCoordinates<CoordinatesOfLength<TDimensions>>(value, coordinates)
+
+  /**
+   * Transforms the entire graph
    *
    * @param {(
-   *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-   *     ) => void} callback
+   *       currentValue?: GraphData<TData, TDimensions> | undefined,
+   *     ) => GraphData<TData, TDimensions>} updater
+   * @returns {GraphData<TData, TDimensions>}
    */
-  forEachVertex: ForEachVertex<TData, TDimensions> = (
-    callback: (
-      currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => void,
-  ): void => this._forEachVertex(callback, [])
-
+  update: Update<TData, TDimensions> = (
+    updater: (
+      currentValue?: GraphData<TData, TDimensions> | undefined,
+    ) => GraphData<TData, TDimensions>,
+  ): GraphData<TData, TDimensions> => {
+    const newValue = updater(this.data)
+    this.data = newValue
+    return newValue
+  }
   /**
    * Transforms graph data at particular `Coordinates`.
    * `Coordinates` of length `TDimensions` transforms a `TData`,
@@ -516,7 +650,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
     updater: (
-      currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+      currentValue?: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
     ) => GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
     coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
@@ -544,44 +678,71 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   }
 
   /**
-   * Sets graph data at particular `Coordinates`.
-   * `Coordinates` of length `TDimensions` set a point to a `TData`,
-   * `Coordinates` with length shorter than `TDimensions` set a `GraphData` of depth `TDimensions` - length of `Coordinates`
+   * Transforms a vertex
    *
-   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
-   * @param {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>} value
-   * @param {...TDimensions extends 0 ? [unknown?] : [TCoordinates?]} coordinatesOrEmpty
+   * @param {(currentValue?: TData) => TData} updater
+   * @param {?CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>} [coordinates]
+   * @returns {TData, coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>) => TData}
    */
-  setAtCoordinates: SetAtCoordinates<TData, TDimensions> = <
-    TCoordinates extends Coordinates = CoordinatesOfLength<0>,
-  >(
-    value: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-    coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
-  ) => this.updateAtCoordinates(() => value, coordinates)
+  updateVertex: UpdateVertex<TData, TDimensions> = (
+    updater: (currentValue?: TData) => TData,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    // @ts-expect-error TData is the same as GraphData with depth 0
+  ) => this.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(updater, coordinates) as TData
+
+  /**
+   * Returns a transformed graph
+   *
+   * @template [TResult=TData]
+   * @param {(
+   *       currentValue?: GraphData<TData, TDimensions> | undefined,
+   *     ) => GraphData<TResult, TDimensions>} transformer
+   * @returns {GraphData<TResult, TDimensions>}
+   */
+  map: Map<TData, TDimensions> = <TResult = TData>(
+    transformer: (
+      currentValue?: GraphData<TData, TDimensions> | undefined,
+    ) => GraphData<TResult, TDimensions>,
+  ): GraphData<TResult, TDimensions> => transformer(this.data)
 
   /**
    * Returns the `TData` at the coordinates mapped to a `TResult`
    *
-   * @template TResult
+   * @template [TResult=TData]
    * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
    * @param {(
-   *       currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+   *       currentValue?: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
    *       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
    *     ) => GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>} transformer
    * @param {?CoordinatesOrNever<TDimensions, TCoordinates>} [coordinates]
    * @returns {GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>}
    */
   mapAtCoordinates: MapAtCoordinates<TData, TDimensions> = <
-    TResult,
+    TResult = TData,
     TCoordinates extends Coordinates = CoordinatesOfLength<0>,
   >(
     transformer: (
-      currentValue: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+      currentValue?: GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
       coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
     ) => GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>,
     coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
   ): GraphDataAtCoordinates<TResult, TDimensions, TCoordinates> =>
     transformer(this.getAtCoordinates(coordinates), coordinates)
+
+  /**
+   * Returns a transformed vertex
+   *
+   * @template [TResult=TData]
+   * @param {(currentValue?: TData) => TResult} transformer
+   * @param {?CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>} [coordinates]
+   * @returns {TResult}
+   */
+  mapVertex: MapVertex<TData, TDimensions> = <TResult = TData>(
+    transformer: (currentValue?: TData) => TResult,
+    coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+  ): TResult =>
+    // @ts-expect-error TResult is assignable to TResult
+    this.mapAtCoordinates<TResult, CoordinatesOfLength<TDimensions>>(transformer, coordinates)
 
   /**
    * Recursively maps over all vertices of the graph and transforms them
@@ -640,6 +801,132 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       }
     }
   }
+
+  /**
+   * Recursively executes a function on all vertices of the graph
+   *
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
+   * @param {(currentValue?: TData, coordinates: CoordinatesOfLength<TDimensions>) => TData} updater
+   * @param {TCoordinates} previousCoordinates
+   * @returns {TData, previousCoordinates: TCoordinates) => void}
+   */
+  private _forEachVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
+    callback: (
+      currentValue?: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) => void,
+    previousCoordinates: TCoordinates,
+  ) => {
+    // special case for a 0 dimension graph or no coordinates
+    if (this.dimensions === 0) {
+      callback(this.data)
+    } else {
+      const depth = previousCoordinates.length + 1
+
+      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
+      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
+
+      // @ts-expect-error this is prevented from running on TData via logical checks
+      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+
+      if (depth === this.dimensions) {
+        coordinatesInGraph.forEach(coordinate => {
+          const coordinates = [...previousCoordinates, coordinate] as CoordinatesOrNever<
+            TDimensions,
+            Tuple<number, TDimensions>
+          >
+
+          callback(
+            this.getAtCoordinates<CoordinatesOfLength<TDimensions>>(coordinates),
+            coordinates,
+          )
+        })
+      } else {
+        coordinatesInGraph.forEach(coordinate =>
+          this._forEachVertex(callback, [...previousCoordinates, coordinate]),
+        )
+      }
+    }
+  }
+
+  /**
+   * Executes a callback for each vertex in the graph
+   *
+   * @param {(
+   *       currentValue?: TData,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+   *     ) => void} callback
+   */
+  forEachVertex: ForEachVertex<TData, TDimensions> = (
+    callback: (
+      currentValue?: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) => void,
+  ): void => this._forEachVertex(callback, [])
+
+  /**
+   * Recursively maps over all vertices and returns true if the `callback` returns true for any vertex
+   *
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
+   * @param {(
+   *       currentValue: TData,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+   *     ) => boolean} callback
+   * @param {TCoordinates} previousCoordinates
+   * @returns {boolean}
+   */
+  private _someVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
+    callback: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) => boolean,
+    previousCoordinates: TCoordinates,
+  ): boolean => {
+    // special case for a 0 dimension graph or no coordinates
+    if (this.dimensions === 0) {
+      return callback(this.data)
+    } else {
+      const depth = previousCoordinates.length + 1
+
+      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
+      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
+
+      // @ts-expect-error this is prevented from running on TData via logical checks
+      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
+
+      if (depth === this.dimensions) {
+        return coordinatesInGraph.some(coordinate =>
+          callback(
+            // @ts-expect-error this will always return TData because it is at the maximum depth of coordinates
+            this.getAtCoordinates<TData, CoordinatesOfLength<TDimensions>>([
+              ...previousCoordinates,
+              coordinate,
+            ]),
+          ),
+        )
+      } else {
+        return coordinatesInGraph.some(coordinate =>
+          this._someVertex(callback, [...previousCoordinates, coordinate]),
+        )
+      }
+    }
+  }
+
+  /**
+   * Returns true if any vertex returns true for the provided `callback`
+   *
+   * @param {(
+   *       currentValue: TData,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+   *     ) => boolean} callback
+   * @returns {boolean}
+   */
+  someVertex: SomeVertex<TData, TDimensions> = (
+    callback: (
+      currentValue: TData,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) => boolean,
+  ): boolean => this._someVertex(callback, [])
 
   /**
    * Transforms all vertices of the graph with an updater function
@@ -742,70 +1029,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): IGraph<TResult, TDimensions> =>
     // @ts-expect-error TResult is valid for a graph with TDimensions=0
     new Graph(this.dimensions, this._mapAllVertices(transformer, []))
-
-  /**
-   * Recursively maps over all vertices and returns true if the `callback` returns true for any vertex
-   *
-   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
-   * @param {(
-   *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-   *     ) => boolean} callback
-   * @param {TCoordinates} previousCoordinates
-   * @returns {boolean}
-   */
-  private _someVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
-    callback: (
-      currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => boolean,
-    previousCoordinates: TCoordinates,
-  ): boolean => {
-    // special case for a 0 dimension graph or no coordinates
-    if (this.dimensions === 0) {
-      return callback(this.data)
-    } else {
-      const depth = previousCoordinates.length + 1
-
-      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
-      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
-
-      // @ts-expect-error this is prevented from running on TData via logical checks
-      const coordinatesInGraph = Object.keys(graphAtCoordinates).map(str => parseInt(str))
-
-      if (depth === this.dimensions) {
-        return coordinatesInGraph.some(coordinate =>
-          callback(
-            // @ts-expect-error this will always return TData because it is at the maximum depth of coordinates
-            this.getAtCoordinates<TData, CoordinatesOfLength<TDimensions>>([
-              ...previousCoordinates,
-              coordinate,
-            ]),
-          ),
-        )
-      } else {
-        return coordinatesInGraph.some(coordinate =>
-          this._someVertex(callback, [...previousCoordinates, coordinate]),
-        )
-      }
-    }
-  }
-
-  /**
-   * Returns true if any vertex returns true for the provided `callback`
-   *
-   * @param {(
-   *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-   *     ) => boolean} callback
-   * @returns {boolean}
-   */
-  someVertex: SomeVertex<TData, TDimensions> = (
-    callback: (
-      currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => boolean,
-  ): boolean => this._someVertex(callback, [])
 
   // #endregion
 }
