@@ -1,7 +1,7 @@
 import React from 'react'
 import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
-import useForm from '../useForm'
+import useForm, { Errors } from '../useForm'
 
 enum Title {
   Mr = 'MR',
@@ -19,7 +19,7 @@ export type ApplicationFormData = {
   hasAgreedToTerms: boolean
 }
 
-export type ApplicationErrors = Partial<{ [Key in keyof ApplicationFormData]: string | null }>
+export type ApplicationErrors = Errors<ApplicationFormData>
 
 interface Props {
   onSubmit: (data: ApplicationFormData) => void

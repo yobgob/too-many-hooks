@@ -9,7 +9,7 @@ export default {
   component: JobApplication,
 } satisfies FormMeta
 
-export const form: StoryObj<FormMeta> = {
+export const jobApplication: StoryObj<FormMeta> = {
   name: 'Job Application',
   parameters: {
     layout: 'centered',
