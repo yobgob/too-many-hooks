@@ -23,6 +23,7 @@ export type UseArrayReturn<T> = [
      *
      * @type {() => void}
      */
+
     readonly clear: () => void
     /**
      * Resets the array to its initial value
