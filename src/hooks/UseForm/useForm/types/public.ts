@@ -117,7 +117,7 @@ export type RegisterFunction<TData extends FormData, TDimensions extends number 
   TFieldElement extends FieldElement,
   TIsRequired extends boolean = false,
 >(
-  name: TFieldName,
+  fieldName: TFieldName,
   options?: RegisterOptions<
     TData,
     TDimensions,
