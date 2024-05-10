@@ -769,6 +769,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       this.data = null
     } else {
       this.updateAtCoordinates(
+        // @ts-expect-error This will be the correct number of dimensions
         currentValue => {
           if (currentValue) {
             return Object.keys(currentValue)
@@ -797,6 +798,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       this.data = null
     } else {
       this.updateAtCoordinates<CoordinatesOfLength<SafeSubtract<TDimensions, 1>>>(
+        // @ts-expect-error This will be the correct number of dimensions
         currentValue => {
           if (currentValue) {
             return Object.keys(currentValue)
