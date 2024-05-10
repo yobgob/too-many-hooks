@@ -1,4 +1,3 @@
-import merge from 'lodash.merge'
 import { Length, SafeSubtract } from '../../common/types/arithmetic'
 
 // #region tuple types
@@ -222,8 +221,8 @@ export type UpdateVertex<TData, TDimensions extends number = 0> = (
 export type Map<TData, TDimensions extends number = 0> = <TResult>(
   transformer: (
     currentValue: GraphData<TData, TDimensions> | null,
-  ) => GraphData<TResult, TDimensions>,
-) => GraphData<TResult, TDimensions>
+  ) => GraphData<TResult, TDimensions> | null,
+) => GraphData<TResult, TDimensions> | null
 
 /**
  * A function which returns transformed data at certain coordinates
@@ -263,7 +262,7 @@ export type MapVertex<TData, TDimensions extends number = 0> = <TResult = TData>
  */
 export type ForEachVertex<TData, TDimensions extends number = 0> = (
   callback: (
-    currentValue: TData,
+    currentValue: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => void,
 ) => void
@@ -277,7 +276,7 @@ export type ForEachVertex<TData, TDimensions extends number = 0> = (
  */
 export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
-    currentValue: TData,
+    currentValue: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => TData | null,
 ) => GraphData<TData, TDimensions> | null
@@ -314,7 +313,7 @@ export type MapAllVertices<TData, TDimensions extends number = 0> = <TResult>(
  */
 export type SomeVertex<TData, TDimensions extends number = 0> = (
   callback: (
-    currentValue: TData,
+    currentValue: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => boolean,
 ) => boolean
@@ -672,11 +671,15 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error the initial and final values of the reduce are different types but that is the intent
       const newValue: GraphData<TData, TDimensions> = coordinates.reduceRight(
         // @ts-expect-error the initial and final values of the reduce are different types but that is the intent
-        (acc, coordinate) => ({ [coordinate]: acc }),
+        (acc, coordinate, index) => ({
+          // @ts-expect-error This number of coordinates will be safe
+          ...this.getAtCoordinates(coordinates.slice(0, coordinates.length - (index + 1))),
+          [coordinate]: acc,
+        }),
         value,
       )
 
-      this.data = merge(this.data, newValue)
+      this.data = newValue
 
       return this.getAtCoordinates(coordinates)
     }
@@ -707,8 +710,8 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   map: Map<TData, TDimensions> = <TResult = TData>(
     transformer: (
       currentValue: GraphData<TData, TDimensions> | null,
-    ) => GraphData<TResult, TDimensions>,
-  ): GraphData<TResult, TDimensions> => transformer(this.data)
+    ) => GraphData<TResult, TDimensions> | null,
+  ): GraphData<TResult, TDimensions> | null => transformer(this.data)
 
   /**
    * Returns the `TData` at the coordinates mapped to a `TResult`
@@ -748,63 +751,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): TResult =>
     // @ts-expect-error TResult is assignable to TResult
     this.mapAtCoordinates<TResult, CoordinatesOfLength<TDimensions>>(transformer, coordinates)
-
-  /**
-   * Recursively maps over all vertices of the graph and transforms them
-   *
-   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
-   * @param {(
-   *       currentValue: TData,
-   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-   *     ) => TData} updater
-   * @param {TCoordinates} previousCoordinates
-   * @returns {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>}
-   */
-  private _updateAllVertices = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
-    updater: (
-      currentValue: TData,
-      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => TData | null,
-    previousCoordinates: TCoordinates,
-  ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
-    // special case for a 0 dimension graph or no coordinates
-    if (this.dimensions === 0) {
-      // @ts-expect-error TData is valid when `TDimensions` is 0
-      const newData: GraphDataAtCoordinates<TData, TDimensions, TCoordinates> = updater(this.data)
-      // @ts-expect-error GraphDataAtCoordinates<TData, TDimensions, TCoordinates> is TData when `TDimensions` is 0
-      this.data = newData
-      return newData
-    } else {
-      const depth = previousCoordinates.length + 1
-
-      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
-      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
-
-      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
-
-      if (depth === this.dimensions) {
-        return coordinatesInGraph.reduce(
-          (acc, coordinate) => ({
-            ...acc,
-            // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
-            [coordinate]: this.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(updater, [
-              ...previousCoordinates,
-              coordinate,
-            ]),
-          }),
-          {} as GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-        )
-      } else {
-        return coordinatesInGraph.reduce(
-          (acc, coordinate) => ({
-            ...acc,
-            [coordinate]: this._updateAllVertices(updater, [...previousCoordinates, coordinate]),
-          }),
-          {} as GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
-        )
-      }
-    }
-  }
 
   /**
    * Recursively executes a function on all vertices of the graph
@@ -867,6 +813,62 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): void => this._forEachVertex(callback, [])
 
   /**
+   * Recursively maps over all vertices of the graph and transforms them
+   *
+   * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
+   * @param {(
+   *       currentValue: TData,
+   *       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+   *     ) => TData} updater
+   * @param {TCoordinates} previousCoordinates
+   * @returns {GraphDataAtCoordinates<TData, TDimensions, TCoordinates>}
+   */
+  private _updateAllVertices = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
+    updater: (
+      currentValue: TData | null,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) => TData | null,
+    previousCoordinates: TCoordinates,
+  ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
+    // special case for a 0 dimension graph or no coordinates
+    if (this.dimensions === 0) {
+      // @ts-expect-error TData is valid when `TDimensions` is 0
+      const newData: GraphDataAtCoordinates<TData, TDimensions, TCoordinates> = updater(this.data)
+      // @ts-expect-error GraphDataAtCoordinates<TData, TDimensions, TCoordinates> is TData when `TDimensions` is 0
+      this.data = newData
+      return newData
+    } else {
+      const depth = previousCoordinates.length + 1
+
+      // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
+      const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
+
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
+
+      console.log('updateAll', depth, coordinatesInGraph, graphAtCoordinates)
+
+      if (depth === this.dimensions) {
+        return coordinatesInGraph.reduce(
+          (acc, coordinate) => ({
+            ...acc,
+            // @ts-expect-error this is the correct number of coordinates
+            [coordinate]: this.updateVertex(updater, [...previousCoordinates, coordinate]),
+          }),
+          {} as GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+        )
+      } else {
+        return coordinatesInGraph.reduce(
+          (acc, coordinate) => ({
+            ...acc,
+            [coordinate]: this._updateAllVertices(updater, [...previousCoordinates, coordinate]),
+          }),
+          {} as GraphDataAtCoordinates<TData, TDimensions, TCoordinates>,
+        )
+      }
+    }
+  }
+
+  /**
    * Recursively maps over all vertices and returns true if the `callback` returns true for any vertex
    *
    * @template {Coordinates} [TCoordinates=CoordinatesOfLength<0>]
@@ -879,7 +881,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    */
   private _someVertex = <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
     callback: (
-      currentValue: TData,
+      currentValue: TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => boolean,
     previousCoordinates: TCoordinates,
@@ -900,13 +902,8 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.some(coordinate =>
-          callback(
-            // @ts-expect-error this will always return TData because it is at the maximum depth of coordinates
-            this.getAtCoordinates<TData, CoordinatesOfLength<TDimensions>>([
-              ...previousCoordinates,
-              coordinate,
-            ]),
-          ),
+          // @ts-expect-error this is the correct number of coordinates
+          callback(this.getVertex([...previousCoordinates, coordinate])),
         )
       } else {
         return coordinatesInGraph.some(coordinate =>
@@ -927,7 +924,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    */
   someVertex: SomeVertex<TData, TDimensions> = (
     callback: (
-      currentValue: TData,
+      currentValue: TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => boolean,
   ): boolean => this._someVertex(callback, [])
@@ -939,7 +936,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    */
   updateAllVertices: UpdateAllVertices<TData, TDimensions> = (
     updater: (
-      currentValue: TData,
+      currentValue: TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TData | null,
   ): GraphData<TData, TDimensions> | null => {
@@ -970,7 +967,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    */
   private _mapAllVertices = <TResult, TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
     transformer: (
-      currentValue: TData,
+      currentValue: TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TResult,
     previousCoordinates: TCoordinates,
@@ -995,11 +992,8 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         return coordinatesInGraph.reduce(
           (acc, coordinate) => ({
             ...acc,
-            [coordinate]: this.mapAtCoordinates<TResult, CoordinatesOfLength<TDimensions>>(
-              // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
-              transformer,
-              [...previousCoordinates, coordinate],
-            ),
+            // @ts-expect-error this is the correct number of coordinates
+            [coordinate]: this.mapVertex(transformer, [...previousCoordinates, coordinate]),
           }),
           {} as GraphDataAtCoordinates<TResult, TDimensions, TCoordinates>,
         )

@@ -111,7 +111,7 @@ export type UpdateVertex<TData, TDimensions extends number = 0> = (
  */
 export type UpdateAllVertices<TData, TDimensions extends number = 0> = (
   updater: (
-    currentValue: TData,
+    currentValue: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
   ) => TData | null,
 ) => void
@@ -309,7 +309,7 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
   const updateAllVertices: UpdateAllVertices<TData, TDimensions> = useCallback(
     (
       updater: (
-        currentValue: TData,
+        currentValue: TData | null,
         coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
       ) => TData | null,
     ) =>
