@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
       - name: 'Validate Pull Request Metadata'
         if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
-        uses: jefflinse/pr-semver-bump@v1
+        uses: jefflinse/pr-semver-bump@v1.6.0
         with:
           mode: validate
           repo-token: ${{ secrets.GITHUB_TOKEN }}

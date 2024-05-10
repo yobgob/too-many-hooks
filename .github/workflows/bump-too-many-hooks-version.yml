@@ -1,9 +1,8 @@
 name: Bump `too-many-hooks` version
 on:
- pull_request:
+  push:
     branches:
       - main
-    types: [labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review]
     paths:
       - 'src/hooks/**/use*.ts'
       - 'src/index.ts'
@@ -13,8 +12,8 @@ jobs:
     name: Bump and Tag Version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: jefflinse/pr-semver-bump@v1
+      - uses: actions/checkout@v4
+      - uses: jefflinse/pr-semver-bump@v1.6.0
         id: semver-bump
         name: Bump and Tag Version
         with:
@@ -38,11 +37,9 @@ jobs:
         with:
           commit-message: Bump package version
           branch: create-pull-request/bump-version
-          base: origin/main
           delete-branch: true
           title: Bump `too-many-hooks` version to `${{ steps.semver-bump.outputs.version }}`
           labels: documentation
-          reviewers: patrickdevries
           body: |
             Bumps from `${{ steps.semver-bump.outputs.old-version }}` to `${{ steps.semver-bump.outputs.version }}`
             Includes PRs:
