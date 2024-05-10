@@ -212,6 +212,36 @@ export type UpdateVertex<TData, TDimensions extends number = 0> = (
 ) => TData | null
 
 /**
+ * A function which clears all graph data
+ *
+ * @typedef {Clear}
+ */
+export type Clear = () => void
+
+/**
+ * A function clears graph data at certain coordinates and below
+ *
+ * @typedef {PruneAtCoordinates}
+ * @template {number} [TDimensions=0]
+ */
+export type PruneAtCoordinates<TDimensions extends number = 0> = <
+  TCoordinates extends CoordinatesOfLength<number> = Tuple<number, 0>,
+>(
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+) => void
+
+/**
+ * A function which returns the data of a vertex
+ *
+ * @export
+ * @typedef {PruneVertex}
+ * @template {number} [TDimensions=0]
+ */
+export type PruneVertex<TDimensions extends number = 0> = (
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+) => void
+
+/**
  * A function which returns a transformed graph
  *
  * @typedef {Map}
@@ -395,6 +425,25 @@ export interface IGraph<TData, TDimensions extends number = 0> {
    * @type {UpdateVertex<TData, TDimensions>}
    */
   updateVertex: UpdateVertex<TData, TDimensions>
+
+  /**
+   * Empties the graph
+   *
+   * @type {Clear}
+   */
+  clear: Clear
+  /**
+   * Removes the coordinates and everything below them from the graph
+   *
+   * @type {PruneAtCoordinates<TDimensions>}
+   */
+  pruneAtCoordinates: PruneAtCoordinates<TDimensions>
+  /**
+   * Removes a vertex from the graph
+   *
+   * @type {PruneVertex<TDimensions>}
+   */
+  pruneVertex: PruneVertex<TDimensions>
 
   /**
    * Returns a transformed graph
@@ -697,6 +746,72 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     // @ts-expect-error TData is the same as GraphData with depth 0
   ) => this.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(updater, coordinates) as TData
+
+  /**
+   * Empties the graph, resetting its data to `null`
+   */
+  clear: Clear = () => {
+    this.data = null
+  }
+
+  /**
+   * Removes coordinates and everything below them from the graph
+   *
+   * @template {CoordinatesOfLength<number>} [TCoordinates=Tuple<number, 0>]
+   * @param {?CoordinatesOrNever<TDimensions, TCoordinates>} [coordinates]
+   */
+  pruneAtCoordinates: PruneAtCoordinates<TDimensions> = <
+    TCoordinates extends CoordinatesOfLength<number> = Tuple<number, 0>,
+  >(
+    coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+  ) => {
+    if (!coordinates?.length) {
+      this.data = null
+    } else {
+      this.updateAtCoordinates(
+        currentValue => {
+          if (currentValue) {
+            return Object.keys(currentValue)
+              .filter(key => parseInt(key) !== coordinates.at(-1))
+              .reduce(
+                (acc, key) => ({ ...acc, [key]: currentValue[key] }),
+                {} as GraphData<TData | null, Length<TCoordinates>>,
+              )
+          }
+          return null
+        },
+        coordinates.slice(0, -1),
+      )
+    }
+  }
+
+  /**
+   * Removes a vertex from the graph
+   *
+   * @param {?CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>} [coordinates]
+   */
+  pruneVertex: PruneVertex<TDimensions> = (
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+  ) => {
+    if (!coordinates?.length) {
+      this.data = null
+    } else {
+      this.updateAtCoordinates<CoordinatesOfLength<SafeSubtract<TDimensions, 1>>>(
+        currentValue => {
+          if (currentValue) {
+            return Object.keys(currentValue)
+              .filter(key => parseInt(key) !== coordinates.at(-1))
+              .reduce(
+                (acc, key) => ({ ...acc, [key]: currentValue[key] }),
+                {} as GraphData<TData | null, 1>,
+              )
+          }
+          return null
+        },
+        coordinates.slice(0, -1),
+      )
+    }
+  }
 
   /**
    * Returns a transformed graph

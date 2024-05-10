@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import {
+  Clear,
   Coordinates,
   CoordinatesOfLength,
   CoordinatesOrNever,
@@ -13,6 +14,8 @@ import {
   MapAllVertices,
   MapAtCoordinates,
   MapVertex,
+  PruneAtCoordinates,
+  PruneVertex,
   SetAllVertices,
   SomeVertex,
 } from './Graph'
@@ -150,6 +153,10 @@ export interface UseGraphReturnFunctions<TData, TDimensions extends number = 0> 
    */
   updateAtCoordinates: UpdateAtCoordinates<TData, TDimensions>
   updateVertex: UpdateVertex<TData, TDimensions>
+
+  clear: Clear
+  pruneAtCoordinates: PruneAtCoordinates<TDimensions>
+  pruneVertex: PruneVertex<TDimensions>
 
   map: Map<TData, TDimensions>
   /**
@@ -320,11 +327,41 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       }),
     [],
   )
+  const pruneAtCoordinates: PruneAtCoordinates<TDimensions> = useCallback(
+    <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
+      coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+    ): void => {
+      setData(oldData => {
+        const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
+        newGraph.pruneAtCoordinates(coordinates)
+        return newGraph
+      })
+    },
+    [],
+  )
+  const pruneVertex: PruneVertex<TDimensions> = useCallback(
+    (coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>): void => {
+      setData(oldData => {
+        const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
+        newGraph.pruneVertex(coordinates)
+        return newGraph
+      })
+    },
+    [],
+  )
 
   const setAllVertices: SetAllVertices<TData> = useCallback(
     (value: TData) => updateAllVertices(() => value),
     [updateAllVertices],
   )
+
+  const clear: Clear = useCallback(() => {
+    setData(oldData => {
+      const newGraph = new Graph<TData, TDimensions>({ graph: oldData })
+      newGraph.clear()
+      return newGraph
+    })
+  }, [])
 
   return [
     data.get(),
@@ -337,6 +374,9 @@ const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
       update,
       updateAtCoordinates,
       updateVertex,
+      clear,
+      pruneAtCoordinates,
+      pruneVertex,
       map: data.map,
       mapAtCoordinates: data.mapAtCoordinates,
       mapVertex: data.mapVertex,

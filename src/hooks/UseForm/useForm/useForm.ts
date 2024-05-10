@@ -9,6 +9,7 @@ import {
   FormData,
   HandleSubmit,
   HandleSubmitOptions,
+  PartialDataKeys,
   RefProps,
   RegisterFunction,
   RegisterOptions,
@@ -20,7 +21,6 @@ import {
 } from './types'
 import {
   getElementDefaultValue,
-  getFilterUnusedVertices,
   getOnChangeValue,
   getTypedData,
   getTypedFieldValue,
@@ -47,7 +47,12 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   )
   const [
     errors,
-    { updateVertex: updateErrorsVertex, updateAllVertices: updateAllErrorVertices, set: setErrors },
+    {
+      updateVertex: updateErrorsVertex,
+      updateAllVertices: updateAllErrorVertices,
+      set: setErrors,
+      pruneVertex: pruneErrorsVertex,
+    },
   ] = useGraph<Errors<TData>, TDimensions>({ dimensions })
   const [
     touched,
@@ -55,6 +60,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       someVertex: touchedAtSomeVertex,
       updateAllVertices: updateAllTouchedVertices,
       updateVertex: updateTouchedVertex,
+      pruneVertex: pruneTouchedVertex,
     },
   ] = useGraph<Touched<TData>, TDimensions>({ dimensions })
   const [
@@ -63,6 +69,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       someVertex: changedAtSomeVertex,
       updateVertex: updateChangedVertex,
       updateAllVertices: updateAllChangedVertices,
+      pruneVertex: pruneChangedVertex,
     },
   ] = useGraph<Changed<TData>, TDimensions>({ dimensions })
   const hasBegun = useMemo(
@@ -148,13 +155,48 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     [updateAllChangedVertices],
   )
 
+  const pruneVertex = useCallback(
+    (coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>) => {
+      fieldsGraph.current.pruneAtCoordinates(coordinates)
+      pruneErrorsVertex(coordinates)
+      pruneTouchedVertex(coordinates)
+      pruneChangedVertex(coordinates)
+    },
+    [pruneChangedVertex, pruneErrorsVertex, pruneTouchedVertex],
+  )
+
   const unregisterInactiveFields = useCallback(() => {
-    const filterUnusedVertices = getFilterUnusedVertices(fieldsGraph)
-    fieldsGraph.current.updateAllVertices(filterUnusedVertices)
-    updateAllErrorVertices(filterUnusedVertices)
-    updateAllTouchedVertices(filterUnusedVertices)
-    updateAllChangedVertices(filterUnusedVertices)
-  }, [updateAllChangedVertices, updateAllErrorVertices, updateAllTouchedVertices])
+    fieldsGraph.current.forEachVertex((fields, coordinates) => {
+      if (fields) {
+        const newFields = Object.keys(fields).reduce(
+          (acc, fieldName) => ({
+            ...acc,
+            ...(fields[fieldName]?.ref?.current ? { [fieldName]: fields[fieldName] } : {}),
+          }),
+          {},
+        )
+        if (Object.keys(newFields).length > 0) {
+          fieldsGraph.current.setVertex(newFields, coordinates)
+          const removeUnregisteredKeys = (
+            fieldsToFilter: PartialDataKeys<TData, unknown> | null,
+          ) =>
+            fieldsToFilter
+              ? Object.keys(newFields).reduce(
+                  (acc, fieldName) => ({ ...acc, [fieldName]: fieldsToFilter[fieldName] }),
+                  {},
+                )
+              : null
+          updateErrorsVertex(removeUnregisteredKeys)
+          updateTouchedVertex(removeUnregisteredKeys)
+          updateChangedVertex(removeUnregisteredKeys)
+          return
+        }
+      }
+      console.log('pruned', coordinates)
+      // if fields is null or there were no keys after filtering, remove the entire vertex
+      pruneVertex(coordinates)
+    })
+  }, [pruneVertex, updateChangedVertex, updateErrorsVertex, updateTouchedVertex])
 
   const updateFieldsVertexFieldError = useCallback(
     <TFieldName extends keyof TData>(
@@ -305,7 +347,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       TFieldElement extends FieldElement,
       TIsRequired extends boolean = false,
     >(
-      name: TFieldName,
+      fieldName: TFieldName,
       options?: RegisterOptions<
         TData,
         TDimensions,
@@ -316,14 +358,14 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
       options ??= {}
       const fields = fieldsGraph.current.getVertex(options.coordinates) ?? {}
-      if (name in fields) {
-        updateFieldsVertex(name, field => ({ ...field!, options }), options.coordinates)
+      if (fieldName in fields) {
+        updateFieldsVertex(fieldName, field => ({ ...field!, options }), options.coordinates)
       } else {
         setFieldsVertex(
-          name,
+          fieldName,
           // @ts-expect-error options are valid because the `validate` type depends upon `isRequired`
           {
-            name,
+            name: fieldName,
             ref: React.createRef<TFieldElement | null>(),
             options,
             value: undefined,
@@ -338,39 +380,40 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       return {
         // this cast is safe because we only create refs of TFieldElement type per name
         [options.refName ?? 'ref']: (element: TFieldElement) => {
-          const fields = fieldsGraph.current.getVertex(options.coordinates)!
-
-          // update internal value upon first setting the ref
-          if (fields[name]!.value === undefined) {
-            const defaultValue = getElementDefaultValue<TData>(element)
-            updateFieldsVertex(
-              name,
-              field => ({
-                ...field!,
-                value: defaultValue,
-                ref: { ...field?.ref, current: element },
-              }),
-              options.coordinates,
-            )
-          } else {
-            updateFieldsVertex(
-              name,
-              field => ({ ...field!, ref: { ...field?.ref, current: element } }),
-              options.coordinates,
-            )
+          const fields = fieldsGraph.current.getVertex(options.coordinates)
+          if (fields?.[fieldName]) {
+            // update internal value from ref if not yet set
+            if (fields[fieldName]!.value === undefined) {
+              const defaultValue = getElementDefaultValue<TData>(element)
+              updateFieldsVertex(
+                fieldName,
+                field => ({
+                  ...field!,
+                  value: defaultValue,
+                  ref: { ...field?.ref, current: element },
+                }),
+                options.coordinates,
+              )
+            } else {
+              updateFieldsVertex(
+                fieldName,
+                field => ({ ...field!, ref: { ...field?.ref, current: element } }),
+                options.coordinates,
+              )
+            }
           }
         },
         onChange: event => {
           const fields = fieldsGraph.current.getVertex(options.coordinates)!
 
-          if (name in fields) {
-            if (!fields[name]!.hasBeenChanged) {
-              change(name, options.coordinates)
+          if (fieldName in fields) {
+            if (!fields[fieldName]!.hasBeenChanged) {
+              change(fieldName, options.coordinates)
             }
 
             const newValue = getOnChangeValue<TData>(event)
             updateFieldsVertex(
-              name,
+              fieldName,
               field => ({ ...field!, value: newValue }),
               options?.coordinates,
             )
@@ -379,14 +422,14 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         onFocus: () => {
           const fields = fieldsGraph.current.getVertex(options.coordinates)!
 
-          if (name in fields) {
-            if (!fields[name]!.hasBeenTouched) {
-              touch(name, options?.coordinates)
+          if (fieldName in fields) {
+            if (!fields[fieldName]!.hasBeenTouched) {
+              touch(fieldName, options?.coordinates)
             }
           }
         },
         onBlur: () => {
-          updateErrorsVertexFieldError(name, options?.coordinates)
+          updateErrorsVertexFieldError(fieldName, options?.coordinates)
         },
       }
     },
