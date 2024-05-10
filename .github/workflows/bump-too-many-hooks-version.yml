@@ -38,6 +38,7 @@ jobs:
         with:
           commit-message: Bump package version
           branch: create-pull-request/bump-version
+          base: main
           delete-branch: true
           title: Bump `too-many-hooks` version to `${{ steps.semver-bump.outputs.version }}`
           labels: documentation
