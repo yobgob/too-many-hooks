@@ -1,8 +1,9 @@
 name: Bump `too-many-hooks` version
 on:
-  push:
+ pull_request:
     branches:
       - main
+    types: [labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review]
     paths:
       - 'src/hooks/**/use*.ts'
       - 'src/index.ts'
