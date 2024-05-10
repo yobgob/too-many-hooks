@@ -155,6 +155,34 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     [updateAllChangedVertices],
   )
 
+  const removeUnregisteredFieldsAtVertex = useCallback(
+    (coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>) => {
+      const fields = fieldsGraph.current.getVertex(coordinates)
+
+      if (fields) {
+        const newFields = Object.keys(fields).reduce(
+          (acc, fieldName) => ({
+            ...acc,
+            ...(fields[fieldName]?.ref?.current ? { [fieldName]: fields[fieldName] } : {}),
+          }),
+          {},
+        )
+        fieldsGraph.current.setVertex(newFields, coordinates)
+        const removeUnregisteredKeys = (fieldsToFilter: PartialDataKeys<TData, unknown> | null) =>
+          fieldsToFilter
+            ? Object.keys(newFields).reduce(
+                (acc, fieldName) => ({ ...acc, [fieldName]: fieldsToFilter[fieldName] }),
+                {},
+              )
+            : null
+        updateErrorsVertex(removeUnregisteredKeys)
+        updateTouchedVertex(removeUnregisteredKeys)
+        updateChangedVertex(removeUnregisteredKeys)
+      }
+    },
+    [updateChangedVertex, updateErrorsVertex, updateTouchedVertex],
+  )
+
   const pruneVertex = useCallback(
     (coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>) => {
       fieldsGraph.current.pruneAtCoordinates(coordinates)
@@ -167,36 +195,19 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
 
   const unregisterInactiveFields = useCallback(() => {
     fieldsGraph.current.forEachVertex((fields, coordinates) => {
-      if (fields) {
-        const newFields = Object.keys(fields).reduce(
-          (acc, fieldName) => ({
-            ...acc,
-            ...(fields[fieldName]?.ref?.current ? { [fieldName]: fields[fieldName] } : {}),
-          }),
-          {},
-        )
-        if (Object.keys(newFields).length > 0) {
-          fieldsGraph.current.setVertex(newFields, coordinates)
-          const removeUnregisteredKeys = (
-            fieldsToFilter: PartialDataKeys<TData, unknown> | null,
-          ) =>
-            fieldsToFilter
-              ? Object.keys(newFields).reduce(
-                  (acc, fieldName) => ({ ...acc, [fieldName]: fieldsToFilter[fieldName] }),
-                  {},
-                )
-              : null
-          updateErrorsVertex(removeUnregisteredKeys)
-          updateTouchedVertex(removeUnregisteredKeys)
-          updateChangedVertex(removeUnregisteredKeys)
-          return
+      if (!fields) {
+        pruneVertex(coordinates)
+      } else {
+        removeUnregisteredFieldsAtVertex(coordinates)
+        const remainingFields = fieldsGraph.current.getVertex(coordinates)
+
+        // if no fields remain registered after filtering, remove the entire vertex
+        if (!remainingFields || Object.keys(remainingFields).length === 0) {
+          pruneVertex(coordinates)
         }
       }
-      console.log('pruned', coordinates)
-      // if fields is null or there were no keys after filtering, remove the entire vertex
-      pruneVertex(coordinates)
     })
-  }, [pruneVertex, updateChangedVertex, updateErrorsVertex, updateTouchedVertex])
+  }, [pruneVertex, removeUnregisteredFieldsAtVertex])
 
   const updateFieldsVertexFieldError = useCallback(
     <TFieldName extends keyof TData>(
