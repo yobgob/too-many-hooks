@@ -145,7 +145,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         ? Object.keys(fields).reduce(
             (acc, fieldName) => ({
               ...acc,
-              [fieldName]: { ...acc[fieldName], changed: false },
+              [fieldName]: { ...fields[fieldName], changed: false },
             }),
             {},
           )
