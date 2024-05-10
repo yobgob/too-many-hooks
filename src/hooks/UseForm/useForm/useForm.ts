@@ -47,18 +47,12 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   )
   const [
     errors,
-    {
-      updateVertex: updateErrorsVertex,
-      updateAllVertices: updateAllErrorVertices,
-      set: setErrors,
-      pruneVertex: pruneErrorsVertex,
-    },
+    { updateVertex: updateErrorsVertex, set: setErrors, pruneVertex: pruneErrorsVertex },
   ] = useGraph<Errors<TData>, TDimensions>({ dimensions })
   const [
     touched,
     {
       someVertex: touchedAtSomeVertex,
-      updateAllVertices: updateAllTouchedVertices,
       updateVertex: updateTouchedVertex,
       pruneVertex: pruneTouchedVertex,
     },
@@ -145,15 +139,24 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     [updateChangedVertex, updateFieldsVertex],
   )
 
-  const resetChanged = useCallback(
-    () =>
-      updateAllChangedVertices(fields =>
-        fields
-          ? Object.keys(fields).reduce((acc, fieldName) => ({ ...acc, [fieldName]: false }), {})
-          : null,
-      ),
-    [updateAllChangedVertices],
-  )
+  const resetChanged = useCallback(() => {
+    fieldsGraph.current.updateAllVertices(fields =>
+      fields
+        ? Object.keys(fields).reduce(
+            (acc, fieldName) => ({
+              ...acc,
+              [fieldName]: { ...acc[fieldName], changed: false },
+            }),
+            {},
+          )
+        : null,
+    )
+    updateAllChangedVertices(fields =>
+      fields
+        ? Object.keys(fields).reduce((acc, fieldName) => ({ ...acc, [fieldName]: false }), {})
+        : null,
+    )
+  }, [updateAllChangedVertices])
 
   const removeUnregisteredFieldsAtVertex = useCallback(
     (coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>) => {
