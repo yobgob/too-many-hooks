@@ -1,12 +1,28 @@
 import { Meta, Source } from '@storybook/blocks'
 import GRAPH_TYPES from '../../../dist/hooks/UseGraph/Graph.d.ts?raw'
 import HOOK_TYPES from '../../../dist/hooks/UseGraph/useGraph.d.ts?raw'
+import USE_FORM_CODE from '../UseForm/useForm/useForm.ts?raw'
 
-<Meta title="useGraph" />
+<Meta title="Graph | useGraph" />
 
-# useGraph
+# Graph / useGraph
 
 Handle state with any number of dimensions
+
+## Graph class
+
+To support the `useGraph` hook, a `Graph` class is provided which stores data of any dimensionality and provides utilties for interacting with that data.
+
+## Examples
+
+`useGraph` is useful in cases such as the `useForm` hook, where state with an unknown number of dimensions is managed.
+
+### `useForm`
+
+In this case, a `Graph` ref is used to track information internal to the hook for any number of fields without triggering rerenders.
+Additionally, `useGraph` is used to statefully store information about each field: `errors`, `touched`, and `changed`.
+
+<Source language="ts" code={USE_FORM_CODE} />
 
 ## Types
 

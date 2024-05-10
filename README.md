@@ -39,6 +39,8 @@ Available hooks and a short summary of their purpose:
 
 - `useArray` - Simplify array state management with useful utilities
 - `useFlag` - Simply manage boolean state
+- `useForm` - Manage state, validations, and submission for forms with any number of dimensions
+- `useGraph` - Easily manage state with any number of dimensions
 - `useTally` - Increment and decrement numeric state
 
 #### Listeners/Observers
@@ -57,6 +59,10 @@ Available hooks and a short summary of their purpose:
 - `useDeepCompareEffect` - Run function when dependencies change, checked deeply for equality
 - `useThrottleFunction` - Run a function when its args change up to a maximum number of calls per time period in ms
 - `useThrottleValue` - Reduce frequency of state updates on a variable to a maximum number of updates per time period in ms
+
+### Classes
+
+- `Graph` - A class that supports the storage, access, and manipulation of data with any number of dimensions
 
 ### Guiding Principles
 

@@ -8,10 +8,6 @@ import USE_THROTTLE_FUNCTION_CODE from '../UseThrottleFunction/useThrottleFuncti
 
 Runs an `effect` function when dependencies change, deeply compared
 
-## Types
-
-<Source language="ts" code={TYPES} />
-
 ## Examples
 
 `useDeepCompareEffect` is not often used directly in the UI so it does not have a dedicated story at this time (ideas welcome).
@@ -23,3 +19,7 @@ In this case, `useDeepCompareEffect` is used to deeply check if arguments to a f
 A normal `useEffect` may fire too often because the arguments may be reassigned on every render, but we only want to run the function when their actual values change.
 
 <Source language="ts" code={USE_THROTTLE_FUNCTION_CODE} />
+
+## Types
+
+<Source language="ts" code={TYPES} />
