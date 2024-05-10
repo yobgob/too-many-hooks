@@ -32,34 +32,32 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <table className="rounded-lg border border-black">
-        <thead>
+      <table className="border-separate border-spacing-0 rounded-lg border border-black contain-paint ">
+        <thead className="[&_th:first-child]:border-l-0 [&_th]:border-b [&_th]:border-l [&_th]:border-black [&_th]:bg-slate-200 [&_th]:p-1">
           <tr>
             {Object.values(Field).map(fieldName => (
-              <th key={fieldName} className="rounded-lg border border-black">
+              <th key={fieldName}>
                 {formatField(fieldName)}
                 {fieldName !== Field.HatSize && <span className="text-red-900">*</span>}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="[&_td:first-child]:border-l-0 [&_td]:border-l [&_td]:border-black [&_tr:not(:last-child)_td]:border-b">
           {Array.from({ length: rows }, (_, i) => i).map(index => (
             <Fragment key={`row-${index}`}>
-              <tr>
-                <td className="rounded-lg border border-black">
+              <tr className=" [&_input]:m-[-1px] [&_input]:rounded-none [&_input]:border-none [&_input]:py-3 [&_input]:focus:border-solid [&_select]:m-[-1px] [&_select]:h-[calc(100%+2px)] [&_select]:w-[calc(100%+2px)] [&_select]:rounded-none [&_select]:border-none [&_select]:py-3  [&_select]:focus:border-solid">
+                <td>
                   <input
-                    className="border-none"
                     {...register(Field.FirstName, { isRequired: true, coordinates: [index] })}
                   />
                 </td>
-                <td className="rounded-lg border border-black">
+                <td>
                   <input
-                    className="border-none"
                     {...register(Field.LastName, { isRequired: true, coordinates: [index] })}
                   />
                 </td>
-                <td className="rounded-lg border border-black">
+                <td>
                   <Select
                     options={SIZE_OPTIONS}
                     variant="text"
@@ -73,7 +71,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
                     })}
                   />
                 </td>
-                <td className="rounded-lg border border-black">
+                <td>
                   <Select
                     options={SIZE_OPTIONS}
                     variant="text"
@@ -83,7 +81,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
               </tr>
               {errors?.[index] &&
                 Object.values(errors[index]).filter(error => error !== null).length > 0 && (
-                  <tr className="text-red-800">
+                  <tr className="text-red-800 [&_td]:p-1">
                     <td>{errors[index][Field.FirstName]}</td>
                     <td>{errors[index][Field.LastName]}</td>
                     <td>{errors[index][Field.TShirtSize]}</td>
@@ -95,8 +93,10 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
         </tbody>
       </table>
 
-      <Button onClick={() => addRow()}>+ Add row</Button>
-      <Button disabled={rows < 2} onClick={() => removeRow()}>
+      <Button onClick={() => addRow()} className="bg-green-600">
+        + Add row
+      </Button>
+      <Button disabled={rows < 2} className="bg-red-600" onClick={() => removeRow()}>
         - Remove row
       </Button>
 
