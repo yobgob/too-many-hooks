@@ -1,8 +1,10 @@
-import { IGraph } from '../../UseGraph/Graph'
+import React from 'react'
+import { CoordinatesOrNever, IGraph, Tuple } from '../../UseGraph/Graph'
 import {
   FieldData,
   Fields,
   FormData,
+  PartialDataKeys,
   isCheckboxInput,
   isDateInput,
   isFileInput,
@@ -98,11 +100,38 @@ export const getTypedData = <TData extends FormData, TDimensions extends number 
   fieldsGraph: IGraph<Fields<TData, TDimensions>, TDimensions>,
 ): IGraph<TData, TDimensions> =>
   fieldsGraph.mapAllVertices(fields =>
-    Object.keys(fields).reduce(
-      (acc, fieldName) =>
-        fieldName
-          ? { ...acc, [fieldName]: getTypedFieldValue<TData, TDimensions>(fields[fieldName]!) }
-          : acc,
-      {} as TData,
-    ),
+    fields
+      ? Object.keys(fields).reduce(
+          (acc, fieldName) =>
+            fieldName
+              ? { ...acc, [fieldName]: getTypedFieldValue<TData, TDimensions>(fields[fieldName]!) }
+              : acc,
+          {} as TData,
+        )
+      : null,
   )
+
+export const getFilterUnusedVertices =
+  <TData extends FormData, TDimensions extends number = 0>(
+    fieldsGraph: React.MutableRefObject<IGraph<Fields<TData, TDimensions>, TDimensions>>,
+  ) =>
+  (
+    fields: PartialDataKeys<TData, unknown> | null,
+    coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
+  ) => {
+    if (fields) {
+      const newFields = Object.keys(fields).reduce(
+        (acc, fieldName) => ({
+          ...acc,
+          ...(fieldsGraph.current.getVertex(coordinates)?.[fieldName]?.ref?.current
+            ? { [fieldName]: fields[fieldName] }
+            : {}),
+        }),
+        {},
+      )
+      if (Object.keys(newFields).length > 0) {
+        return newFields
+      }
+    }
+    return null
+  }

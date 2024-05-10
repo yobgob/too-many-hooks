@@ -20,6 +20,7 @@ import {
 } from './types'
 import {
   getElementDefaultValue,
+  getFilterUnusedVertices,
   getOnChangeValue,
   getTypedData,
   getTypedFieldValue,
@@ -44,12 +45,18 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const fieldsGraph = useRef<IGraph<Fields<TData, TDimensions>, TDimensions>>(
     new Graph<Fields<TData, TDimensions>, TDimensions>({ dimensions }),
   )
-  const [errors, { updateVertex: updateErrorsVertex, set: setErrors }] = useGraph<
-    Errors<TData>,
-    TDimensions
-  >()
-  const [touched, { someVertex: touchedAtSomeVertex, updateVertex: updateTouchedVertex }] =
-    useGraph<Touched<TData>, TDimensions>()
+  const [
+    errors,
+    { updateVertex: updateErrorsVertex, updateAllVertices: updateAllErrorVertices, set: setErrors },
+  ] = useGraph<Errors<TData>, TDimensions>({ dimensions })
+  const [
+    touched,
+    {
+      someVertex: touchedAtSomeVertex,
+      updateAllVertices: updateAllTouchedVertices,
+      updateVertex: updateTouchedVertex,
+    },
+  ] = useGraph<Touched<TData>, TDimensions>({ dimensions })
   const [
     changed,
     {
@@ -57,12 +64,12 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       updateVertex: updateChangedVertex,
       updateAllVertices: updateAllChangedVertices,
     },
-  ] = useGraph<Changed<TData>, TDimensions>()
+  ] = useGraph<Changed<TData>, TDimensions>({ dimensions })
   const hasBegun = useMemo(
     () =>
       !!touched &&
       touchedAtSomeVertex(fields =>
-        Object.values(fields).some(fieldHasBeenTouched => fieldHasBeenTouched),
+        fields ? Object.values(fields).some(fieldHasBeenTouched => fieldHasBeenTouched) : false,
       ),
     [touched, touchedAtSomeVertex],
   )
@@ -70,7 +77,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
     () =>
       !!changed &&
       changedAtSomeVertex(fields =>
-        Object.values(fields).some(fieldHasBeenChanged => fieldHasBeenChanged),
+        fields ? Object.values(fields).some(fieldHasBeenChanged => fieldHasBeenChanged) : false,
       ),
     [changed, changedAtSomeVertex],
   )
@@ -134,10 +141,20 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
   const resetChanged = useCallback(
     () =>
       updateAllChangedVertices(fields =>
-        Object.keys(fields).reduce((acc, fieldName) => ({ ...acc, [fieldName]: false }), {}),
+        fields
+          ? Object.keys(fields).reduce((acc, fieldName) => ({ ...acc, [fieldName]: false }), {})
+          : null,
       ),
     [updateAllChangedVertices],
   )
+
+  const unregisterInactiveFields = useCallback(() => {
+    const filterUnusedVertices = getFilterUnusedVertices(fieldsGraph)
+    fieldsGraph.current.updateAllVertices(filterUnusedVertices)
+    updateAllErrorVertices(filterUnusedVertices)
+    updateAllTouchedVertices(filterUnusedVertices)
+    updateAllChangedVertices(filterUnusedVertices)
+  }, [updateAllChangedVertices, updateAllErrorVertices, updateAllTouchedVertices])
 
   const updateFieldsVertexFieldError = useCallback(
     <TFieldName extends keyof TData>(
@@ -195,11 +212,13 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
 
   const updateFieldsVertexFieldErrors = useCallback(
     (): void =>
-      fieldsGraph.current.forEachVertex((fields, coordinates) =>
-        Object.keys(fields).forEach(fieldName =>
-          updateFieldsVertexFieldError(fieldName as keyof TData, coordinates),
-        ),
-      ),
+      fieldsGraph.current.forEachVertex((fields, coordinates) => {
+        if (fields) {
+          Object.keys(fields).forEach(fieldName =>
+            updateFieldsVertexFieldError(fieldName as keyof TData, coordinates),
+          )
+        }
+      }),
     [updateFieldsVertexFieldError],
   )
 
@@ -224,13 +243,15 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
 
     const errors = fieldsGraph.current
       .mapAllVertices(fields =>
-        Object.keys(fields).reduce(
-          (acc, fieldName) => ({
-            ...acc,
-            [fieldName]: fields[fieldName]?.error,
-          }),
-          {} as Errors<TData>,
-        ),
+        fields
+          ? Object.keys(fields).reduce(
+              (acc, fieldName) => ({
+                ...acc,
+                [fieldName]: fields[fieldName]?.error,
+              }),
+              {} as Errors<TData>,
+            )
+          : null,
       )
       .get()
 
@@ -243,6 +264,8 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       onSubmit,
       onError,
     }: HandleSubmitOptions<TData, TDimensions, TShouldSkipValidations>) => {
+      unregisterInactiveFields()
+
       if (shouldSkipValidations) {
         const typedData = getTypedData(fieldsGraph.current)
         // @ts-expect-error a graph of data is assignable to a graph of partial data
@@ -251,13 +274,15 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
       } else if (fieldsGraph.current) {
         updateErrors()
         const errors = fieldsGraph.current.mapAllVertices(fields =>
-          Object.keys(fields).reduce(
-            (acc, fieldName) => ({ ...acc, [fieldName]: fields[fieldName]!.error }),
-            {} as Errors<TData>,
-          ),
+          fields
+            ? Object.keys(fields).reduce(
+                (acc, fieldName) => ({ ...acc, [fieldName]: fields[fieldName]!.error }),
+                {} as Errors<TData>,
+              )
+            : null,
         )
         const hasErrors = errors.someVertex(fields =>
-          Object.keys(fields).some(fieldName => fields[fieldName] !== null),
+          fields ? Object.keys(fields).some(fieldName => fields[fieldName] !== null) : false,
         )
 
         if (hasErrors) {
@@ -271,7 +296,7 @@ const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0
         }
       }
     },
-    [resetChanged, updateErrors],
+    [resetChanged, unregisterInactiveFields, updateErrors],
   )
 
   const register: RegisterFunction<TData, TDimensions> = useCallback(

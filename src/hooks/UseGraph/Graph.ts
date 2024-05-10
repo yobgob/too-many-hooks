@@ -299,9 +299,9 @@ export type SetAllVertices<TData> = (value: TData) => void
  */
 export type MapAllVertices<TData, TDimensions extends number = 0> = <TResult>(
   transformer: (
-    currentValue: TData,
+    currentValue: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-  ) => TResult,
+  ) => TResult | null,
 ) => IGraph<TResult, TDimensions>
 
 /**
@@ -493,7 +493,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    * @constructor
    * @param {GraphData<TData, TDimensions>} data
    */
-  constructor(initial: { dimensions: TDimensions; data: GraphData<TData, TDimensions> })
+  constructor(initial: { dimensions: TDimensions; data: GraphData<TData, TDimensions> | null })
   /**
    * Copies a Graph into a new Graph
    *
@@ -845,8 +845,6 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
 
       const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
 
-      console.log('updateAll', depth, coordinatesInGraph, graphAtCoordinates)
-
       if (depth === this.dimensions) {
         return coordinatesInGraph.reduce(
           (acc, coordinate) => ({
@@ -1021,11 +1019,11 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
    */
   mapAllVertices: MapAllVertices<TData, TDimensions> = <TResult>(
     transformer: (
-      currentValue: TData,
+      currentValue: TData | null,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    ) => TResult,
+    ) => TResult | null,
   ): IGraph<TResult, TDimensions> =>
-    // @ts-expect-error TResult is valid for a graph with TDimensions=0
+    // @ts-expect-error TResult is valid for graphs with TDimensions=0
     new Graph({ dimensions: this.dimensions, data: this._mapAllVertices(transformer, []) })
 
   // #endregion
