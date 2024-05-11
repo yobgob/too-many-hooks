@@ -20,10 +20,10 @@ jobs:
         run: echo "NEEDS_CHECK=${{ fromJSON(env.IS_LABELED_RELEASE) || !fromJSON(env.IS_LABELED_NON_LOGICAL) }}" >> "$GITHUB_OUTPUT"
       - name: 'Checkout'
         if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: 'Validate Pull Request Metadata'
         if: ${{ fromJSON(steps.if.outputs.NEEDS_CHECK) }}
-        uses: jefflinse/pr-semver-bump@v1
+        uses: jefflinse/pr-semver-bump@v1.6.0
         with:
           mode: validate
           repo-token: ${{ secrets.GITHUB_TOKEN }}

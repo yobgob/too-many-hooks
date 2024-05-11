@@ -12,8 +12,8 @@ jobs:
     name: Bump and Tag Version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: jefflinse/pr-semver-bump@v1
+      - uses: actions/checkout@v4
+      - uses: jefflinse/pr-semver-bump@v1.6.0
         id: semver-bump
         name: Bump and Tag Version
         with:
