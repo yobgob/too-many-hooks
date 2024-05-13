@@ -397,15 +397,15 @@ export type UseForm = <TData extends FieldsData, TDimensions extends number = 0>
 /**
  * `useForm` data with any dimensionality, usually used for arrays or matrices of forms
  *
- * Requires a `TNodeData` type which is the type of the form fields that are repeated for each set of graph coordinates
+ * Requires a `TFieldsData` type which is the type of the form fields that are repeated for each set of graph coordinates
  *
  * Requires `TDimensions` which indicates how many dimensions the form has
- * - e.g. 0 is just TNodeData, 1 is effectively an array of TNodeData, 2 is effectively a matrix of TNodeData
+ * e.g. 0 is just TFieldsData, 1 is effectively an array of TFieldsData, 2 is effectively a matrix of TFieldsData
  * (although they are actually objects indexed with numbers)
  *
  * @export
  * @typedef {FormData}
- * @template {FieldsData} TNodeData
- * @template {number} [TDimensions]
+ * @template TFieldsData
+ * @template {number} [TDimensions=0]
  */
-export type FormData<TNodeData, TDimensions extends number = 0> = IGraph<TNodeData, TDimensions>
+export type FormData<TFieldsData, TDimensions extends number = 0> = IGraph<TFieldsData, TDimensions>
