@@ -8,24 +8,21 @@ import { SIZE_OPTIONS } from './constants'
 import { formatField } from './formatters'
 import { Field, Size } from './types'
 
-export type RowFormData = {
+export type SpreadsheetFormData = {
   [Field.FirstName]: string
   [Field.LastName]: string
   [Field.TShirtSize]: Size
   [Field.HatSize]: Size
 }
 
-export type SpreadsheetFormData = IGraph<RowFormData, 1>
-export type SpreadsheetErrors = IGraph<Errors<RowFormData>, 1>
-
 interface Props {
-  onSubmit: (data: SpreadsheetFormData) => void
-  onError: (data: SpreadsheetErrors) => void
+  onSubmit: (data: IGraph<SpreadsheetFormData, 1>) => void
+  onError: (data: IGraph<Errors<SpreadsheetFormData>, 1>) => void
 }
 
 const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
   const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } = useForm<
-    RowFormData,
+    SpreadsheetFormData,
     1
   >({ dimensions: 1 })
   const [rows, { increment: addRow, decrement: removeRow }] = useTally({ initial: 1 })

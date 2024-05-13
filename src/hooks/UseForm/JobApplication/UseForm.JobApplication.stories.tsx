@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react'
-import JobApplication, { ApplicationErrors, ApplicationFormData } from './JobApplication'
+import { Errors } from '../useForm'
+import JobApplication, { ApplicationFormData } from './JobApplication'
 import JOB_APPLICATION_CODE from './JobApplication.tsx?raw'
 
 type FormMeta = Meta<typeof JobApplication>
@@ -22,7 +23,7 @@ export const jobApplication: StoryObj<FormMeta> = {
       action: (data: ApplicationFormData) => data,
     },
     onError: {
-      action: (errors: ApplicationErrors) => errors,
+      action: (errors: Errors<ApplicationFormData>) => errors,
     },
   },
   render: args => <JobApplication {...args} />,

@@ -19,11 +19,9 @@ export type ApplicationFormData = {
   hasAgreedToTerms: boolean
 }
 
-export type ApplicationErrors = Errors<ApplicationFormData>
-
 interface Props {
   onSubmit: (data: ApplicationFormData) => void
-  onError: (data: ApplicationErrors) => void
+  onError: (data: Errors<ApplicationFormData>) => void
 }
 
 const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
