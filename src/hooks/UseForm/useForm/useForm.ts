@@ -12,7 +12,7 @@ import {
   HandleSubmitOptions,
   PartialDataKeys,
   RefProps,
-  RegisterFunction,
+  Register,
   RegisterOptions,
   RegisterResult,
   Touched,
@@ -34,7 +34,7 @@ import {
  * their values, errors, and submission of the form.
  *
  * @template {FieldsData} TData
- * @returns {{ register: RegisterFunction<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
+ * @returns {{ register: Register<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
  */
 const useForm: UseForm = <TData extends FieldsData, TDimensions extends number = 0>(
   {
@@ -356,7 +356,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
     [resetChanged, unregisterInactiveFields, updateErrors],
   )
 
-  const register: RegisterFunction<TData, TDimensions> = useCallback(
+  const register: Register<TData, TDimensions> = useCallback(
     <
       TFieldName extends keyof TData,
       TFieldElement extends FieldElement,

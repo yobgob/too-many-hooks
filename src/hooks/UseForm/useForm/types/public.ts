@@ -109,10 +109,10 @@ export type RegisterResult<
  * - Where or not the field is required
  *
  * @export
- * @typedef {RegisterFunction}
+ * @typedef {Register}
  * @template {FieldsData} TData
  */
-export type RegisterFunction<TData extends FieldsData, TDimensions extends number = 0> = <
+export type Register<TData extends FieldsData, TDimensions extends number = 0> = <
   TFieldName extends keyof TData,
   TFieldElement extends FieldElement,
   TIsRequired extends boolean = false,
@@ -343,9 +343,9 @@ export interface UseFormReturn<TData extends FieldsData, TDimensions extends num
   /**
    * The `register` function is used to register inputs as fields within the form
    *
-   * @type {RegisterFunction<TData, TDimensions>}
+   * @type {Register<TData, TDimensions>}
    */
-  register: RegisterFunction<TData, TDimensions>
+  register: Register<TData, TDimensions>
   /**
    * A graph of maps of registered fields to their validation information
    *
