@@ -19,12 +19,12 @@ interface Props {
   onError: (data: FormData<Errors<SpreadsheetFormData>, 1>) => void
 }
 
-const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
+const Spreadsheet: React.FC<Props> = ({ onSubmit, onError }) => {
   const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } = useForm<
     SpreadsheetFormData,
     1
   >({ dimensions: 1 })
-  const [rows, { increment: addRow, decrement: removeRow }] = useTally({ initial: 1 })
+  const [numRows, { increment: addRow, decrement: removeRow }] = useTally({ initial: 1 })
 
   return (
     <div className="flex flex-col gap-4">
@@ -40,7 +40,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           </tr>
         </thead>
         <tbody className="[&_td:first-child]:border-l-0 [&_td]:border-l [&_td]:border-black [&_tr:not(:last-child)_td]:border-b">
-          {Array.from({ length: rows }, (_, i) => i).map(index => (
+          {Array.from({ length: numRows }, (_, i) => i).map(index => (
             <Fragment key={`row-${index}`}>
               <tr className=" [&_input]:m-[-1px] [&_input]:rounded-none [&_input]:border-none [&_input]:py-3 [&_input]:focus:border-solid [&_select]:m-[-1px] [&_select]:h-[calc(100%+2px)] [&_select]:w-[calc(100%+2px)] [&_select]:rounded-none [&_select]:border-none [&_select]:py-3  [&_select]:focus:border-solid">
                 <td>
@@ -92,7 +92,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
       <Button onClick={() => addRow()} className="bg-green-600">
         + Add row
       </Button>
-      <Button disabled={rows < 2} className="bg-red-600" onClick={() => removeRow()}>
+      <Button disabled={numRows < 2} className="bg-red-600" onClick={() => removeRow()}>
         - Remove row
       </Button>
 
@@ -118,4 +118,4 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
   )
 }
 
-export default JobApplication
+export default Spreadsheet

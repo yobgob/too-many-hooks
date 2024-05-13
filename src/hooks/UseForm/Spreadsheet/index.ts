@@ -1,3 +1,3 @@
-import JobApplication from './JobApplication'
+import Spreadsheet from './Spreadsheet'
 
-export default JobApplication
+export default Spreadsheet
