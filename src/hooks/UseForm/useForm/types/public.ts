@@ -82,7 +82,9 @@ export interface RegisterOptions<
  */
 export type RegisterResult<TFieldElement extends FieldElement = FieldElement> = {
   ref: React.Ref<TFieldElement>
-  onChange: (event: React.ChangeEvent<HTMLElement> | null) => void
+  onChange: <TOnChangeElement extends FieldElement = FieldElement>(
+    event: React.ChangeEvent<TOnChangeElement> | null,
+  ) => void
   onFocus: () => void
   onBlur: () => void
 }
