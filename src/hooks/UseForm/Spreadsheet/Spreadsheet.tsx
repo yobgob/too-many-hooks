@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react'
 import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
-import { IGraph } from '../../UseGraph/Graph'
 import useTally from '../../UseTally/useTally'
-import useForm, { Errors } from '../useForm'
+import useForm, { Errors, FormData } from '../useForm'
 import { SIZE_OPTIONS } from './constants'
 import { formatField } from './formatters'
 import { Field, Size } from './types'
@@ -16,8 +15,8 @@ export type SpreadsheetFormData = {
 }
 
 interface Props {
-  onSubmit: (data: IGraph<SpreadsheetFormData, 1>) => void
-  onError: (data: IGraph<Errors<SpreadsheetFormData>, 1>) => void
+  onSubmit: (data: FormData<SpreadsheetFormData, 1>) => void
+  onError: (data: FormData<Errors<SpreadsheetFormData>, 1>) => void
 }
 
 const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {

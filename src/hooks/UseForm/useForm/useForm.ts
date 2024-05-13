@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useRef } from 'react'
-import { CoordinatesOfLength, CoordinatesOrNever, Graph, IGraph } from '../../UseGraph/Graph'
+import { CoordinatesOfLength, CoordinatesOrNever, Graph } from '../../UseGraph/Graph'
 import useGraph from '../../UseGraph/useGraph'
 import {
   Changed,
   Errors,
   FieldElement,
   Fields,
+  FieldsData,
   FormData,
   HandleSubmit,
   HandleSubmitOptions,
@@ -32,17 +33,17 @@ import {
  * Provides a `register` function for registering fields with the hook and handles tracking
  * their values, errors, and submission of the form.
  *
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @returns {{ register: RegisterFunction<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
  */
-const useForm: UseForm = <TData extends FormData, TDimensions extends number = 0>(
+const useForm: UseForm = <TData extends FieldsData, TDimensions extends number = 0>(
   {
     dimensions,
     isRequiredErrorMessageOverride,
     // @ts-expect-error TDimensions defaults to 0 if dimensions is not defined, so this is okay
   }: UseFormOptions<TDimensions> = { dimensions: 0 },
 ): UseFormReturn<TData, TDimensions> => {
-  const fieldsGraph = useRef<IGraph<Fields<TData, TDimensions>, TDimensions>>(
+  const fieldsGraph = useRef<FormData<Fields<TData, TDimensions>, TDimensions>>(
     new Graph<Fields<TData, TDimensions>, TDimensions>({ dimensions }),
   )
   const [

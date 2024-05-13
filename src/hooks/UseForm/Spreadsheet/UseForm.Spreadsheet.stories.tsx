@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react'
-import { IGraph } from '../../UseGraph/Graph'
-import { Errors } from '../useForm'
+import { Errors, FormData } from '../useForm'
 import Spreadsheet, { SpreadsheetFormData } from './Spreadsheet'
 import SPREADSHEET_CODE from './Spreadsheet.tsx?raw'
 
@@ -21,10 +20,10 @@ export const spreadsheet: StoryObj<FormMeta> = {
   },
   argTypes: {
     onSubmit: {
-      action: (data: IGraph<SpreadsheetFormData, 1>) => data,
+      action: (data: FormData<SpreadsheetFormData, 1>) => data,
     },
     onError: {
-      action: (errors: IGraph<Errors<SpreadsheetFormData>, 1>) => errors,
+      action: (errors: FormData<Errors<SpreadsheetFormData>, 1>) => errors,
     },
   },
   render: args => <Spreadsheet {...args} />,

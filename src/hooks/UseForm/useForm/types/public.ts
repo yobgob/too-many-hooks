@@ -14,10 +14,10 @@ export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEl
  * The type of data that can be used in the `useForm` - the same as standard input types
  *
  * @export
- * @interface FormData
- * @typedef {FormData}
+ * @interface FieldsData
+ * @typedef {FieldsData}
  */
-export interface FormData {
+export interface FieldsData {
   [Key: ObjectKey]: string | string[] | number | boolean | Date
 }
 
@@ -27,13 +27,13 @@ export interface FormData {
  * @export
  * @interface RegisterOptions
  * @typedef {RegisterOptions}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {keyof TData} [TFieldName=keyof TData]
  * @template {ObjectKey} [TRefPropsKey='ref']
  * @template {boolean} [TIsRequired=false]
  */
 export interface RegisterOptions<
-  TData extends FormData,
+  TData extends FieldsData,
   TDimensions extends number = 0,
   TFieldName extends keyof TData = keyof TData,
   TRefPropsKey extends ObjectKey = 'ref',
@@ -60,13 +60,13 @@ export interface RegisterOptions<
    * @type {?(
    *     field: TIsRequired extends true ? TData[TFieldName] : TData[TFieldName] | undefined | null,
    *     fields: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
-   *     graph: IGraph<Partial<TData>, TDimensions>,
+   *     graph: FormData<Partial<TData>, TDimensions>,
    *   ) => string | null}
    */
   validate?: (
     field: TIsRequired extends true ? TData[TFieldName] : TData[TFieldName] | undefined | null,
     fields: TIsRequired extends true ? Partial<TData> & Pick<TData, TFieldName> : Partial<TData>,
-    graph: IGraph<Partial<TData>, TDimensions>,
+    graph: FormData<Partial<TData>, TDimensions>,
   ) => string | null
 
   /**
@@ -110,9 +110,9 @@ export type RegisterResult<
  *
  * @export
  * @typedef {RegisterFunction}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  */
-export type RegisterFunction<TData extends FormData, TDimensions extends number = 0> = <
+export type RegisterFunction<TData extends FieldsData, TDimensions extends number = 0> = <
   TFieldName extends keyof TData,
   TFieldElement extends FieldElement,
   TIsRequired extends boolean = false,
@@ -133,21 +133,21 @@ export type RegisterFunction<TData extends FormData, TDimensions extends number 
  *
  * @export
  * @typedef {OnSubmit}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {boolean} TShouldSkipValidations
  */
 export type OnSubmit<
-  TData extends FormData,
+  TData extends FieldsData,
   TDimensions extends number = 0,
   TShouldSkipValidations extends boolean = false,
 > = (
   data: TShouldSkipValidations extends true
     ? TDimensions extends 0
       ? Partial<TData>
-      : IGraph<Partial<TData>, TDimensions>
+      : FormData<Partial<TData>, TDimensions>
     : TDimensions extends 0
       ? TData
-      : IGraph<TData, TDimensions>,
+      : FormData<TData, TDimensions>,
 ) => void
 
 /**
@@ -156,11 +156,11 @@ export type OnSubmit<
  * @export
  * @interface HandleSubmitOptions
  * @typedef {HandleSubmitOptions}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {boolean} TShouldSkipValidations
  */
 export interface HandleSubmitOptions<
-  TData extends FormData,
+  TData extends FieldsData,
   TDimensions extends number = 0,
   TShouldSkipValidations extends boolean = false,
 > {
@@ -180,10 +180,10 @@ export interface HandleSubmitOptions<
   /**
    * A callback used upon submission of the form if errors prevented completion
    *
-   * @type {?(errors: TDimensions extends 0 ? Errors<TData> : IGraph<Errors<TData>, TDimensions>) => void}
+   * @type {?(errors: TDimensions extends 0 ? Errors<TData> : FormData<Errors<TData>, TDimensions>) => void}
    */
   onError?: (
-    errors: TDimensions extends 0 ? Errors<TData> : IGraph<Errors<TData>, TDimensions>,
+    errors: TDimensions extends 0 ? Errors<TData> : FormData<Errors<TData>, TDimensions>,
   ) => void
 }
 
@@ -192,10 +192,10 @@ export interface HandleSubmitOptions<
  *
  * @export
  * @typedef {HandleSubmit}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {boolean} TShouldSkipValidations
  */
-export type HandleSubmit<TData extends FormData, TDimensions extends number = 0> = <
+export type HandleSubmit<TData extends FieldsData, TDimensions extends number = 0> = <
   TShouldSkipValidations extends boolean = false,
 >(
   options: HandleSubmitOptions<TData, TDimensions, TShouldSkipValidations>,
@@ -207,13 +207,13 @@ export type HandleSubmit<TData extends FormData, TDimensions extends number = 0>
  * @export
  * @interface FieldData
  * @typedef {FieldData}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {FieldElements<TData>} [TFieldElements=FieldElements<TData>]
  * @template {string | number | symbol} [TRefPropsKey='ref']
  * @template {boolean} [TIsRequired=false]
  */
 export interface FieldData<
-  TData extends FormData,
+  TData extends FieldsData,
   TDimensions extends number = 0,
   TFieldElements extends FieldElements<TData> = FieldElements<TData>,
   TRefPropsKey extends ObjectKey = ObjectKey,
@@ -270,35 +270,35 @@ export interface FieldData<
  *
  * @export
  * @typedef {Errors}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  */
-export type Errors<TData extends FormData> = PartialDataKeys<TData, string | null>
+export type Errors<TData extends FieldsData> = PartialDataKeys<TData, string | null>
 /**
  * Maps registered field names to a boolean indicating if the user has focused the input.
  *
  * @export
  * @typedef {Touched}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  */
-export type Touched<TData extends FormData> = PartialDataKeys<TData, boolean>
+export type Touched<TData extends FieldsData> = PartialDataKeys<TData, boolean>
 /**
  * Maps registered field names to a boolean indicating if the user has changed the value of the input.
  *
  * @export
  * @typedef {Changed}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  */
-export type Changed<TData extends FormData> = PartialDataKeys<TData, boolean>
+export type Changed<TData extends FieldsData> = PartialDataKeys<TData, boolean>
 /**
  * Maps registered field names to their respective element types in the DOM
  *
  * @export
  * @typedef {FieldElements}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {FieldElement} [TFieldElement=FieldElement]
  */
 export type FieldElements<
-  TData extends FormData,
+  TData extends FieldsData,
   TFieldElement extends FieldElement = FieldElement,
 > = { [Key in keyof TData]: TFieldElement }
 
@@ -313,13 +313,13 @@ export type FieldElements<
  *
  * @export
  * @typedef {Fields}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  * @template {FieldElements<TData, FieldElement>} [TFieldElements=FieldElements<TData, FieldElement>]
  * @template {ObjectKey} [TRefPropsKey=ObjectKey]
  * @template {boolean} [TIsRequired=boolean]
  */
 export type Fields<
-  TData extends FormData,
+  TData extends FieldsData,
   TDimensions extends number = 0,
   TFieldElements extends FieldElements<TData, FieldElement> = FieldElements<TData, FieldElement>,
   TRefPropsKey extends ObjectKey = ObjectKey,
@@ -337,9 +337,9 @@ export interface UseFormOptions<TDimensions extends number = 0> {
  * @export
  * @interface UseFormReturn
  * @typedef {UseFormReturn}
- * @template {FormData} TData
+ * @template {FieldsData} TData
  */
-export interface UseFormReturn<TData extends FormData, TDimensions extends number = 0> {
+export interface UseFormReturn<TData extends FieldsData, TDimensions extends number = 0> {
   /**
    * The `register` function is used to register inputs as fields within the form
    *
@@ -390,6 +390,22 @@ export interface UseFormReturn<TData extends FormData, TDimensions extends numbe
  * @export
  * @typedef {UseForm}
  */
-export type UseForm = <TData extends FormData, TDimensions extends number = 0>(
+export type UseForm = <TData extends FieldsData, TDimensions extends number = 0>(
   options?: UseFormOptions<TDimensions>,
 ) => UseFormReturn<TData, TDimensions>
+
+/**
+ * `useForm` data with any dimensionality, usually used for arrays or matrices of forms
+ *
+ * Requires a `TNodeData` type which is the type of the form fields that are repeated for each set of graph coordinates
+ *
+ * Requires `TDimensions` which indicates how many dimensions the form has
+ * - e.g. 0 is just TNodeData, 1 is effectively an array of TNodeData, 2 is effectively a matrix of TNodeData
+ * (although they are actually objects indexed with numbers)
+ *
+ * @export
+ * @typedef {FormData}
+ * @template {FieldsData} TNodeData
+ * @template {number} [TDimensions]
+ */
+export type FormData<TNodeData, TDimensions extends number = 0> = IGraph<TNodeData, TDimensions>

@@ -1,8 +1,9 @@
 import React from 'react'
-import { CoordinatesOrNever, IGraph, Tuple } from '../../UseGraph/Graph'
+import { CoordinatesOrNever, Tuple } from '../../UseGraph/Graph'
 import {
   FieldData,
   Fields,
+  FieldsData,
   FormData,
   PartialDataKeys,
   isCheckboxInput,
@@ -12,7 +13,7 @@ import {
   isRadioInput,
 } from './types'
 
-export const getElementDefaultValue = <TData extends FormData>(
+export const getElementDefaultValue = <TData extends FieldsData>(
   // the type does not matter since we check for each property
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   element: any,
@@ -35,7 +36,7 @@ export const getElementDefaultValue = <TData extends FormData>(
   return element.defaultValue ?? element.value
 }
 
-export const getOnChangeValue = <TData extends FormData>(
+export const getOnChangeValue = <TData extends FieldsData>(
   // the type does not matter since we check for each property
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   event: any,
@@ -65,7 +66,7 @@ export const isBlank = (value: unknown): value is undefined | null | '' =>
 export const isNotBlank = (value: unknown): value is Exclude<unknown, undefined | null | ''> =>
   !isBlank(value)
 
-export const getTypedFieldValue = <TData extends FormData, TDimensions extends number = 0>(
+export const getTypedFieldValue = <TData extends FieldsData, TDimensions extends number = 0>(
   field: FieldData<TData, TDimensions>,
 ): TData[keyof TData] => {
   if (field.ref.current && 'type' in field.ref.current) {
@@ -96,9 +97,9 @@ export const getTypedFieldValue = <TData extends FormData, TDimensions extends n
   return field.value!
 }
 
-export const getTypedData = <TData extends FormData, TDimensions extends number = 0>(
-  fieldsGraph: IGraph<Fields<TData, TDimensions>, TDimensions>,
-): IGraph<TData, TDimensions> =>
+export const getTypedData = <TData extends FieldsData, TDimensions extends number = 0>(
+  fieldsGraph: FormData<Fields<TData, TDimensions>, TDimensions>,
+): FormData<TData, TDimensions> =>
   fieldsGraph.mapAllVertices(fields =>
     fields
       ? Object.keys(fields).reduce(
@@ -112,8 +113,8 @@ export const getTypedData = <TData extends FormData, TDimensions extends number 
   )
 
 export const getFilterUnusedVertices =
-  <TData extends FormData, TDimensions extends number = 0>(
-    fieldsGraph: React.MutableRefObject<IGraph<Fields<TData, TDimensions>, TDimensions>>,
+  <TData extends FieldsData, TDimensions extends number = 0>(
+    fieldsGraph: React.MutableRefObject<FormData<Fields<TData, TDimensions>, TDimensions>>,
   ) =>
   (
     fields: PartialDataKeys<TData, unknown> | null,
