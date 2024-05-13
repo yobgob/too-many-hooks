@@ -2,6 +2,7 @@ import React from 'react'
 import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
 import useForm, { Errors } from '../useForm'
+import { buildRegisterOverride } from '../useForm/utils'
 
 enum Title {
   Mr = 'MR',
@@ -23,6 +24,8 @@ interface Props {
   onSubmit: (data: ApplicationFormData) => void
   onError: (data: Errors<ApplicationFormData>) => void
 }
+
+const registerSelect = buildRegisterOverride({ ref: 'selectRef' })
 
 const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
   const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } =
@@ -54,7 +57,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
             { label: 'Ms', value: Title.Ms },
           ]}
           placeholder="Title"
-          {...register('title', { isRequired: true, refName: 'selectRef' })}
+          {...registerSelect(register('title', { isRequired: true }))}
         />
         {errors?.title && <span className="text-red-800">{errors.title}</span>}
       </div>

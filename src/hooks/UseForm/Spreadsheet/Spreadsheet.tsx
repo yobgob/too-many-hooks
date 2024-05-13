@@ -3,6 +3,7 @@ import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
 import useTally from '../../UseTally/useTally'
 import useForm, { Errors, FormData } from '../useForm'
+import { buildRegisterOverride } from '../useForm/utils'
 import { SIZE_OPTIONS } from './constants'
 import { formatField } from './formatters'
 import { Field, Size } from './types'
@@ -18,6 +19,8 @@ interface Props {
   onSubmit: (data: FormData<SpreadsheetFormData, 1>) => void
   onError: (data: FormData<Errors<SpreadsheetFormData>, 1>) => void
 }
+
+const registerSelect = buildRegisterOverride({ ref: 'selectRef' })
 
 const Spreadsheet: React.FC<Props> = ({ onSubmit, onError }) => {
   const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } = useForm<
@@ -57,21 +60,22 @@ const Spreadsheet: React.FC<Props> = ({ onSubmit, onError }) => {
                   <Select
                     options={SIZE_OPTIONS}
                     variant="text"
-                    {...register(Field.TShirtSize, {
-                      isRequired: true,
-                      refName: 'selectRef',
-                      coordinates: [index],
-                      isRequiredErrorMessageOverride: 'A selection must be made',
-                      validate: shirtSize =>
-                        shirtSize === Size.Unselected ? 'A selection must be made' : null,
-                    })}
+                    {...registerSelect(
+                      register(Field.TShirtSize, {
+                        isRequired: true,
+                        coordinates: [index],
+                        isRequiredErrorMessageOverride: 'A selection must be made',
+                        validate: shirtSize =>
+                          shirtSize === Size.Unselected ? 'A selection must be made' : null,
+                      }),
+                    )}
                   />
                 </td>
                 <td>
                   <Select
                     options={SIZE_OPTIONS}
                     variant="text"
-                    {...register(Field.HatSize, { refName: 'selectRef', coordinates: [index] })}
+                    {...registerSelect(register(Field.HatSize, { coordinates: [index] }))}
                   />
                 </td>
               </tr>

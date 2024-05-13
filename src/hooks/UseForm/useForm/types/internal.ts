@@ -3,10 +3,6 @@ import { FieldsData } from './public'
 
 export type ObjectKey = string | number | symbol
 
-export type RefProps<TFieldElement extends FieldElement> = {
-  [Key: ObjectKey]: React.Ref<TFieldElement>
-}
-
 export type PartialDataKeys<TData extends FieldsData, TValue> = { [Key in keyof TData]?: TValue }
 
 export const isFileInput = (element: FieldElement): element is HTMLInputElement =>

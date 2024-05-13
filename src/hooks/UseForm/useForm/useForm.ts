@@ -11,7 +11,6 @@ import {
   HandleSubmit,
   HandleSubmitOptions,
   PartialDataKeys,
-  RefProps,
   Register,
   RegisterOptions,
   RegisterResult,
@@ -363,14 +362,8 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       TIsRequired extends boolean = false,
     >(
       fieldName: TFieldName,
-      options?: RegisterOptions<
-        TData,
-        TDimensions,
-        TFieldName,
-        keyof RefProps<TFieldElement>,
-        TIsRequired
-      >,
-    ): RegisterResult<TFieldElement, RefProps<TFieldElement>> => {
+      options?: RegisterOptions<TData, TDimensions, TFieldName, TIsRequired>,
+    ): RegisterResult<TFieldElement> => {
       options ??= {}
       const fields = fieldsGraph.current.getVertex(options.coordinates) ?? {}
       if (fieldName in fields) {
@@ -393,8 +386,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       }
 
       return {
-        // this cast is safe because we only create refs of TFieldElement type per name
-        [options.refName ?? 'ref']: (element: TFieldElement) => {
+        ref: (element: TFieldElement) => {
           const fields = fieldsGraph.current.getVertex(options.coordinates)
           if (fields?.[fieldName]) {
             // update internal value from ref if not yet set
@@ -462,4 +454,5 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
   }
 }
 
+export * from './types/public'
 export default useForm

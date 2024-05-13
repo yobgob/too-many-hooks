@@ -1,17 +1,20 @@
 import React from 'react'
-import { CoordinatesOrNever, Tuple } from '../../UseGraph/Graph'
+import { CoordinatesOrNever, Tuple } from '../../../UseGraph/Graph'
 import {
   FieldData,
+  FieldElement,
   Fields,
   FieldsData,
   FormData,
+  ObjectKey,
   PartialDataKeys,
+  RegisterResult,
   isCheckboxInput,
   isDateInput,
   isFileInput,
   isNumberInput,
   isRadioInput,
-} from './types'
+} from '../types'
 
 export const getElementDefaultValue = <TData extends FieldsData>(
   // the type does not matter since we check for each property
@@ -136,3 +139,38 @@ export const getFilterUnusedVertices =
     }
     return null
   }
+
+export const overrideRegisterResultPropNames = <
+  TFieldElement extends FieldElement = FieldElement,
+  TRefOverride extends ObjectKey = 'ref',
+  TOnChangeOverride extends ObjectKey = 'onChange',
+  TOnBlurOverride extends ObjectKey = 'onBlur',
+  TOnFocusOverride extends ObjectKey = 'onFocus',
+>(
+  registerProps: RegisterResult<TFieldElement>,
+  nameOverrides: Partial<{
+    ref: TRefOverride
+    onChange: TOnChangeOverride
+    onBlur: TOnBlurOverride
+    onFocus: TOnFocusOverride
+  }>,
+): { [key in TRefOverride]: RegisterResult<TFieldElement>['ref'] } & {
+  [key in TOnChangeOverride]: RegisterResult<TFieldElement>['onChange']
+} & { [key in TOnBlurOverride]: RegisterResult<TFieldElement>['onBlur'] } & {
+  [key in TOnFocusOverride]: RegisterResult<TFieldElement>['onFocus']
+} => {
+  const { ref, onChange, onBlur, onFocus } = {
+    ref: (nameOverrides.ref ?? 'ref') as TRefOverride,
+    onChange: (nameOverrides.onChange ?? 'onChange') as TOnChangeOverride,
+    onBlur: (nameOverrides.onBlur ?? 'onBlur') as TOnBlurOverride,
+    onFocus: (nameOverrides.onFocus ?? 'onFocus') as TOnFocusOverride,
+  }
+
+  // @ts-expect-error these keys are properly typed but TS treats them as string because they are dynamic
+  return {
+    [ref]: registerProps.ref,
+    [onChange]: registerProps.onChange,
+    [onBlur]: registerProps.onBlur,
+    [onFocus]: registerProps.onFocus,
+  }
+}

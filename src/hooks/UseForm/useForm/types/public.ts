@@ -1,6 +1,6 @@
 import React from 'react'
 import { CoordinatesOfLength, CoordinatesOrNever, GraphData, IGraph } from '../../../UseGraph/Graph'
-import { ObjectKey, PartialDataKeys, RefProps } from './internal'
+import { ObjectKey, PartialDataKeys } from './internal'
 
 /**
  * The type of elements that can be registered with `useForm` - inputs, selects, and textareas
@@ -29,22 +29,15 @@ export interface FieldsData {
  * @typedef {RegisterOptions}
  * @template {FieldsData} TData
  * @template {keyof TData} [TFieldName=keyof TData]
- * @template {ObjectKey} [TRefPropsKey='ref']
+ * @template {RefPropKey} [TRefPropKey='ref']
  * @template {boolean} [TIsRequired=false]
  */
 export interface RegisterOptions<
   TData extends FieldsData,
   TDimensions extends number = 0,
   TFieldName extends keyof TData = keyof TData,
-  TRefPropsKey extends ObjectKey = 'ref',
   TIsRequired extends boolean = false,
 > {
-  /**
-   * Overrides the name of the `ref` prop to the registered input
-   *
-   * @type {?TRefPropsKey}
-   */
-  refName?: TRefPropsKey
   /**
    * If true, adds a validation that the field has a value, outputting an error if not
    *
@@ -79,24 +72,17 @@ export interface RegisterOptions<
 
 /**
  * The result of the `register` function including:
- * - A ref of the type of the field's element with name RegisterOptions.refName ?? 'ref'
+ * - A ref of the type of the field's element
  * - An `onChange` function for updating form data values
  * - An `onFocus` function for marking fields as touched
  * - An `onBlur` function for triggering validations
  * @export
  * @typedef {RegisterResult}
  * @template {FieldElement} [TFieldElement=FieldElement]
- * @template {RefProps<TFieldElement>} [TRefProps={
- *     ref: React.Ref<TFieldElement>
- *   }]
  */
-export type RegisterResult<
-  TFieldElement extends FieldElement = FieldElement,
-  TRefProps extends RefProps<TFieldElement> = {
-    ref: React.Ref<TFieldElement>
-  },
-> = TRefProps & {
-  onChange: (event: unknown) => void
+export type RegisterResult<TFieldElement extends FieldElement = FieldElement> = {
+  ref: React.Ref<TFieldElement>
+  onChange: (event: React.ChangeEvent<HTMLElement> | null) => void
   onFocus: () => void
   onBlur: () => void
 }
@@ -118,14 +104,8 @@ export type Register<TData extends FieldsData, TDimensions extends number = 0> =
   TIsRequired extends boolean = false,
 >(
   fieldName: TFieldName,
-  options?: RegisterOptions<
-    TData,
-    TDimensions,
-    TFieldName,
-    keyof RefProps<TFieldElement>,
-    TIsRequired
-  >,
-) => RegisterResult<TFieldElement, RefProps<TFieldElement>>
+  options?: RegisterOptions<TData, TDimensions, TFieldName, TIsRequired>,
+) => RegisterResult<TFieldElement>
 
 /**
  * The callback run when submitting via `handleSubmit` in `useForm`.
@@ -209,14 +189,13 @@ export type HandleSubmit<TData extends FieldsData, TDimensions extends number = 
  * @typedef {FieldData}
  * @template {FieldsData} TData
  * @template {FieldElements<TData>} [TFieldElements=FieldElements<TData>]
- * @template {string | number | symbol} [TRefPropsKey='ref']
+ * @template {string | number | symbol} [TRefPropKey='ref']
  * @template {boolean} [TIsRequired=false]
  */
 export interface FieldData<
   TData extends FieldsData,
   TDimensions extends number = 0,
   TFieldElements extends FieldElements<TData> = FieldElements<TData>,
-  TRefPropsKey extends ObjectKey = ObjectKey,
   TIsRequired extends boolean = boolean,
 > {
   /**
@@ -234,9 +213,9 @@ export interface FieldData<
   /**
    * Configures the validations of the registered field and what the `register` function for the field returns
    *
-   * @type {?RegisterOptions<TData, keyof TData, TRefPropsKey, TIsRequired>}
+   * @type {?RegisterOptions<TData, keyof TData, TRefPropKey, TIsRequired>}
    */
-  options?: RegisterOptions<TData, TDimensions, keyof TData, TRefPropsKey, TIsRequired>
+  options?: RegisterOptions<TData, TDimensions, keyof TData, TIsRequired>
   /**
    * The current value of the field
    *
@@ -315,16 +294,15 @@ export type FieldElements<
  * @typedef {Fields}
  * @template {FieldsData} TData
  * @template {FieldElements<TData, FieldElement>} [TFieldElements=FieldElements<TData, FieldElement>]
- * @template {ObjectKey} [TRefPropsKey=ObjectKey]
+ * @template {RefPropKey} [TRefPropKey=RefPropKey]
  * @template {boolean} [TIsRequired=boolean]
  */
 export type Fields<
   TData extends FieldsData,
   TDimensions extends number = 0,
   TFieldElements extends FieldElements<TData, FieldElement> = FieldElements<TData, FieldElement>,
-  TRefPropsKey extends ObjectKey = ObjectKey,
   TIsRequired extends boolean = boolean,
-> = PartialDataKeys<TData, FieldData<TData, TDimensions, TFieldElements, TRefPropsKey, TIsRequired>>
+> = PartialDataKeys<TData, FieldData<TData, TDimensions, TFieldElements, TIsRequired>>
 
 export interface UseFormOptions<TDimensions extends number = 0> {
   dimensions?: TDimensions
