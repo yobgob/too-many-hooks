@@ -775,7 +775,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
             return Object.keys(currentValue)
               .filter(key => parseInt(key) !== coordinates.at(-1))
               .reduce(
-                (acc, key) => ({ ...acc, [key]: currentValue[key] }),
+                (acc, key) => ({ ...acc, [key]: currentValue[key as keyof TData] }),
                 {} as GraphData<TData | null, Length<TCoordinates>>,
               )
           }
@@ -804,7 +804,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
             return Object.keys(currentValue)
               .filter(key => parseInt(key) !== coordinates.at(-1))
               .reduce(
-                (acc, key) => ({ ...acc, [key]: currentValue[key] }),
+                (acc, key) => ({ ...acc, [key]: currentValue[key as keyof TData] }),
                 {} as GraphData<TData | null, 1>,
               )
           }
