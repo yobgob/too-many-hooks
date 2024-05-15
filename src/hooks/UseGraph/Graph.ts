@@ -612,10 +612,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
-      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
+      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
       return this.data
     } else {
-      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
+      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
       return coordinates.reduce((graph, coordinate) => graph?.[coordinate], this.data) ?? null
     }
   }
@@ -711,9 +711,9 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
 
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
-      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
+      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
       this.data = value
-      // @ts-expect-error TData is valid as an GraphData with a TDimensions of 0
+      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
       return this.data
     } else {
       // @ts-expect-error the initial and final values of the reduce are different types but that is the intent
