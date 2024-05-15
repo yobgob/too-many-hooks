@@ -575,8 +575,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     } else if (dimensions !== undefined) {
       this.dimensions = dimensions
     } else {
-      // @ts-expect-error TDimensions defaults to 0 if dimensions is not defined, so this is okay
-      this.dimensions = 0
+      this.dimensions = 0 as TDimensions
     }
   }
   // #endregion

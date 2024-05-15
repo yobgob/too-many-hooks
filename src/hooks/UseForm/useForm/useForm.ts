@@ -35,13 +35,10 @@ import {
  * @template {FieldsData} TData
  * @returns {{ register: Register<TData>; errors: Errors<TData>; touched: Touched<TData>; handleSubmit: HandleSubmit<TData>; }}
  */
-const useForm: UseForm = <TData extends FieldsData, TDimensions extends number = 0>(
-  {
-    dimensions,
-    isRequiredErrorMessageOverride,
-    // @ts-expect-error TDimensions defaults to 0 if dimensions is not defined, so this is okay
-  }: UseFormOptions<TDimensions> = { dimensions: 0 },
-): UseFormReturn<TData, TDimensions> => {
+const useForm: UseForm = <TData extends FieldsData, TDimensions extends number = 0>({
+  dimensions = 0 as TDimensions,
+  isRequiredErrorMessageOverride,
+}: UseFormOptions<TDimensions> = {}): UseFormReturn<TData, TDimensions> => {
   const fieldsGraph = useRef<FormData<Fields<TData, TDimensions>, TDimensions>>(
     new Graph<Fields<TData, TDimensions>, TDimensions>({ dimensions }),
   )

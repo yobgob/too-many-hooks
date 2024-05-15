@@ -243,13 +243,10 @@ export type UseGraph = <TData, TDimensions extends number = 0>(
  * @param {Graph<TData, TDimensions>} param0.initial
  * @returns {UseGraphReturn<TData, TDimensions>}
  */
-const useGraph: UseGraph = <TData, TDimensions extends number = 0>(
-  {
-    dimensions,
-    initial,
-    // @ts-expect-error TDimensions defaults to 0 if dimensions is not defined, so this is okay
-  }: UseGraphOptions<TData, TDimensions> = { dimensions: 0 },
-): UseGraphReturn<TData, TDimensions> => {
+const useGraph: UseGraph = <TData, TDimensions extends number = 0>({
+  dimensions = 0 as TDimensions,
+  initial,
+}: UseGraphOptions<TData, TDimensions> = {}): UseGraphReturn<TData, TDimensions> => {
   const [data, setData] = useState<Graph<TData, TDimensions>>(
     initial ?? new Graph<TData, TDimensions>({ dimensions }),
   )
