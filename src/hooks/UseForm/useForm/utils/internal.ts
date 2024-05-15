@@ -62,10 +62,10 @@ export const getOnChangeValue = <TData extends FieldsData>(
   }
 }
 
-export const isBlank = (value: unknown): value is undefined | null | '' =>
+export const isBlank = <T>(value: T | undefined | null | ''): value is undefined | null | '' =>
   value === null || value === undefined || value === ''
 
-export const isNotBlank = (value: unknown): value is Exclude<unknown, undefined | null | ''> =>
+export const isNotBlank = <T>(value: T): value is Exclude<T, undefined | null | ''> =>
   !isBlank(value)
 
 export const getTypedFieldValue = <TData extends FieldsData, TDimensions extends number = 0>(
