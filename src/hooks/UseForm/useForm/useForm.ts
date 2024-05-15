@@ -1,8 +1,11 @@
 import React, { useCallback, useMemo, useRef } from 'react'
-import { CoordinatesOfLength, CoordinatesOrNever, Graph } from '../../UseGraph/Graph'
+import { getObjectWithoutKey } from '../../../common/utils'
+import { Coordinates, CoordinatesOfLength, CoordinatesOrNever, Graph } from '../../UseGraph/Graph'
 import useGraph from '../../UseGraph/useGraph'
 import {
   Changed,
+  Deregister,
+  DeregisterAtCoordinates,
   Errors,
   FieldElement,
   Fields,
@@ -45,7 +48,12 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
   )
   const [
     errors,
-    { updateVertex: updateErrorsVertex, set: setErrors, pruneVertex: pruneErrorsVertex },
+    {
+      updateVertex: updateErrorsVertex,
+      set: setErrors,
+      pruneVertex: pruneErrorsVertex,
+      pruneAtCoordinates: pruneErrorsAtCoordinates,
+    },
   ] = useGraph<Errors<TData>, TDimensions>({ dimensions })
   const [
     touched,
@@ -53,6 +61,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       someVertex: touchedAtSomeVertex,
       updateVertex: updateTouchedVertex,
       pruneVertex: pruneTouchedVertex,
+      pruneAtCoordinates: pruneTouchedAtCoordinates,
     },
   ] = useGraph<Touched<TData>, TDimensions>({ dimensions })
   const [
@@ -62,6 +71,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       updateVertex: updateChangedVertex,
       updateAllVertices: updateAllChangedVertices,
       pruneVertex: pruneChangedVertex,
+      pruneAtCoordinates: pruneChangedAtCoordinates,
     },
   ] = useGraph<Changed<TData>, TDimensions>({ dimensions })
   const hasBegun = useMemo(
@@ -196,7 +206,51 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
     [pruneChangedVertex, pruneErrorsVertex, pruneTouchedVertex],
   )
 
-  const unregisterInactiveFields = useCallback(() => {
+  const deregister: Deregister<TData, TDimensions> = useCallback(
+    <TFieldName extends keyof TData>(
+      fieldName: TFieldName,
+      coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+    ) => {
+      fieldsGraph.current.updateVertex(
+        fields => (fields ? getObjectWithoutKey(fields, fieldName) : null),
+        coordinates,
+      )
+      const remainingFields = fieldsGraph.current.getVertex(coordinates)
+
+      // if no fields remain registered after filtering, remove the entire vertex
+      if (!remainingFields || Object.keys(remainingFields).length === 0) {
+        pruneVertex(coordinates)
+      } else {
+        updateErrorsVertex(
+          fields => (fields ? getObjectWithoutKey(fields, fieldName) : null),
+          coordinates,
+        )
+        updateTouchedVertex(
+          fields => (fields ? getObjectWithoutKey(fields, fieldName) : null),
+          coordinates,
+        )
+        updateChangedVertex(
+          fields => (fields ? getObjectWithoutKey(fields, fieldName) : null),
+          coordinates,
+        )
+      }
+    },
+    [pruneVertex, updateChangedVertex, updateErrorsVertex, updateTouchedVertex],
+  )
+
+  const deregisterAtCoordinates: DeregisterAtCoordinates<TDimensions> = useCallback(
+    <TCoordinates extends Coordinates = CoordinatesOfLength<0>>(
+      coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+    ) => {
+      fieldsGraph.current.pruneAtCoordinates(coordinates)
+      pruneErrorsAtCoordinates(coordinates)
+      pruneTouchedAtCoordinates(coordinates)
+      pruneChangedAtCoordinates(coordinates)
+    },
+    [pruneChangedAtCoordinates, pruneErrorsAtCoordinates, pruneTouchedAtCoordinates],
+  )
+
+  const deregisterInactiveFields = useCallback(() => {
     fieldsGraph.current.forEachVertex((fields, coordinates) => {
       if (!fields) {
         pruneVertex(coordinates)
@@ -321,7 +375,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       onError,
     }: HandleSubmitOptions<TData, TDimensions, TShouldSkipValidations>) => {
       if (!shouldNotAutoPruneFields) {
-        unregisterInactiveFields()
+        deregisterInactiveFields()
       }
 
       if (shouldSkipValidations) {
@@ -354,7 +408,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         }
       }
     },
-    [resetChanged, shouldNotAutoPruneFields, unregisterInactiveFields, updateErrors],
+    [resetChanged, shouldNotAutoPruneFields, deregisterInactiveFields, updateErrors],
   )
 
   const register: Register<TData, TDimensions> = useCallback(
@@ -447,6 +501,8 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
 
   return {
     register,
+    deregister,
+    deregisterAtCoordinates,
     errors,
     touched,
     changed,

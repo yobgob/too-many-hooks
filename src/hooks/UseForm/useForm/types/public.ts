@@ -1,5 +1,11 @@
 import React from 'react'
-import { CoordinatesOfLength, CoordinatesOrNever, GraphData, IGraph } from '../../../UseGraph/Graph'
+import {
+  Coordinates,
+  CoordinatesOfLength,
+  CoordinatesOrNever,
+  GraphData,
+  IGraph,
+} from '../../../UseGraph/Graph'
 import { ObjectKey, PartialDataKeys } from './internal'
 
 /**
@@ -115,6 +121,33 @@ export type Register<TData extends FieldsData, TDimensions extends number = 0> =
   fieldName: TFieldName,
   options?: RegisterOptions<TData, TDimensions, TFieldName, TIsRequired>,
 ) => RegisterResult<TFieldElement>
+
+/**
+ * The type of the `deregister` function provided by `useForm`.
+ *
+ * @export
+ * @typedef {Deregister}
+ * @template {FieldsData} TData
+ */
+export type Deregister<TData extends FieldsData, TDimensions extends number = 0> = <
+  TFieldName extends keyof TData,
+>(
+  fieldName: TFieldName,
+  coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
+) => void
+
+/**
+ * The type of the `deregisterAtCoordinates` function provided by `useForm`.
+ *
+ * @export
+ * @typedef {DeregisterAtCoordinates}
+ * @template {FieldsData} TData
+ */
+export type DeregisterAtCoordinates<TDimensions extends number = 0> = <
+  TCoordinates extends Coordinates = CoordinatesOfLength<0>,
+>(
+  coordinates?: CoordinatesOrNever<TDimensions, TCoordinates>,
+) => void
 
 /**
  * The callback run when submitting via `handleSubmit` in `useForm`.
@@ -334,6 +367,18 @@ export interface UseFormReturn<TData extends FieldsData, TDimensions extends num
    * @type {Register<TData, TDimensions>}
    */
   register: Register<TData, TDimensions>
+  /**
+   * The `deregister` function is used to remove fields from the form for which data/errors should no longer be tracked
+   *
+   * @type {Deregister<TData, TDimensions>}
+   */
+  deregister: Deregister<TData, TDimensions>
+  /**
+   * The `deregisterAtCoordinates` function deregisters all fields at or below a set of coordinates
+   *
+   * @type {DeregisterAtCoordinates<TDimensions>}
+   */
+  deregisterAtCoordinates: DeregisterAtCoordinates<TDimensions>
   /**
    * A graph of maps of registered fields to their validation information
    *

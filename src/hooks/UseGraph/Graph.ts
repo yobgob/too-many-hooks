@@ -1,4 +1,5 @@
 import { Length, SafeSubtract } from '../../common/types/arithmetic'
+import { getObjectWithoutKey } from '../../common/utils'
 
 // #region tuple types
 /**
@@ -768,18 +769,16 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       this.data = null
     } else {
       this.updateAtCoordinates(
-        // @ts-expect-error This will be the correct number of dimensions
         currentValue => {
           if (currentValue) {
-            return Object.keys(currentValue)
-              .filter(key => +key !== coordinates.at(-1))
-              .reduce(
-                (acc, key) => ({ ...acc, [key]: currentValue[key as keyof TData] }),
-                {} as GraphData<TData | null, Length<TCoordinates>>,
-              )
+            return getObjectWithoutKey(
+              currentValue,
+              coordinates.at(-1)! as keyof GraphData<TData | null>,
+            )
           }
           return null
         },
+        // @ts-expect-error This is the correct number of dimensions
         coordinates.slice(0, -1),
       )
     }
@@ -797,18 +796,16 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       this.data = null
     } else {
       this.updateAtCoordinates<CoordinatesOfLength<SafeSubtract<TDimensions, 1>>>(
-        // @ts-expect-error This will be the correct number of dimensions
         currentValue => {
           if (currentValue) {
-            return Object.keys(currentValue)
-              .filter(key => +key !== coordinates.at(-1))
-              .reduce(
-                (acc, key) => ({ ...acc, [key]: currentValue[key as keyof TData] }),
-                {} as GraphData<TData | null, 1>,
-              )
+            return getObjectWithoutKey(
+              currentValue,
+              coordinates.at(-1)! as keyof GraphData<TData | null>,
+            )
           }
           return null
         },
+        // @ts-expect-error This is the correct number of dimensions
         coordinates.slice(0, -1),
       )
     }
