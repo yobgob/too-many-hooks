@@ -91,7 +91,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
     [changed, changedAtSomeVertex],
   )
 
-  const updateFieldsVertex = useCallback(
+  const updateFieldsVertexField = useCallback(
     (
       fieldName: keyof TData,
       updater: (
@@ -130,10 +130,14 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       fieldName: keyof TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      updateFieldsVertex(fieldName, fields => ({ ...fields!, hasBeenTouched: true }), coordinates)
+      updateFieldsVertexField(
+        fieldName,
+        fields => ({ ...fields!, hasBeenTouched: true }),
+        coordinates,
+      )
       updateTouchedVertex(fields => ({ ...fields!, [fieldName]: true }), coordinates)
     },
-    [updateTouchedVertex, updateFieldsVertex],
+    [updateTouchedVertex, updateFieldsVertexField],
   )
 
   const change = useCallback(
@@ -141,10 +145,14 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       fieldName: keyof TData,
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
-      updateFieldsVertex(fieldName, fields => ({ ...fields!, hasBeenChanged: true }), coordinates)
+      updateFieldsVertexField(
+        fieldName,
+        fields => ({ ...fields!, hasBeenChanged: true }),
+        coordinates,
+      )
       updateChangedVertex(fields => ({ ...fields!, [fieldName]: true }), coordinates)
     },
-    [updateChangedVertex, updateFieldsVertex],
+    [updateChangedVertex, updateFieldsVertexField],
   )
 
   const resetChanged = useCallback(() => {
@@ -285,7 +293,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
           isRequiredErrorMessageOverride ??
           'Field is required'
 
-        updateFieldsVertex(
+        updateFieldsVertexField(
           fieldName,
           field => ({
             ...field!,
@@ -305,7 +313,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         // @ts-expect-error these `TData`s will be the same
         const error = options?.validate?.(typedValue, typedFields, typedData) ?? null
 
-        updateFieldsVertex(
+        updateFieldsVertexField(
           fieldName,
           field => ({
             ...field!,
@@ -317,7 +325,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         return error
       }
     },
-    [isRequiredErrorMessageOverride, updateFieldsVertex],
+    [isRequiredErrorMessageOverride, updateFieldsVertexField],
   )
 
   const updateFieldsVertexFieldErrors = useCallback(
@@ -423,7 +431,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       options ??= {}
       const fields = fieldsGraph.current.getVertex(options.coordinates) ?? {}
       if (fieldName in fields) {
-        updateFieldsVertex(fieldName, field => ({ ...field!, options }), options.coordinates)
+        updateFieldsVertexField(fieldName, field => ({ ...field!, options }), options.coordinates)
       } else {
         setFieldsVertex(
           fieldName,
@@ -448,7 +456,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
             // update internal value from ref if not yet set
             if (fields[fieldName]!.value === undefined) {
               const defaultValue = getElementDefaultValue<TData>(element)
-              updateFieldsVertex(
+              updateFieldsVertexField(
                 fieldName,
                 field => ({
                   ...field!,
@@ -458,7 +466,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
                 options.coordinates,
               )
             } else {
-              updateFieldsVertex(
+              updateFieldsVertexField(
                 fieldName,
                 field => ({ ...field!, ref: { ...field?.ref, current: element } }),
                 options.coordinates,
@@ -475,7 +483,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
             }
 
             const newValue = getOnChangeValue<TData>(event)
-            updateFieldsVertex(
+            updateFieldsVertexField(
               fieldName,
               field => ({ ...field!, value: newValue }),
               options?.coordinates,
@@ -496,7 +504,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         },
       }
     },
-    [change, setFieldsVertex, touch, updateErrorsVertexFieldError, updateFieldsVertex],
+    [change, setFieldsVertex, touch, updateErrorsVertexFieldError, updateFieldsVertexField],
   )
 
   return {
