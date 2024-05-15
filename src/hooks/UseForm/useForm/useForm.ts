@@ -526,5 +526,4 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
   }
 }
 
-export * from './types/public'
 export default useForm
