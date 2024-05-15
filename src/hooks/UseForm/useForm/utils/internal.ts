@@ -6,7 +6,6 @@ import {
   Fields,
   FieldsData,
   FormData,
-  ObjectKey,
   PartialDataKeys,
   RegisterResult,
   isCheckboxInput,
@@ -142,10 +141,10 @@ export const getFilterUnusedVertices =
 
 export const overrideRegisterResultPropNames = <
   TFieldElement extends FieldElement = FieldElement,
-  TRefOverride extends ObjectKey = 'ref',
-  TOnChangeOverride extends ObjectKey = 'onChange',
-  TOnBlurOverride extends ObjectKey = 'onBlur',
-  TOnFocusOverride extends ObjectKey = 'onFocus',
+  TRefOverride extends string = 'ref',
+  TOnChangeOverride extends string = 'onChange',
+  TOnBlurOverride extends string = 'onBlur',
+  TOnFocusOverride extends string = 'onFocus',
 >(
   registerProps: RegisterResult<TFieldElement>,
   nameOverrides: Partial<{

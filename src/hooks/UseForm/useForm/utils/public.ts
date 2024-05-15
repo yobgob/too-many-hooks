@@ -1,13 +1,13 @@
-import { FieldElement, ObjectKey, RegisterResult } from '../types'
+import { FieldElement, RegisterResult } from '../types'
 import { overrideRegisterResultPropNames } from './internal'
 
 export /**
  * Builds a function which overrides the names of the component props returned by the `useForm` `register` function
  *
- * @template {ObjectKey} [TRefOverride='ref']
- * @template {ObjectKey} [TOnChangeOverride='onChange']
- * @template {ObjectKey} [TOnBlurOverride='onBlur']
- * @template {ObjectKey} [TOnFocusOverride='onFocus']
+ * @template {string} [TRefOverride='ref']
+ * @template {string} [TOnChangeOverride='onChange']
+ * @template {string} [TOnBlurOverride='onBlur']
+ * @template {string} [TOnFocusOverride='onFocus']
  * @param {Partial<{
  *       ref: TRefOverride
  *       onChange: TOnChangeOverride
@@ -18,10 +18,10 @@ export /**
  */
 const buildRegisterOverride =
   <
-    TRefOverride extends ObjectKey = 'ref',
-    TOnChangeOverride extends ObjectKey = 'onChange',
-    TOnBlurOverride extends ObjectKey = 'onBlur',
-    TOnFocusOverride extends ObjectKey = 'onFocus',
+    TRefOverride extends string = 'ref',
+    TOnChangeOverride extends string = 'onChange',
+    TOnBlurOverride extends string = 'onBlur',
+    TOnFocusOverride extends string = 'onFocus',
   >(
     nameOverrides: Partial<{
       ref: TRefOverride
