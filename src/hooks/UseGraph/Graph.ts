@@ -613,10 +613,10 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
-      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
+      // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
       return this.data
     } else {
-      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
+      // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
       return coordinates.reduce((graph, coordinate) => graph?.[coordinate], this.data) ?? null
     }
   }
@@ -670,7 +670,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   setVertex: SetVertex<TData, TDimensions> = (
     value: TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, Tuple<number, TDimensions>>,
-    // @ts-expect-error TData is assignable to TData
+    // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
   ): TData | null => this.setAtCoordinates<CoordinatesOfLength<TDimensions>>(value, coordinates)
 
   /**
@@ -712,9 +712,9 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
 
     // special case for a 0 dimension graph or no coordinates
     if (!coordinates?.length) {
-      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
+      // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
       this.data = value
-      // @ts-expect-error TData is valid as a GraphData with a TDimensions of 0
+      // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
       return this.data
     } else {
       // @ts-expect-error the initial and final values of the reduce are different types but that is the intent
@@ -744,7 +744,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   updateVertex: UpdateVertex<TData, TDimensions> = (
     updater: (currentValue: TData | null) => TData | null,
     coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
-    // @ts-expect-error TData is the same as GraphData with depth 0
+    // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
   ) => this.updateAtCoordinates<CoordinatesOfLength<TDimensions>>(updater, coordinates) as TData
 
   /**
@@ -778,7 +778,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
           }
           return null
         },
-        // @ts-expect-error This is the correct number of dimensions
+        // @ts-expect-error this is the correct number of dimensions
         coordinates.slice(0, -1),
       )
     }
@@ -805,7 +805,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
           }
           return null
         },
-        // @ts-expect-error This is the correct number of dimensions
+        // @ts-expect-error this is the correct number of dimensions
         coordinates.slice(0, -1),
       )
     }
@@ -945,7 +945,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
   ): GraphDataAtCoordinates<TData, TDimensions, TCoordinates> => {
     // special case for a 0 dimension graph or no coordinates
     if (this.dimensions === 0) {
-      // @ts-expect-error TData is valid when `TDimensions` is 0
+      // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
       const newData: GraphDataAtCoordinates<TData, TDimensions, TCoordinates> = updater(this.data)
       // @ts-expect-error GraphDataAtCoordinates<TData, TDimensions, TCoordinates> is TData when `TDimensions` is 0
       this.data = newData
@@ -1086,7 +1086,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
     // special case for a 0 dimension graph or no coordinates
     if (this.dimensions === 0) {
       if (this.data === null) return null
-      // @ts-expect-error TResult is valid when `TDimensions` is 0
+      // @ts-expect-error `TResult` is valid as a `GraphData` with `TDimensions=0`
       const newData: GraphDataAtCoordinates<TResult, TDimensions, TCoordinates> = transformer(
         this.data,
       )
@@ -1136,7 +1136,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => TResult | null,
   ): IGraph<TResult, TDimensions> =>
-    // @ts-expect-error TResult is valid for graphs with TDimensions=0
+    // @ts-expect-error `TResult` is valid as a `GraphData` with `TDimensions=0`
     new Graph({ dimensions: this.dimensions, data: this._mapAllVertices(transformer, []) })
 
   // #endregion

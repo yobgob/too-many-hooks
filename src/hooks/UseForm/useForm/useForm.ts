@@ -1,6 +1,12 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { getObjectWithoutKey } from '../../../common/utils'
-import { Coordinates, CoordinatesOfLength, CoordinatesOrNever, Graph } from '../../UseGraph/Graph'
+import {
+  Coordinates,
+  CoordinatesOfLength,
+  CoordinatesOrNever,
+  Graph,
+  IGraph,
+} from '../../UseGraph/Graph'
 import useGraph from '../../UseGraph/useGraph'
 import {
   Changed,
@@ -310,14 +316,17 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
 
         return error
       } else {
-        const typedData = getTypedData<TData, TDimensions>(fieldsGraph.current)
+        const typedData = getTypedData<TData, TDimensions>(fieldsGraph.current) as IGraph<
+          TData,
+          TDimensions
+        >
         const typedFields = {
           ...typedData.getVertex(coordinates)!,
           [fieldName]: typedValue,
         }
 
-        // @ts-expect-error these `TData`s will be the same
-        const error = options?.validate?.(typedValue, typedFields, typedData) ?? null
+        // @ts-expect-error `TData` is valid as a `GraphData` with `TDimensions=0`
+        const error = options?.validate?.(typedValue, typedFields, typedData.get()!) ?? null
 
         updateFieldsVertexField(
           fieldName,
@@ -412,7 +421,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         )
 
         if (hasErrors) {
-          // @ts-expect-error Errors<TData> is assignable to a graph with TDimensions of 0
+          // @ts-expect-error `Errors<TData>` is valid as a `GraphData` with `TDimensions=0`
           onError?.(errors)
         } else {
           const typedData = getTypedData(fieldsGraph.current)
