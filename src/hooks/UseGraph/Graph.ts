@@ -894,7 +894,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(parseInt)
 
       if (depth === this.dimensions) {
         coordinatesInGraph.forEach(coordinate => {
