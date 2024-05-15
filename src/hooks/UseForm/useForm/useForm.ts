@@ -467,14 +467,14 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
                 field => ({
                   ...field!,
                   value: defaultValue,
-                  ref: { ...field?.ref, current: element },
+                  ref: { ...field!.ref, current: element },
                 }),
                 options.coordinates,
               )
             } else {
               updateFieldsVertexField(
                 fieldName,
-                field => ({ ...field!, ref: { ...field?.ref, current: element } }),
+                field => ({ ...field!, ref: { ...field!.ref, current: element } }),
                 options.coordinates,
               )
             }
