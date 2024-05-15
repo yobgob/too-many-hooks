@@ -772,7 +772,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         currentValue => {
           if (currentValue) {
             return Object.keys(currentValue)
-              .filter(key => parseInt(key) !== coordinates.at(-1))
+              .filter(key => +key !== coordinates.at(-1))
               .reduce(
                 (acc, key) => ({ ...acc, [key]: currentValue[key as keyof TData] }),
                 {} as GraphData<TData | null, Length<TCoordinates>>,
@@ -801,7 +801,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
         currentValue => {
           if (currentValue) {
             return Object.keys(currentValue)
-              .filter(key => parseInt(key) !== coordinates.at(-1))
+              .filter(key => +key !== coordinates.at(-1))
               .reduce(
                 (acc, key) => ({ ...acc, [key]: currentValue[key as keyof TData] }),
                 {} as GraphData<TData | null, 1>,
@@ -894,7 +894,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(parseInt)
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(key => +key)
 
       if (depth === this.dimensions) {
         coordinatesInGraph.forEach(coordinate => {
@@ -959,7 +959,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => +str)
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.reduce(
@@ -1012,7 +1012,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => +str)
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.some(coordinate =>
@@ -1100,7 +1100,7 @@ export class Graph<TData, TDimensions extends number = 0> implements IGraph<TDat
       // @ts-expect-error TDimensions is guaranteed to be greater than 0 due to the previous check
       const graphAtCoordinates = this.getAtCoordinates<TCoordinates>(previousCoordinates)
 
-      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => parseInt(str))
+      const coordinatesInGraph = Object.keys(graphAtCoordinates ?? {}).map(str => +str)
 
       if (depth === this.dimensions) {
         return coordinatesInGraph.reduce(

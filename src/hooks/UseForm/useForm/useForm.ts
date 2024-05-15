@@ -196,10 +196,13 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
   const unregisterInactiveFields = useCallback(() => {
     fieldsGraph.current.forEachVertex((fields, coordinates) => {
       if (!fields) {
+        console.log('no fields', fields, coordinates)
         pruneVertex(coordinates)
       } else {
+        console.log('before removal', fields, coordinates)
         removeUnregisteredFieldsAtVertex(coordinates)
         const remainingFields = fieldsGraph.current.getVertex(coordinates)
+        console.log('remaining', fields, coordinates)
 
         // if no fields remain registered after filtering, remove the entire vertex
         if (!remainingFields || Object.keys(remainingFields).length === 0) {
@@ -215,6 +218,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>,
     ) => {
       const fieldsAtCoordinate = fieldsGraph.current.getVertex(coordinates)
+      console.log(fieldsAtCoordinate, fieldName)
 
       if (!(fieldsAtCoordinate && fieldName in fieldsAtCoordinate)) return null // If the field has not been registered, it cannot have an error
 
@@ -266,6 +270,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
   const updateFieldsVertexFieldErrors = useCallback(
     (): void =>
       fieldsGraph.current.forEachVertex((fields, coordinates) => {
+        console.log('for each', fields)
         if (fields) {
           Object.keys(fields).forEach(fieldName =>
             updateFieldsVertexFieldError(fieldName as keyof TData, coordinates),
@@ -307,6 +312,8 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
           : null,
       )
       .get()
+
+    console.log(fieldsGraph.current, errors)
 
     setErrors(errors)
   }, [setErrors, updateFieldsVertexFieldErrors])
