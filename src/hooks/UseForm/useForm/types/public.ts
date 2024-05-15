@@ -18,7 +18,7 @@ export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEl
  * @typedef {FieldsData}
  */
 export interface FieldsData {
-  [Key: ObjectKey]: string | string[] | number | boolean | Date
+  [key: ObjectKey]: string | string[] | number | boolean | Date
 }
 
 /**
