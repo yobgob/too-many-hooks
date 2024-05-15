@@ -37,7 +37,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           Your email
           <input
             type="email"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             placeholder="name@example.com"
             {...register('email', {
               isRequired: true,
@@ -64,7 +64,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
         <label className="block text-sm font-medium text-gray-900">
           Your name
           <input
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...register('name', { isRequired: true })}
           />
         </label>
@@ -75,7 +75,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           Available start date
           <input
             type="date"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...register('startDate', {
               isRequired: true,
               validate: startDate =>
@@ -90,7 +90,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           Expected salary
           <input
             type="number"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...register('expectedSalary', {
               isRequired: true,
               validate: expectedSalary =>
