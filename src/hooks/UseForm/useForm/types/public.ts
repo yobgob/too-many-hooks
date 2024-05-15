@@ -68,6 +68,13 @@ export interface RegisterOptions<
    * @type {?CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>}
    */
   coordinates?: CoordinatesOrNever<TDimensions, CoordinatesOfLength<TDimensions>>
+
+  /**
+   * If `true`, the field will not be automatically removed when its `ref` is unset
+   *
+   * @type {?boolean}
+   */
+  shouldNotBeAutoPruned?: boolean
 }
 
 /**
@@ -309,6 +316,7 @@ export type Fields<
 export interface UseFormOptions<TDimensions extends number = 0> {
   dimensions?: TDimensions
   isRequiredErrorMessageOverride?: string
+  shouldNotAutoPruneFields?: boolean
 }
 
 /**

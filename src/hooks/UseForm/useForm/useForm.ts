@@ -38,6 +38,7 @@ import {
 const useForm: UseForm = <TData extends FieldsData, TDimensions extends number = 0>({
   dimensions = 0 as TDimensions,
   isRequiredErrorMessageOverride,
+  shouldNotAutoPruneFields = false,
 }: UseFormOptions<TDimensions> = {}): UseFormReturn<TData, TDimensions> => {
   const fieldsGraph = useRef<FormData<Fields<TData, TDimensions>, TDimensions>>(
     new Graph<Fields<TData, TDimensions>, TDimensions>({ dimensions }),
@@ -163,7 +164,9 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         const newFields = Object.keys(fields).reduce(
           (acc, fieldName) => ({
             ...acc,
-            ...(fields[fieldName]?.ref?.current ? { [fieldName]: fields[fieldName] } : {}),
+            ...(fields[fieldName]?.ref?.current || fields[fieldName]?.options?.shouldNotBeAutoPruned
+              ? { [fieldName]: fields[fieldName] }
+              : {}),
           }),
           {},
         )
@@ -317,7 +320,9 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
       onSubmit,
       onError,
     }: HandleSubmitOptions<TData, TDimensions, TShouldSkipValidations>) => {
-      unregisterInactiveFields()
+      if (!shouldNotAutoPruneFields) {
+        unregisterInactiveFields()
+      }
 
       if (shouldSkipValidations) {
         const typedData = getTypedData(fieldsGraph.current)
@@ -349,7 +354,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         }
       }
     },
-    [resetChanged, unregisterInactiveFields, updateErrors],
+    [resetChanged, shouldNotAutoPruneFields, unregisterInactiveFields, updateErrors],
   )
 
   const register: Register<TData, TDimensions> = useCallback(
