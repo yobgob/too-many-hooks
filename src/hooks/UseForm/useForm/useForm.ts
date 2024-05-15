@@ -132,10 +132,13 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
     ) => {
       updateFieldsVertexField(
         fieldName,
-        fields => ({ ...fields!, hasBeenTouched: true }),
+        fields => (fields ? { ...fields, hasBeenTouched: true } : fields),
         coordinates,
       )
-      updateTouchedVertex(fields => ({ ...fields!, [fieldName]: true }), coordinates)
+      updateTouchedVertex(
+        fields => (fields ? { ...fields, [fieldName]: true } : fields),
+        coordinates,
+      )
     },
     [updateTouchedVertex, updateFieldsVertexField],
   )
@@ -147,10 +150,13 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
     ) => {
       updateFieldsVertexField(
         fieldName,
-        fields => ({ ...fields!, hasBeenChanged: true }),
+        fields => (fields ? { ...fields, hasBeenChanged: true } : fields),
         coordinates,
       )
-      updateChangedVertex(fields => ({ ...fields!, [fieldName]: true }), coordinates)
+      updateChangedVertex(
+        fields => (fields ? { ...fields, [fieldName]: true } : fields),
+        coordinates,
+      )
     },
     [updateChangedVertex, updateFieldsVertexField],
   )
