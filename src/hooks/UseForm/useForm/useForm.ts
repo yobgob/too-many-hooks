@@ -368,12 +368,12 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
     const errors = fieldsGraph.current
       .mapAllVertices(fields =>
         fields
-          ? Object.keys(fields).reduce(
+          ? Object.keys(fields).reduce<Errors<TData>>(
               (acc, fieldName) => ({
                 ...acc,
                 [fieldName]: fields[fieldName]?.error,
               }),
-              {} as Errors<TData>,
+              {},
             )
           : null,
       )
@@ -401,9 +401,9 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
         updateErrors()
         const errors = fieldsGraph.current.mapAllVertices(fields =>
           fields
-            ? Object.keys(fields).reduce(
+            ? Object.keys(fields).reduce<Errors<TData>>(
                 (acc, fieldName) => ({ ...acc, [fieldName]: fields[fieldName]!.error }),
-                {} as Errors<TData>,
+                {},
               )
             : null,
         )
