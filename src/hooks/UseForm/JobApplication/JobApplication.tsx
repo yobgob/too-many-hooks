@@ -2,7 +2,7 @@ import React from 'react'
 import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
 import useForm, { Errors } from '../useForm'
-import { buildRegisterOverride } from '../useForm/utils'
+import { buildOverriddenRegister } from '../useForm/utils'
 
 enum Title {
   Mr = 'MR',
@@ -25,11 +25,10 @@ interface Props {
   onError: (data: Errors<ApplicationFormData>) => void
 }
 
-const registerSelect = buildRegisterOverride({ ref: 'selectRef' })
-
 const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
   const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } =
     useForm<ApplicationFormData>()
+  const registerSelect = buildOverriddenRegister(register, { ref: 'selectRef' })
 
   return (
     <div className="flex w-96 flex-col gap-4">
@@ -57,7 +56,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
             { label: 'Ms', value: Title.Ms },
           ]}
           placeholder="Title"
-          {...registerSelect(register('title', { isRequired: true }))}
+          {...registerSelect('title', { isRequired: true })}
         />
         {errors?.title && <span className="text-red-800">{errors.title}</span>}
       </div>

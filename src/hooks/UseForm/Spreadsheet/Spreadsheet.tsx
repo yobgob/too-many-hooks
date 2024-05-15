@@ -3,7 +3,7 @@ import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
 import useTally from '../../UseTally/useTally'
 import useForm, { Errors, FormData } from '../useForm'
-import { buildRegisterOverride } from '../useForm/utils'
+import { buildOverriddenRegister } from '../useForm/utils'
 import { SIZE_OPTIONS } from './constants'
 import { formatField } from './formatters'
 import { Field, Size } from './types'
@@ -20,13 +20,12 @@ interface Props {
   onError: (data: FormData<Errors<SpreadsheetFormData>, 1>) => void
 }
 
-const registerSelect = buildRegisterOverride({ ref: 'selectRef' })
-
 const Spreadsheet: React.FC<Props> = ({ onSubmit, onError }) => {
   const { register, errors, hasBegun, hasChangedWithoutSubmit, handleSubmit } = useForm<
     SpreadsheetFormData,
     1
   >({ dimensions: 1 })
+  const registerSelect = buildOverriddenRegister(register, { ref: 'selectRef' })
   const [numRows, { increment: addRow, decrement: removeRow }] = useTally({ initial: 1 })
 
   return (
@@ -60,22 +59,20 @@ const Spreadsheet: React.FC<Props> = ({ onSubmit, onError }) => {
                   <Select
                     options={SIZE_OPTIONS}
                     variant="text"
-                    {...registerSelect(
-                      register(Field.TShirtSize, {
-                        isRequired: true,
-                        coordinates: [index],
-                        isRequiredErrorMessageOverride: 'A selection must be made',
-                        validate: shirtSize =>
-                          shirtSize === Size.Unselected ? 'A selection must be made' : null,
-                      }),
-                    )}
+                    {...registerSelect(Field.TShirtSize, {
+                      isRequired: true,
+                      coordinates: [index],
+                      isRequiredErrorMessageOverride: 'A selection must be made',
+                      validate: shirtSize =>
+                        shirtSize === Size.Unselected ? 'A selection must be made' : null,
+                    })}
                   />
                 </td>
                 <td>
                   <Select
                     options={SIZE_OPTIONS}
                     variant="text"
-                    {...registerSelect(register(Field.HatSize, { coordinates: [index] }))}
+                    {...registerSelect(Field.HatSize, { coordinates: [index] })}
                   />
                 </td>
               </tr>
