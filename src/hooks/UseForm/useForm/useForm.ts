@@ -470,7 +470,7 @@ const useForm: UseForm = <TData extends FieldsData, TDimensions extends number =
           if (fields?.[fieldName]) {
             // update internal value from ref if not yet set
             if (fields[fieldName]!.value === undefined) {
-              const defaultValue = getElementDefaultValue<TData>(element)
+              const defaultValue = getElementDefaultValue<TData, TFieldElement>(element)
               updateFieldsVertexField(
                 fieldName,
                 field => ({

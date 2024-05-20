@@ -11,13 +11,22 @@ enum Title {
   Ms = 'MS',
 }
 
+enum Industry {
+  Agriculture = 'AGRICULTURE',
+  Finance = 'FINANCE',
+  Retail = 'RETAIL',
+  Tech = 'TECH',
+}
+
 export type ApplicationFormData = {
   email: string
   title: Title
   name: string
+  previousIndustries: string[]
   startDate: Date
   expectedSalary: number
   hasAgreedToTerms: boolean
+  coverLetter: string
 }
 
 interface Props {
@@ -72,6 +81,24 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
       </div>
       <div className="flex flex-col gap-1">
         <label className="block text-sm font-medium text-gray-900">
+          Previous industries
+          <select
+            multiple
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            {...register('previousIndustries', { isRequired: true })}
+          >
+            <option label="Agriculture" value={Industry.Agriculture} />
+            <option label="Finance" value={Industry.Finance} />
+            <option label="Retail" value={Industry.Retail} />
+            <option label="Tech" value={Industry.Tech} />
+          </select>
+        </label>
+        {errors?.previousIndustries && (
+          <span className="text-red-800">{errors.previousIndustries}</span>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="block text-sm font-medium text-gray-900">
           Available start date
           <input
             type="date"
@@ -101,6 +128,16 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
           />
         </label>
         {errors?.expectedSalary && <span className="text-red-800">{errors.expectedSalary}</span>}
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="block text-sm font-medium text-gray-900">
+          Cover letter
+          <textarea
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            {...register('coverLetter')}
+          />
+        </label>
+        {errors?.coverLetter && <span className="text-red-800">{errors.coverLetter}</span>}
       </div>
       <div className="flex flex-col gap-1">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-300">

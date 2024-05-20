@@ -13,29 +13,50 @@ import {
   isFileInput,
   isNumberInput,
   isRadioInput,
+  isSelectMultiple,
+  isSelectOne,
+  isTextarea,
 } from '../types'
 
-export const getElementDefaultValue = <TData extends FieldsData>(
-  // the type does not matter since we check for each property
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  element: any,
+const getSelectMultipleValue = (element: HTMLSelectElement): string[] =>
+  Array.from(element.options).reduce<string[]>(
+    (acc, option) => (option.selected ? [...acc, option.value] : acc),
+    [],
+  )
+
+export const getElementDefaultValue = <
+  TData extends FieldsData,
+  TFieldElement extends FieldElement,
+>(
+  element: TFieldElement,
 ): TData[keyof TData] | undefined => {
   if (!element) return undefined
+  console.log(element, element.type)
 
   if (isRadioInput(element) || isCheckboxInput(element)) {
-    // @ts-expect-error if it is a radio or checkbox the TData[keyof TData] must be a boolean
-    return element.defaultChecked ?? element.checked
+    return (element.defaultChecked as TData[keyof TData]) ?? (element.checked as TData[keyof TData])
   }
   if (isFileInput(element)) {
-    // @ts-expect-error if it is a file input the TData[keyof TData] must be files
-    return element.files
+    return element.files as TData[keyof TData]
   }
   if (isNumberInput(element)) {
-    // @ts-expect-error if it is a number input TData[keyof TData] must be a number
-    return element.defaultValue ? +element.defaultValue : +element.value
+    return element.defaultValue
+      ? (+element.defaultValue as TData[keyof TData])
+      : (+element.value as TData[keyof TData])
+  }
+  if (isSelectOne(element)) {
+    return element.value as TData[keyof TData]
+  }
+  if (isSelectMultiple(element)) {
+    return getSelectMultipleValue(element) as TData[keyof TData]
+  }
+  if (isTextarea(element)) {
+    return element.value as TData[keyof TData]
   }
 
-  return element.defaultValue ?? element.value
+  return 'defaultValue' in element
+    ? (element.defaultValue as TData[keyof TData]) ?? (element.value as TData[keyof TData])
+    : (element.value as TData[keyof TData])
 }
 
 export const getOnChangeValue = <TData extends FieldsData>(
@@ -44,26 +65,29 @@ export const getOnChangeValue = <TData extends FieldsData>(
   event: any,
 ): TData[keyof TData] | undefined => {
   if ('target' in event && 'type' in event.target) {
-    const target = event.target
+    const element = event.target
 
-    if (isRadioInput(target) || isCheckboxInput(target)) {
-      // @ts-expect-error if it is a radio or checkbox TData[keyof TData] must be a boolean
-      return target.checked
+    if (isRadioInput(element) || isCheckboxInput(element)) {
+      return element.checked as TData[keyof TData]
     }
-    if (isFileInput(target)) {
-      // @ts-expect-error if it is a file input TData[keyof TData] must be files
-      return target.files
+    if (isFileInput(element)) {
+      return element.files as TData[keyof TData]
     }
-    if (isNumberInput(target)) {
-      // @ts-expect-error if it is a number input TData[keyof TData] must be a number
-      return +target.value
+    if (isNumberInput(element)) {
+      return +element.value as TData[keyof TData]
     }
-    return target.value
+    if (isSelectMultiple(element)) {
+      return getSelectMultipleValue(element) as TData[keyof TData]
+    }
+    return element.value as TData[keyof TData]
   }
 }
 
 export const isBlank = <T>(value: T | undefined | null | ''): value is undefined | null | '' =>
-  value === null || value === undefined || value === ''
+  value === null ||
+  value === undefined ||
+  value === '' ||
+  (typeof value === 'object' && 'length' in value && value.length === 0)
 
 export const isNotBlank = <T>(value: T): value is Exclude<T, undefined | null | ''> =>
   !isBlank(value)
@@ -72,29 +96,27 @@ export const getTypedFieldValue = <TData extends FieldsData, TDimensions extends
   field: FieldData<TData, TDimensions>,
 ): TData[keyof TData] => {
   if (field.ref.current && 'type' in field.ref.current) {
-    const currentElement = field.ref.current
+    const element = field.ref.current
 
-    if (isRadioInput(currentElement) || isCheckboxInput(currentElement)) {
-      // @ts-expect-error if it is a radio or checkbox TData[keyof TData] must be a boolean
-      return currentElement.checked
+    if (isRadioInput(element) || isCheckboxInput(element)) {
+      return element.checked as TData[keyof TData]
     }
-    if (isFileInput(currentElement)) {
-      // @ts-expect-error if it is a file input TData[keyof TData] must be files
-      return currentElement.files
+    if (isFileInput(element)) {
+      return element.files as TData[keyof TData]
     }
-    if (isNumberInput(currentElement)) {
-      // @ts-expect-error if it is a number input TData[keyof TData] must be a number
-      return isNotBlank(currentElement.value) ? +currentElement.value : currentElement.value
+    if (isNumberInput(element)) {
+      return isNotBlank(element.value) ? (+element.value as TData[keyof TData]) : element.value
     }
-    if (isDateInput(currentElement)) {
-      // @ts-expect-error if it is a date input TData[keyof TData] must be a Date
-      return isNotBlank(currentElement.value)
-        ? new Date(currentElement.value)
-        : currentElement.value
+    if (isDateInput(element)) {
+      return isNotBlank(element.value)
+        ? (new Date(element.value) as TData[keyof TData])
+        : element.value
+    }
+    if (isSelectMultiple(element)) {
+      return getSelectMultipleValue(element) as TData[keyof TData]
     }
 
-    // @ts-expect-error the only remaining type is string
-    return currentElement.value
+    return element.value as TData[keyof TData]
   }
   return field.value!
 }
