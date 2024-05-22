@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Button } from '../../../storybook-common/components'
 import useArray from '../useArray'
 import { BOOKS, UNUSED_BOOKS } from './constants'
@@ -10,8 +10,8 @@ const Bookshelf: React.FC = () => {
   return (
     <div className="flex max-w-lg flex-wrap gap-y-4 border-l-8 border-t border-l-yellow-900 border-t-yellow-800 bg-yellow-700 p-4 [border-style:outset]">
       {books.map(({ name, colors }, i) => (
-        <>
-          <div key={name} className="flex border-b-2 border-b-yellow-900">
+        <Fragment key={name}>
+          <div className="flex border-b-2 border-b-yellow-900">
             <div className="contents-center flex h-28 items-center border-b-4 border-b-yellow-900 bg-yellow-800 p-1 pr-4">
               <Button
                 onClick={() => {
@@ -41,7 +41,7 @@ const Bookshelf: React.FC = () => {
               <div className="h-28 border-b-4 border-b-yellow-900 bg-yellow-800" />
             </div>
           )}
-        </>
+        </Fragment>
       ))}
       <div className="flex-1 border-b-2 border-b-yellow-900">
         <div className="h-28 border-b-4 border-b-yellow-900 bg-yellow-800 p-1">

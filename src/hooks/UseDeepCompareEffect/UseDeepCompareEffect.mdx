@@ -1,5 +1,5 @@
 import { Meta, Source } from '@storybook/blocks'
-import TYPES from '../../../dist/hooks/UseDeepCompareEffect/useDeepCompareEffect.d.ts?raw'
+import TYPES from '../../../dist/src/hooks/UseDeepCompareEffect/useDeepCompareEffect.d.ts?raw'
 import USE_THROTTLE_FUNCTION_CODE from '../UseThrottleFunction/useThrottleFunction.ts?raw'
 
 <Meta title="useDeepCompareEffect" name="useDeepCompareEffect" />
@@ -7,10 +7,6 @@ import USE_THROTTLE_FUNCTION_CODE from '../UseThrottleFunction/useThrottleFuncti
 # useDeepCompareEffect
 
 Runs an `effect` function when dependencies change, deeply compared
-
-## Types
-
-<Source language="ts" code={TYPES} />
 
 ## Examples
 
@@ -23,3 +19,7 @@ In this case, `useDeepCompareEffect` is used to deeply check if arguments to a f
 A normal `useEffect` may fire too often because the arguments may be reassigned on every render, but we only want to run the function when their actual values change.
 
 <Source language="ts" code={USE_THROTTLE_FUNCTION_CODE} />
+
+## Types
+
+<Source language="ts" code={TYPES} />

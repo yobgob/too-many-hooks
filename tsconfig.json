@@ -16,6 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["**/*.{ts,tsx}"],
   "references": [{ "path": "./tsconfig.bun.json" }]
 }
