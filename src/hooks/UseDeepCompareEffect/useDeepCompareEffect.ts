@@ -1,4 +1,4 @@
-import isEqual from 'lodash.isequal'
+import { isEqual } from 'lodash-es'
 import type React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
 
