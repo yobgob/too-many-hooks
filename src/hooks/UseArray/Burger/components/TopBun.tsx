@@ -1,4 +1,5 @@
-import React, { SVGProps } from 'react'
+import type React from 'react'
+import type { SVGProps } from 'react'
 
 const TopBun: React.FC<SVGProps<SVGSVGElement>> = props => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346.93 121.44" {...props}>

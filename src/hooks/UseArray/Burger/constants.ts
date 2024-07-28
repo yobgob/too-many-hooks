@@ -9,7 +9,7 @@ import {
   Tomato,
   TopBun,
 } from './components'
-import { Ingredient, IngredientGroup } from './types'
+import type { Ingredient, IngredientGroup } from './types'
 
 export const INGREDIENT_WIDTH = '20rem'
 

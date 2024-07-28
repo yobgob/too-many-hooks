@@ -1,6 +1,6 @@
-import React from 'react'
-import { CoordinatesOrNever, Tuple } from '../../../UseGraph/Graph'
-import {
+import type React from 'react'
+import type { CoordinatesOrNever, Tuple } from '../../../UseGraph/Graph'
+import type {
   FieldData,
   FieldElement,
   Fields,
@@ -8,6 +8,8 @@ import {
   FormData,
   PartialDataKeys,
   RegisterResult,
+} from '../types'
+import {
   isCheckboxInput,
   isDateInput,
   isFileInput,

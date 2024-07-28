@@ -1,6 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react'
-import { Errors, FormData } from '../useForm'
-import Spreadsheet, { SpreadsheetFormData } from './Spreadsheet'
+import type { Meta, StoryObj } from '@storybook/react'
+import type { Errors, FormData } from '../useForm'
+import type { SpreadsheetFormData } from './Spreadsheet'
+import Spreadsheet from './Spreadsheet'
 import SPREADSHEET_CODE from './Spreadsheet.tsx?raw'
 
 type FormMeta = Meta<typeof Spreadsheet>
