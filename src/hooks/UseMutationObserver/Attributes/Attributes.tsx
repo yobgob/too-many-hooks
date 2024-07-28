@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { useEffect } from 'react'
 import useMutationObserver from '../useMutationObserver'
 
@@ -13,7 +13,7 @@ const Attributes: React.FC<Props> = ({ attributeMutation, attribute }) => {
     subtree: true,
   })
   useEffect(() => {
-    const currentAttribute = document.getElementById('example-div')?.dataset.attribute
+    const currentAttribute = document.getElementById('example-div')?.dataset['attribute']
     if (records && currentAttribute !== undefined) {
       attributeMutation(
         `Observed mutation with record attributeName ${records?.[0].attributeName}, div data ${

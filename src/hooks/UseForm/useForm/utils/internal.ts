@@ -7,7 +7,8 @@ import type {
   FieldsData,
   FormData,
   PartialDataKeys,
-  RegisterResult} from '../types';
+  RegisterResult,
+} from '../types'
 import {
   isCheckboxInput,
   isDateInput,

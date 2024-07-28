@@ -16,10 +16,9 @@ import type {
   PruneAtCoordinates,
   PruneVertex,
   SetAllVertices,
-  SomeVertex} from './Graph';
-import {
-  Graph
+  SomeVertex,
 } from './Graph'
+import { Graph } from './Graph'
 
 /**
  * The type of the `set` function for `useGraph`

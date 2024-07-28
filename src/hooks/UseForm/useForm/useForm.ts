@@ -4,10 +4,9 @@ import type {
   Coordinates,
   CoordinatesOfLength,
   CoordinatesOrNever,
-  IGraph} from '../../UseGraph/Graph';
-import {
-  Graph
+  IGraph,
 } from '../../UseGraph/Graph'
+import { Graph } from '../../UseGraph/Graph'
 import useGraph from '../../UseGraph/useGraph'
 import type {
   Changed,

@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { Fragment } from 'react'
 import { Button } from '../../../storybook-common/components'
 import useArray from '../useArray'

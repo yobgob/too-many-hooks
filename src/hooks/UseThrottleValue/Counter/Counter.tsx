@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { useEffect } from 'react'
 import useTally from '../../UseTally/useTally'
 import useThrottleValue from '../useThrottleValue'

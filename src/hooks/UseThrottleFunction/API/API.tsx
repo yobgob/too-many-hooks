@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { useState } from 'react'
 import useThrottleFunction from '../useThrottleFunction'
 import type COUNTRIES from './assets/countries.json'

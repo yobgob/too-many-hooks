@@ -1,9 +1,9 @@
-import type React from 'react';
+import type React from 'react'
 import { Fragment } from 'react'
 import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
 import useTally from '../../UseTally/useTally'
-import type { Errors, FormData } from '../useForm';
+import type { Errors, FormData } from '../useForm'
 import useForm from '../useForm'
 import { buildOverriddenRegister } from '../useForm/utils'
 import { SIZE_OPTIONS } from './constants'

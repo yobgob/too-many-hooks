@@ -1,5 +1,5 @@
-import type { SVGProps } from 'react';
 import type React from 'react'
+import type { SVGProps } from 'react'
 
 const Lettuce: React.FC<SVGProps<SVGSVGElement>> = props => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346.93 49.14" {...props}>

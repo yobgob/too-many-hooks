@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { useState } from 'react'
 import '../../../index.css'
 import { Button, Select } from '../../../storybook-common/components'

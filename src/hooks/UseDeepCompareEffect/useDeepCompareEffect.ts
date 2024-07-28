@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal'
-import type React from 'react';
+import type React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
 
 const useDeepCompareMemoize = <T>(value: T) => {

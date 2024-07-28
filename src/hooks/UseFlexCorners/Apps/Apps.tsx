@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { useMemo } from 'react'
 import useFlexCorners from '../useFlexCorners'
 

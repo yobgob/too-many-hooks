@@ -1,7 +1,7 @@
 import type React from 'react'
 import { Select } from '../../../storybook-common/components'
 import Button from '../../../storybook-common/components/Button'
-import type { Errors } from '../useForm';
+import type { Errors } from '../useForm'
 import useForm from '../useForm'
 import { buildOverriddenRegister } from '../useForm/utils'
 

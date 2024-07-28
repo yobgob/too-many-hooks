@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from 'react'
 import { useEffect, useState } from 'react'
 import useResizeObserver from '../useResizeObserver'
 
