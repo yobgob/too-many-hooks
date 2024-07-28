@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useState } from 'react'
 import useThrottleFunction from '../useThrottleFunction'
-import type COUNTRIES from './assets/countries.json'
+import COUNTRIES from './assets/countries.json'
 
 interface Props {
   firstName: string
