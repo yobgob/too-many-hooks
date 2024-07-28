@@ -17,10 +17,11 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "dist",
+    "isolatedModules": true,
+    "useDefineForClassFields": true,
+    "noEmit": true,
 
     // Best practices
     "strict": true,
@@ -31,6 +32,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true
-  },
-  "include": ["src/index.ts"]
+  }
 }
