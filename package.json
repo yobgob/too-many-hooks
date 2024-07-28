@@ -45,9 +45,7 @@
     "format:all": "bun format:base ."
   },
   "dependencies": {
-    "lodash.isequal": "^4.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
@@ -63,9 +61,7 @@
     "@storybook/testing-library": "^0.2.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
-    "@types/lodash.isequal": "^4.5.8",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
+    "@types/lodash-es": "^4.17.12",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "@vitejs/plugin-react": "^4.2.1",
@@ -88,7 +84,20 @@
     "storybook": "^8.0.9",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.10",
-    "vite-plugin-dts": "^3.6.4"
+    "vite": "^5.0.10"
+  },
+  "peerDependencies": {
+    "react": "^18",
+    "react-dom": "^18",
+    "@types/react": "^18",
+    "@types/react-dom": "^18"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
   }
 }
