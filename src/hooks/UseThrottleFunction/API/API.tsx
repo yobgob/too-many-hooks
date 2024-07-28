@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import type React from 'react';
+import { useState } from 'react'
 import useThrottleFunction from '../useThrottleFunction'
-import COUNTRIES from './assets/countries.json'
+import type COUNTRIES from './assets/countries.json'
 
 interface Props {
   firstName: string

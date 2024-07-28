@@ -1,4 +1,4 @@
-import { FieldElement, FieldsData, Register, RegisterOptions } from '../types'
+import type { FieldElement, FieldsData, Register, RegisterOptions } from '../types'
 import { overrideRegisterResultPropNames } from './internal'
 
 export /**

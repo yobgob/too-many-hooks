@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { getObjectWithoutKey } from '../../../common/utils'
-import {
+import type {
   Coordinates,
   CoordinatesOfLength,
   CoordinatesOrNever,
-  Graph,
-  IGraph,
+  IGraph} from '../../UseGraph/Graph';
+import {
+  Graph
 } from '../../UseGraph/Graph'
 import useGraph from '../../UseGraph/useGraph'
-import {
+import type {
   Changed,
   Deregister,
   DeregisterAtCoordinates,

@@ -1,4 +1,4 @@
-import { Length, SafeSubtract } from '../../common/types/arithmetic'
+import type { Length, SafeSubtract } from '../../common/types/arithmetic'
 import { getObjectWithoutKey } from '../../common/utils'
 
 // #region tuple types

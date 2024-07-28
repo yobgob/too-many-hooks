@@ -1,4 +1,4 @@
-import { INGREDIENTS, INGREDIENT_GROUPS } from './constants'
+import type { INGREDIENTS, INGREDIENT_GROUPS } from './constants'
 
 export type Ingredient = keyof typeof INGREDIENTS
 

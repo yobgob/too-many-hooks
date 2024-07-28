@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import {
+import type {
   Clear,
   Coordinates,
   CoordinatesOfLength,
@@ -7,7 +7,6 @@ import {
   ForEachVertex,
   GetAtCoordinates,
   GetVertex,
-  Graph,
   GraphData,
   GraphDataAtCoordinates,
   Map,
@@ -17,7 +16,9 @@ import {
   PruneAtCoordinates,
   PruneVertex,
   SetAllVertices,
-  SomeVertex,
+  SomeVertex} from './Graph';
+import {
+  Graph
 } from './Graph'
 
 /**

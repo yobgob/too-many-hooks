@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react'
+import type React from 'react';
+import { Fragment } from 'react'
 import { Button } from '../../../storybook-common/components'
 import useArray from '../useArray'
 import { BOOKS, UNUSED_BOOKS } from './constants'

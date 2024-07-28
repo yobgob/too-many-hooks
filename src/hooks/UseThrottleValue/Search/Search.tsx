@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import type React from 'react';
+import { useMemo } from 'react'
 import BOOK_NAMES from '../../../storybook-common/assets/book-names.json'
 import useThrottleValue from '../useThrottleValue'
 

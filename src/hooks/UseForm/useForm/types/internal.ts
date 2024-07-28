@@ -1,4 +1,4 @@
-import { FieldElement, FieldsData } from './public'
+import type { FieldElement, FieldsData } from './public'
 
 export type ObjectKey = string | number | symbol
 

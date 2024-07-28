@@ -1,4 +1,5 @@
-import React, { ComponentProps } from 'react'
+import type { ComponentProps } from 'react';
+import type React from 'react'
 
 interface Props extends ComponentProps<'button'> {
   variant?: 'fill' | 'outline' | 'text'

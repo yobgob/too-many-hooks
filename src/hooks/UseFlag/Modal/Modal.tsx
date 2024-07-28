@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import '../../../index.css'
 import { Button, Modal as Modal_ } from '../../../storybook-common/components'
 import useFlag from '../useFlag'

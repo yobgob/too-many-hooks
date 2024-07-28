@@ -1,6 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react'
-import { Errors } from '../useForm'
-import JobApplication, { ApplicationFormData } from './JobApplication'
+import type { Meta, StoryObj } from '@storybook/react'
+import type { Errors } from '../useForm'
+import type { ApplicationFormData } from './JobApplication';
+import JobApplication from './JobApplication'
 import JOB_APPLICATION_CODE from './JobApplication.tsx?raw'
 
 type FormMeta = Meta<typeof JobApplication>

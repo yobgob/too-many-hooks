@@ -10,11 +10,12 @@ import useFlexCorners, {
   type UseFlexCornersReturn,
 } from './hooks/UseFlexCorners/useFlexCorners'
 import useForm from './hooks/UseForm/useForm'
-import useGraph, {
+import type {
   UseGraph,
   UseGraphReturn,
   UseGraphReturnFunctions,
-} from './hooks/UseGraph/useGraph'
+} from './hooks/UseGraph/useGraph';
+import useGraph from './hooks/UseGraph/useGraph'
 import useMatchMedia, { type UseMatchMedia } from './hooks/UseMatchMedia/useMatchMedia'
 import useMutationObserver, {
   type UseMutationObserver,

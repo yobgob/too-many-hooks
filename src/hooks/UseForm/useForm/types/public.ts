@@ -1,12 +1,12 @@
-import React from 'react'
-import {
+import type React from 'react'
+import type {
   Coordinates,
   CoordinatesOfLength,
   CoordinatesOrNever,
   GraphData,
   IGraph,
 } from '../../../UseGraph/Graph'
-import { ObjectKey, PartialDataKeys } from './internal'
+import type { ObjectKey, PartialDataKeys } from './internal'
 
 /**
  * The type of elements that can be registered with `useForm` - inputs, selects, and textareas

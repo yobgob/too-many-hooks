@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import type React from 'react';
+import { useState } from 'react'
 import '../../../index.css'
 import { Button, Select } from '../../../storybook-common/components'
 import useArray from '../useArray'
@@ -10,7 +11,7 @@ import {
   INGREDIENT_OPTIONS,
   INGREDIENT_WIDTH,
 } from './constants'
-import { Ingredient, IngredientGroup } from './types'
+import type { Ingredient, IngredientGroup } from './types'
 
 const Burger: React.FC = () => {
   const [
