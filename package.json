@@ -25,6 +25,7 @@
       "require": "./dist/too-many-hooks.umd.cjs"
     }
   },
+  "sideEffects": false,
   "scripts": {
     "build": "tsc && vite build",
     "storybook": "bun run build && storybook dev -p 6006",
