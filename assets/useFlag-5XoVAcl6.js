@@ -1,0 +1,1 @@
+import{r as s}from"./index-RYns6xqu.js";const n=t=>{const[e,a]=s.useState(t),l=s.useCallback(()=>a(!0),[]),o=s.useCallback(()=>a(!1),[]),u=s.useCallback(()=>a(c=>!c),[]);return[e,{set:a,flag:l,unflag:o,toggle:u}]};export{n as u};

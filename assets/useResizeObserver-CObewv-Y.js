@@ -1,0 +1,1 @@
+import{r}from"./index-RYns6xqu.js";const b=(e,s)=>{const[u,o]=r.useState(),n=r.useRef(new ResizeObserver(o));return r.useEffect(()=>{if(e){const t=n.current;return t.observe(e,s),()=>{t.unobserve(e)}}},[e,n,s]),u};export{b as u};

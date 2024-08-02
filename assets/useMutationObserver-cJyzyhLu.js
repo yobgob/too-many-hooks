@@ -1,0 +1,1 @@
+import{r}from"./index-RYns6xqu.js";const f=(e,s)=>{const[c,n]=r.useState(),t=r.useRef(new MutationObserver(n));return r.useEffect(()=>{if(e){const o=t.current;return o.observe(e,s),()=>o.disconnect()}},[e,t,s]),c};export{f as u};
