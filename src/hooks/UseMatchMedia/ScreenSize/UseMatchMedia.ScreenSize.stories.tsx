@@ -1,5 +1,5 @@
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 import ScreenSize from './ScreenSize'
 import SCREEN_SIZE_CODE from './ScreenSize.tsx?raw'
 

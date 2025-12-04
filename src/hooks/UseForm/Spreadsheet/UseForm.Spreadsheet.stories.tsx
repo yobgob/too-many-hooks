@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { Errors, FormData } from '../useForm'
 import type { SpreadsheetFormData } from './Spreadsheet'
 import Spreadsheet from './Spreadsheet'

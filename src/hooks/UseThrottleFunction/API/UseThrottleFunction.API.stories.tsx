@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import API from './API'
 import API_CODE from './API.tsx?raw'
 import COUNTRIES from './assets/countries.json'

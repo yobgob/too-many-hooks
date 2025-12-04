@@ -1,5 +1,5 @@
 import { expect } from '@storybook/jest'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
 import Modal from './Modal'
 import MODAL_CODE from './Modal.tsx?raw'

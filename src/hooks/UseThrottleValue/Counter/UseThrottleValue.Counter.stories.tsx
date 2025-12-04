@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import Counter from './Counter'
 import COUNTER_CODE from './Counter.tsx?raw'
 

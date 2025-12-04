@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import Burger from './Burger'
 import BURGER_CODE from './Burger.tsx?raw'
 

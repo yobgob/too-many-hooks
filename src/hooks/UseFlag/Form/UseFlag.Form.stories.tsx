@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import Form from './Form'
 import FORM_CODE from './Form.tsx?raw'
 

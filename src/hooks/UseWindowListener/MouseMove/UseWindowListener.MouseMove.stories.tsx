@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import MouseMove from './MouseMove'
 import MOUSE_MOVE_CODE from './MouseMove.tsx?raw'
 

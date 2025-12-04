@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import Apps from './Apps'
 import APPS_CODE from './Apps.tsx?raw'
 

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import ContainerQuery from './ContainerQuery'
 import CONTAINER_QUERY_CODE from './ContainerQuery.tsx?raw'
 

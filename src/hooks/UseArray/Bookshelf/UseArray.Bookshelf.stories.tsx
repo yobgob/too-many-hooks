@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import Bookshelf from './Bookshelf'
 import BOOKSHELF_CODE from './Bookshelf.tsx?raw'
 
