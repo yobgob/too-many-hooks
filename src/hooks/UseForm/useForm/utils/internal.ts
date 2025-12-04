@@ -57,7 +57,7 @@ export const getElementDefaultValue = <
   }
 
   return 'defaultValue' in element
-    ? (element.defaultValue as TData[keyof TData]) ?? (element.value as TData[keyof TData])
+    ? ((element.defaultValue as TData[keyof TData]) ?? (element.value as TData[keyof TData]))
     : (element.value as TData[keyof TData])
 }
 
