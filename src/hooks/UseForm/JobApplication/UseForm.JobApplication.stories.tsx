@@ -1,31 +1,37 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { action } from 'storybook/actions'
+import preview from '../../../../.storybook/preview'
+import USE_FORM_DOCS from '../use-form-docs'
 import type { Errors } from '../useForm'
 import type { ApplicationFormData } from './JobApplication'
 import JobApplication from './JobApplication'
 import JOB_APPLICATION_CODE from './JobApplication.tsx?raw'
 
-type FormMeta = Meta<typeof JobApplication>
-
-export default {
-  title: 'useForm/Job Application',
+const meta = preview.meta({
+  title: 'useForm',
   component: JobApplication,
-} satisfies FormMeta
-
-export const jobApplication: StoryObj<FormMeta> = {
-  name: 'Job Application',
   parameters: {
     layout: 'centered',
+    docs: USE_FORM_DOCS,
+  },
+})
+
+export default meta
+
+export const JobApplication_Example = meta.story({
+  args: {
+    onSubmit: (data: ApplicationFormData) => {
+      action('onSubmit')(data)
+      return data
+    },
+    onError: (errors: Errors<ApplicationFormData>) => {
+      action('onError')(errors)
+      return errors
+    },
+  },
+  name: 'Job Application',
+  parameters: {
     docs: {
       source: { code: JOB_APPLICATION_CODE, language: 'tsx' },
     },
   },
-  argTypes: {
-    onSubmit: {
-      action: (data: ApplicationFormData) => data,
-    },
-    onError: {
-      action: (errors: Errors<ApplicationFormData>) => errors,
-    },
-  },
-  render: args => <JobApplication {...args} />,
-}
+})

@@ -54,18 +54,7 @@ const Apps: React.FC<Props> = ({
         `}
         />
       )),
-    [
-      itemCount,
-      corners?.top.left.index,
-      corners?.top.right.index,
-      corners?.left.top.index,
-      corners?.left.bottom.index,
-      corners?.right.top.index,
-      corners?.right.bottom.index,
-      corners?.bottom.right.index,
-      corners?.bottom.left.index,
-      setElement,
-    ],
+    [itemCount, corners?.top, corners?.left, corners?.right, corners?.bottom, setElement],
   )
 
   return (

@@ -1,22 +1,25 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '../../../../.storybook/preview'
+import USE_THROTTLE_VALUE_DOCS from '../use-throttle-value-docs'
 import Counter from './Counter'
 import COUNTER_CODE from './Counter.tsx?raw'
 
-type CounterMeta = Meta<typeof Counter>
-
-export default {
-  title: 'useThrottleValue/Counter',
+const meta = preview.meta({
+  title: 'useThrottleValue',
   component: Counter,
-} satisfies CounterMeta
-
-export const counter: StoryObj<CounterMeta> = {
-  name: 'Counter',
   parameters: {
     layout: 'centered',
+    docs: USE_THROTTLE_VALUE_DOCS,
+  },
+})
+
+export default meta
+
+export const Counter_Example = meta.story({
+  name: 'Counter',
+  parameters: {
     controls: { expanded: true },
     docs: {
       source: { code: COUNTER_CODE, language: 'tsx' },
     },
   },
-  render: args => <Counter {...args} />,
-}
+})

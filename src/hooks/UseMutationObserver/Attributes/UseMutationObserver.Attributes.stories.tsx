@@ -1,29 +1,29 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { action } from 'storybook/actions'
 import Attributes from '.'
+import preview from '../../../../.storybook/preview'
+import USE_MUTATION_OBSERVER_DOCS from '../use-mutation-observer-docs'
 import ATTRIBUTES_CODE from './Attributes.tsx?raw'
 
-type AttributesMeta = Meta<typeof Attributes>
-
-export default {
-  title: 'useMutationObserver/Attributes',
+const meta = preview.meta({
+  title: 'useMutationObserver',
   component: Attributes,
-} satisfies AttributesMeta
-
-export const attributes: StoryObj<Meta<typeof Attributes>> = {
-  name: 'Attributes',
   parameters: {
     layout: 'centered',
+    docs: USE_MUTATION_OBSERVER_DOCS,
+  },
+})
+
+export default meta
+
+export const Attributes_Example = meta.story({
+  name: 'Attributes',
+  parameters: {
     docs: {
       source: { code: ATTRIBUTES_CODE, language: 'tsx' },
     },
   },
-  argTypes: {
-    attribute: {
-      type: 'string',
-    },
-    attributeMutation: {
-      action: (name: string) => name,
-    },
+  args: {
+    attribute: 'example',
+    attributeMutation: (name: string) => action('attributeMutation')(name),
   },
-  render: args => <Attributes {...args} />,
-}
+})
