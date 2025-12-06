@@ -1,31 +1,33 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import { action } from 'storybook/actions'
+import preview from '../../../../.storybook/preview'
+import USE_FORM_DOCS from '../use-form-docs'
 import type { Errors, FormData } from '../useForm'
 import type { SpreadsheetFormData } from './Spreadsheet'
 import Spreadsheet from './Spreadsheet'
 import SPREADSHEET_CODE from './Spreadsheet.tsx?raw'
 
-type FormMeta = Meta<typeof Spreadsheet>
-
-export default {
-  title: 'useForm/Spreadsheet',
+const meta = preview.meta({
+  title: 'useForm',
   component: Spreadsheet,
-} satisfies FormMeta
-
-export const spreadsheet: StoryObj<FormMeta> = {
-  name: 'Spreadsheet',
   parameters: {
     layout: 'centered',
-    docs: {
-      source: { code: SPREADSHEET_CODE, language: 'tsx' },
+    docs: USE_FORM_DOCS,
+  },
+})
+
+export default meta
+
+export const Spreadsheet_Example = meta.story({
+  name: 'Spreadsheet',
+  args: {
+    onSubmit: (data: FormData<SpreadsheetFormData, 1>) => {
+      action('onSubmit')(data)
+      return data
+    },
+    onError: (errors: FormData<Errors<SpreadsheetFormData>, 1>) => {
+      action('onError')(errors)
+      return errors
     },
   },
-  argTypes: {
-    onSubmit: {
-      action: (data: FormData<SpreadsheetFormData, 1>) => data,
-    },
-    onError: {
-      action: (errors: FormData<Errors<SpreadsheetFormData>, 1>) => errors,
-    },
-  },
-  render: args => <Spreadsheet {...args} />,
-}
+  parameters: { docs: { source: { code: SPREADSHEET_CODE, language: 'tsx' } } },
+})

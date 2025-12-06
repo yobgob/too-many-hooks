@@ -1,21 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import preview from '../../../../.storybook/preview'
+import USE_RESIZE_OBSERVER_DOCS from '../use-resize-observer-docs'
 import ContainerQuery from './ContainerQuery'
 import CONTAINER_QUERY_CODE from './ContainerQuery.tsx?raw'
 
-type ContainerQueryMeta = Meta<typeof ContainerQuery>
-
-export default {
-  title: 'UseResizeObserver/ContainerQuery',
+const meta = preview.meta({
+  title: 'useResizeObserver',
   component: ContainerQuery,
-} satisfies ContainerQueryMeta
-
-export const containerQuery: StoryObj<ContainerQueryMeta> = {
-  name: 'Container Query',
   parameters: {
     layout: 'centered',
+    docs: USE_RESIZE_OBSERVER_DOCS,
+  },
+})
+
+export default meta
+
+export const ContainerQuery_Example = meta.story({
+  name: 'Container Query',
+  parameters: {
     docs: {
       source: { code: CONTAINER_QUERY_CODE, language: 'tsx' },
     },
   },
-  render: args => <ContainerQuery {...args} />,
-}
+})

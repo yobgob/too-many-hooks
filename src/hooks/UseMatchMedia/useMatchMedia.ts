@@ -37,6 +37,7 @@ const useMatchMedia: UseMatchMedia = (query: string): MediaQueryList => {
 
   useEffect(() => {
     const newMediaQueryList = window.matchMedia(query)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMediaQueryList(newMediaQueryList)
     newMediaQueryList.addEventListener('change', onMediaQueryListChange)
     return () => newMediaQueryList.removeEventListener('change', onMediaQueryListChange)

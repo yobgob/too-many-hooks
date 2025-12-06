@@ -1,21 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import preview from '../../../../.storybook/preview'
+import USE_FLAG_DOCS from '../use-flag-docs'
 import Form from './Form'
 import FORM_CODE from './Form.tsx?raw'
 
-type FormMeta = Meta<typeof Form>
-
-export default {
-  title: 'useFlag/Form',
+const meta = preview.meta({
+  title: 'useFlag',
   component: Form,
-} satisfies FormMeta
-
-export const form: StoryObj<FormMeta> = {
-  name: 'Form',
   parameters: {
     layout: 'centered',
+    docs: USE_FLAG_DOCS,
+  },
+})
+
+export default meta
+
+export const Form_Example = meta.story({
+  name: 'Form',
+  parameters: {
     docs: {
       source: { code: FORM_CODE, language: 'tsx' },
     },
   },
-  render: args => <Form {...args} />,
-}
+})

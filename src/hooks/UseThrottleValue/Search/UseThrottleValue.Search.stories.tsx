@@ -1,25 +1,26 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import preview from '../../../../.storybook/preview'
+import USE_THROTTLE_VALUE_DOCS from '../use-throttle-value-docs'
 import Search from './Search'
 import SEARCH_CODE from './Search.tsx?raw'
 
-type SearchMeta = Meta<typeof Search>
-
-export default {
-  title: 'useThrottleValue/Search',
+const meta = preview.meta({
+  title: 'useThrottleValue',
   component: Search,
-} satisfies SearchMeta
-
-export const search: StoryObj<SearchMeta> = {
-  name: 'Search',
   parameters: {
     layout: 'centered',
+    docs: USE_THROTTLE_VALUE_DOCS,
+  },
+})
+
+export default meta
+
+export const Search_Example = meta.story({
+  name: 'Search',
+  parameters: {
     controls: { expanded: true },
     docs: {
       source: { code: SEARCH_CODE, language: 'tsx' },
     },
   },
-  args: {
-    search: '',
-  },
-  render: args => <Search {...args} />,
-}
+  args: { search: '' },
+})

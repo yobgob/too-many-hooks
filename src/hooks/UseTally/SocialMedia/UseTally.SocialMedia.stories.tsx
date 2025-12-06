@@ -1,16 +1,21 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
+import preview from '../../../../.storybook/preview'
+import USE_TALLY_DOCS from '../use-tally-docs'
 import SocialMedia from './SocialMedia'
 import SOCIAL_MEDIA_CODE from './SocialMedia.tsx?raw'
 
-type SocialMediaMeta = Meta<typeof SocialMedia>
-
-export default {
-  title: 'useTally/SocialMedia',
+const meta = preview.meta({
+  title: 'useTally',
   component: SocialMedia,
-} satisfies SocialMediaMeta
+  parameters: {
+    layout: 'centered',
+    docs: USE_TALLY_DOCS,
+  },
+})
 
-export const socialMedia: StoryObj<SocialMediaMeta> = {
+export default meta
+
+export const SocialMedia_Example = meta.story({
   name: 'Social Media',
   play: ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -18,19 +23,10 @@ export const socialMedia: StoryObj<SocialMediaMeta> = {
     userEvent.click(tallyingButton)
   },
   parameters: {
-    layout: 'centered',
     controls: { expanded: true },
     docs: {
       source: { code: SOCIAL_MEDIA_CODE, language: 'tsx' },
     },
   },
-  argTypes: {
-    step: { type: 'number' },
-    incrementStep: { type: 'number' },
-    decrementStep: { type: 'number' },
-  },
-  args: {
-    step: 1,
-  },
-  render: args => <SocialMedia {...args} />,
-}
+  args: { step: 1 },
+})

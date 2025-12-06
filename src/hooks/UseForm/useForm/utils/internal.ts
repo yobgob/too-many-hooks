@@ -33,7 +33,6 @@ export const getElementDefaultValue = <
   element: TFieldElement,
 ): TData[keyof TData] | undefined => {
   if (!element) return undefined
-  console.log(element, element.type)
 
   if (isRadioInput(element) || isCheckboxInput(element)) {
     return (element.defaultChecked as TData[keyof TData]) ?? (element.checked as TData[keyof TData])
@@ -57,7 +56,7 @@ export const getElementDefaultValue = <
   }
 
   return 'defaultValue' in element
-    ? (element.defaultValue as TData[keyof TData]) ?? (element.value as TData[keyof TData])
+    ? ((element.defaultValue as TData[keyof TData]) ?? (element.value as TData[keyof TData]))
     : (element.value as TData[keyof TData])
 }
 
