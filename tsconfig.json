@@ -38,7 +38,7 @@
     "vite.config.ts",
     ".storybook/**.ts",
     "tailwind.config.ts",
-    ".storybook/preview.tsx",
+    ".storybook/preview.ts",
     "src/hooks/UseForm/JobApplication/.UseForm.JobApplication.source.ignoremdx"
   ]
 }
