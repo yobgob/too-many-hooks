@@ -106,8 +106,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...register('startDate', {
               isRequired: true,
-              validate: startDate =>
-                startDate < new Date(Date.now()) ? 'Date must be in the future' : null,
+              validate: startDate => (startDate < new Date() ? 'Date must be in the future' : null),
             })}
           />
         </label>
@@ -159,16 +158,7 @@ const JobApplication: React.FC<Props> = ({ onSubmit, onError }) => {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          onClick={() =>
-            handleSubmit({
-              onSubmit,
-              onError,
-            })
-          }
-        >
-          Save
-        </Button>
+        <Button onClick={() => handleSubmit({ onSubmit, onError })}>Save</Button>
         {hasBegun &&
           (hasChangedWithoutSubmit ? (
             <div className="text-orange-500">&#9888; Unsaved changes</div>

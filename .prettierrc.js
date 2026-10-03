@@ -1,5 +1,5 @@
 /** @type {import('prettier').Config} */
-module.exports = {
+export default {
   arrowParens: 'avoid',
   jsxSingleQuote: false,
   plugins: ['prettier-plugin-organize-imports', 'prettier-plugin-tailwindcss'],

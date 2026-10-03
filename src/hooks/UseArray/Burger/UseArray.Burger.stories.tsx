@@ -1,25 +1,25 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import preview from '../../../../.storybook/preview'
+import USE_ARRAY_DOCS from '../use-array-docs'
 import Burger from './Burger'
 import BURGER_CODE from './Burger.tsx?raw'
 
-type BurgerMeta = Meta<typeof Burger>
-
-export default {
-  title: 'useArray/Burger',
+const meta = preview.meta({
+  title: 'useArray',
   component: Burger,
-} satisfies BurgerMeta
+  parameters: {
+    layout: 'centered',
+    docs: USE_ARRAY_DOCS,
+  },
+})
 
-export const burger: StoryObj<BurgerMeta> = {
+export default meta
+
+export const Burger_Example = meta.story({
   name: 'Burger',
   parameters: {
-    layout: 'fullscreen',
-    backgrounds: {
-      default: 'light',
-      values: [{ name: 'light', value: 'white' }],
-    },
+    backgrounds: { default: 'light', values: [{ name: 'light', value: 'white' }] },
     docs: {
       source: { code: BURGER_CODE, language: 'tsx' },
     },
   },
-  render: args => <Burger {...args} />,
-}
+})

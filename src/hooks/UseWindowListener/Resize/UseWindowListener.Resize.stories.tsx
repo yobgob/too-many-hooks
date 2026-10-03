@@ -1,26 +1,28 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import { action } from 'storybook/actions'
+import preview from '../../../../.storybook/preview'
+import USE_WINDOW_LISTENER_DOCS from '../use-window-listener-docs'
 import Resize from './Resize'
 import RESIZE_CODE from './Resize.tsx?raw'
 
-type ResizeMeta = Meta<typeof Resize>
-
-export default {
-  title: 'useWindowListener/Resize',
+const meta = preview.meta({
+  title: 'useWindowListener',
   component: Resize,
-} satisfies ResizeMeta
-
-export const resize: StoryObj<ResizeMeta> = {
-  name: 'Resize',
   parameters: {
     layout: 'centered',
+    docs: USE_WINDOW_LISTENER_DOCS,
+  },
+})
+
+export default meta
+
+export const Resize_Example = meta.story({
+  name: 'Resize',
+  parameters: {
     docs: {
       source: { code: RESIZE_CODE, language: 'tsx' },
     },
   },
-  argTypes: {
-    addResizeAction: {
-      action: (...data: unknown[]) => data,
-    },
+  args: {
+    addResizeAction: (...data: unknown[]) => action('addResizeAction')(...data),
   },
-  render: args => <Resize {...args} />,
-}
+})

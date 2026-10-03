@@ -116,10 +116,10 @@ The storybook depends upon the library build, so storybook scripts also build th
 #### Tooling
 
 - Build - The library is built using [Vite](https://vitejs.dev/), configured with `vite.config.ts`
-- Formatting - [Prettier](https://prettier.io/docs/en/) configured with `.prettierrc.cjs`
-- Linting - [ESLint](https://eslint.org/docs/latest/) configured with `.eslintrc.cjs`
+- Formatting - [Prettier](https://prettier.io/docs/en/) configured with `.prettierrc.ts`
+- Linting - [ESLint](https://eslint.org/docs/latest/) configured with `eslint.config.js`
 - Storybook - The storybook application is built using [Vite](https://vitejs.dev/), configured with /`.storybook/vite.config.ts` and [storybook](https://storybook.js.org/docs/ember/get-started/introduction)
-- Styling - [Tailwind](https://tailwindcss.com/docs/installation) configured with `tailwind.config.cjs`
+- Styling - [Tailwind](https://tailwindcss.com/docs/installation) configured with `tailwind.config.ts`
 
 #### Scripts
 

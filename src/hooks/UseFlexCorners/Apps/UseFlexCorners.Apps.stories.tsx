@@ -1,42 +1,54 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import preview from '../../../../.storybook/preview'
+import USE_FLEX_CORNERS_DOCS from '../use-flex-corners-docs'
 import Apps from './Apps'
 import APPS_CODE from './Apps.tsx?raw'
 
-type AppsMeta = Meta<typeof Apps>
-
-export default {
-  title: 'useFlexCorners/Apps',
+const meta = preview.meta({
+  title: 'useFlexCorners',
   component: Apps,
-} satisfies AppsMeta
+  parameters: {
+    layout: 'centered',
+    docs: USE_FLEX_CORNERS_DOCS,
+  },
+})
 
-export const apps: StoryObj<AppsMeta> = {
+export default meta
+
+export const Apps_Example = meta.story({
   name: 'Apps',
   parameters: {
-    layout: 'fullscreen',
     docs: {
       source: { code: APPS_CODE, language: 'tsx' },
     },
   },
   argTypes: {
     flexWrap: {
-      options: ['wrap', 'nowrap', 'wrap-reverse'],
       control: { type: 'select' },
+      options: ['nowrap', 'wrap', 'wrap-reverse'],
     },
     flexDirection: {
-      options: ['row', 'column', 'row-reverse', 'column-reverse'],
       control: { type: 'select' },
+      options: ['row', 'row-reverse', 'column', 'column-reverse'],
     },
     justifyContent: {
-      options: ['start', 'center', 'space-between', 'space-around', 'space-evenly'],
       control: { type: 'select' },
+      options: ['start', 'end', 'center', 'space-between', 'space-around', 'space-evenly'],
     },
     alignItems: {
-      options: ['stretch', 'center', 'start', 'end'],
       control: { type: 'select' },
+      options: ['start', 'end', 'center', 'baseline', 'stretch'],
     },
     alignContent: {
-      options: ['start', 'center', 'space-between', 'space-around'],
       control: { type: 'select' },
+      options: [
+        'start',
+        'end',
+        'center',
+        'space-between',
+        'space-around',
+        'space-evenly',
+        'stretch',
+      ],
     },
   },
   args: {
@@ -47,5 +59,4 @@ export const apps: StoryObj<AppsMeta> = {
     alignItems: 'stretch',
     alignContent: 'start',
   },
-  render: args => <Apps {...args} />,
-}
+})

@@ -1,26 +1,28 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import { action } from 'storybook/actions'
+import preview from '../../../../.storybook/preview'
+import USE_WINDOW_LISTENER_DOCS from '../use-window-listener-docs'
 import MouseMove from './MouseMove'
 import MOUSE_MOVE_CODE from './MouseMove.tsx?raw'
 
-type MouseMoveMeta = Meta<typeof MouseMove>
-
-export default {
-  title: 'useWindowListener/MouseMove',
+const meta = preview.meta({
+  title: 'useWindowListener',
   component: MouseMove,
-} satisfies MouseMoveMeta
-
-export const mouseMove: StoryObj<MouseMoveMeta> = {
-  name: 'Mouse Move',
   parameters: {
     layout: 'centered',
+    docs: USE_WINDOW_LISTENER_DOCS,
+  },
+})
+
+export default meta
+
+export const MouseMove_Example = meta.story({
+  name: 'Mouse Move',
+  parameters: {
     docs: {
       source: { code: MOUSE_MOVE_CODE, language: 'tsx' },
     },
   },
-  argTypes: {
-    addMouseMoveAction: {
-      action: (...data: unknown[]) => data,
-    },
+  args: {
+    addMouseMoveAction: (...data: unknown[]) => action('addMouseMoveAction')(...data),
   },
-  render: args => <MouseMove {...args} />,
-}
+})
